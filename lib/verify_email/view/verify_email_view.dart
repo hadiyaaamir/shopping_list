@@ -19,8 +19,20 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: CustomAppBar(title: 'Verify Email'),
+    return Scaffold(
+      appBar: const CustomAppBar(title: 'Verify Email'),
+      body: BlocListener<AuthenticationBloc, AuthenticationState>(
+        listener: (context, state) {
+          print('state.status: ${state.status}');
+          if (state.status == AuthenticationStatus.unverified &&
+              context.read<AuthenticationRepository>().isEmailVerfied) {
+            context
+                .read<AuthenticationBloc>()
+                .add(AuthenticationEmailVerified());
+          }
+        },
+        child: Container(),
+      ),
     );
   }
 }

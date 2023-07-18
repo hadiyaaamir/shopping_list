@@ -24,13 +24,16 @@ class _ShoppingAppViewState extends State<ShoppingAppView> {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
             switch (state.status) {
+              case AuthenticationStatus.unverified:
+                _navigator.pushAndRemoveUntil<void>(
+                  VerifyEmailPage.route(),
+                  (route) => false,
+                );
               case AuthenticationStatus.authenticated:
                 _navigator.pushAndRemoveUntil<void>(
-                  state.emailVerified
-                      ? state.profileCreated
-                          ? ShoppingListsPage.route()
-                          : CreateProfilePage.route()
-                      : VerifyEmailPage.route(),
+                  state.profileCreated
+                      ? ShoppingListsPage.route()
+                      : CreateProfilePage.route(),
                   (route) => false,
                 );
               case AuthenticationStatus.unauthenticated:

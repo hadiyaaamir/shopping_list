@@ -52,10 +52,12 @@ class AuthenticationBloc
         print('unauthenticated user');
         return emit(const AuthenticationState.unauthenticated());
 
+      case AuthenticationStatus.unverified:
+        return emit(const AuthenticationState.unverified());
+
       case AuthenticationStatus.authenticated:
         final authUser = _authenticationRepository.currentAuthUser;
         final profileCreated = await _getUserProfileCreated(authUser: authUser);
-        final emailVerified = _authenticationRepository.isEmailVerfied;
 
         print('authenticated user: $authUser');
         return emit(
@@ -63,7 +65,6 @@ class AuthenticationBloc
               ? AuthenticationState.authenticated(
                   user: authUser,
                   profileCreated: profileCreated,
-                  emailVerified: emailVerified,
                 )
               : const AuthenticationState.unauthenticated(),
         );
@@ -119,7 +120,7 @@ class AuthenticationBloc
       final user = _authenticationRepository.currentAuthUser;
       return emit(
         user != null
-            ? AuthenticationState.authenticated(user: user, emailVerified: true)
+            ? AuthenticationState.authenticated(user: user)
             : const AuthenticationState.unauthenticated(),
       );
     }

@@ -6,7 +6,7 @@ class ShoppingListsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      appBar: CustomAppBar(title: 'Shopping Lists'),
+      appBar: CustomAppBar(title: 'Shopping Lists', profileButton: true),
     );
   }
 }
