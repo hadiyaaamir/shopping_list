@@ -7,6 +7,7 @@ import 'package:shopping_list/profile/profile.dart';
 import 'package:shopping_list/shopping_lists/shopping_lists.dart';
 import 'package:shopping_list/splash/splash.dart';
 import 'package:shopping_list/utils/constants.dart';
+import 'package:shopping_list/verify_email/verify_email.dart';
 import 'package:shopping_list_repository/shopping_list_repository.dart';
 
 import 'package:user_repository/user_repository.dart';

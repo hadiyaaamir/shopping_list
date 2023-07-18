@@ -34,4 +34,14 @@ class AuthenticationRepositoryHardcoded implements AuthenticationRepository {
   @override
   // TODO: implement currentAuthUser
   AuthUser? get currentAuthUser => throw UnimplementedError();
+
+  @override
+  // TODO: implement isEmailVerfied
+  bool get isEmailVerfied => throw UnimplementedError();
+
+  @override
+  Future<void> sendEmailVerification() {
+    // TODO: implement sendEmailVerification
+    throw UnimplementedError();
+  }
 }

@@ -26,9 +26,11 @@ class _ShoppingAppViewState extends State<ShoppingAppView> {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
                 _navigator.pushAndRemoveUntil<void>(
-                  state.profileCreated
-                      ? ShoppingListsPage.route()
-                      : CreateProfilePage.route(),
+                  state.emailVerified
+                      ? state.profileCreated
+                          ? ShoppingListsPage.route()
+                          : CreateProfilePage.route()
+                      : VerifyEmailPage.route(),
                   (route) => false,
                 );
               case AuthenticationStatus.unauthenticated:

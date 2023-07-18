@@ -52,12 +52,16 @@ class AuthenticationBloc
       case AuthenticationStatus.authenticated:
         final authUser = _authenticationRepository.currentAuthUser;
         final profileCreated = await _getUserProfileCreated(authUser: authUser);
+        final emailVerified = _authenticationRepository.isEmailVerfied;
 
         print('authenticated user: $authUser');
         return emit(
           authUser != null
               ? AuthenticationState.authenticated(
-                  user: authUser, profileCreated: profileCreated)
+                  user: authUser,
+                  profileCreated: profileCreated,
+                  emailVerified: emailVerified,
+                )
               : const AuthenticationState.unauthenticated(),
         );
     }
