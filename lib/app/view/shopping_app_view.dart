@@ -17,29 +17,30 @@ class _ShoppingAppViewState extends State<ShoppingAppView> {
       navigatorKey: _navigatorKey,
       title: 'Flutter Login App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
+        colorScheme: ColorScheme.fromSeed(seedColor: kSeedColor),
         useMaterial3: true,
       ),
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
-            // switch (state.status) {
-            //           case AuthenticationStatus.authenticated:
-            _navigator.pushAndRemoveUntil<void>(
-              // state.profileCreated
-              //     ?
-              ShoppingListsPage.route(),
-              //     : CreateProfilePage.route(),
-              (route) => false,
-            );
-            //           case AuthenticationStatus.unauthenticated:
-            //             // _navigator.pushAndRemoveUntil<void>(
-            //             //   LoginPage.route(),
-            //             //   (route) => false,
-            //             // );
-            //           case AuthenticationStatus.unknown:
-            //             break;
-            //         }
+            switch (state.status) {
+              case AuthenticationStatus.authenticated:
+                _navigator.pushAndRemoveUntil<void>(
+                  state.emailVerified
+                      ? state.profileCreated
+                          ? ShoppingListsPage.route()
+                          : CreateProfilePage.route()
+                      : VerifyEmailPage.route(),
+                  (route) => false,
+                );
+              case AuthenticationStatus.unauthenticated:
+                _navigator.pushAndRemoveUntil<void>(
+                  LoginPage.route(),
+                  (route) => false,
+                );
+              case AuthenticationStatus.unknown:
+                break;
+            }
           },
           child: child,
         );

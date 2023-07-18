@@ -13,7 +13,7 @@ class UserRepositoryHardcoded extends UserRepository {
         firstName: 'Hadiya',
         lastName: 'Aamir',
         email: 'h.aamir@gmail.com',
-        designation: 'Intern',
+        username: 'hadiya',
       ),
     );
   }

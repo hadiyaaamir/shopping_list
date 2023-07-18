@@ -24,6 +24,7 @@ class UserRepositoryFirebase extends UserRepository {
 
   Future<bool> userProfileCreated(
       {required String userId, required String email}) async {
+    resetUser();
     final user = await getUser(email: email, userId: userId);
     return user != User.empty.copyWith(email: email);
   }

@@ -71,6 +71,19 @@ class AuthenticationRepositoryFirebase extends AuthenticationRepository {
           email: _firebaseAuth.currentUser!.email!,
         )
       : null;
+
+  bool get isEmailVerfied => _firebaseAuth.currentUser != null
+      ? _firebaseAuth.currentUser!.emailVerified
+      : false;
+
+  Future<void> sendEmailVerification() async {
+    try {
+      _firebaseAuth.currentUser?.sendEmailVerification();
+      print('email sent to $currentAuthUser');
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      print(e);
+    } catch (_) {}
+  }
 }
 
 class SignUpWithEmailAndPasswordFailure implements Exception {
