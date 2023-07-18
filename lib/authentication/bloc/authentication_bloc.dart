@@ -19,6 +19,9 @@ class AuthenticationBloc
     on<_AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
     on<AuthenticationLogoutRequested>(_onAuthenticationLogoutRequested);
     on<AuthenticationUserChanged>(_onAuthenticationUserChanged);
+    on<AuthenticationSendVerificationEmail>(
+        _onAuthenticationSendVerificationEmail);
+    on<AuthenticationEmailVerified>(_onAuthenticationEmailVerified);
 
     _authenticationStatusSubscription = _authenticationRepository.status.listen(
       (status) => add(_AuthenticationStatusChanged(status)),
@@ -95,5 +98,30 @@ class AuthenticationBloc
           ? AuthenticationState.authenticated(user: user)
           : const AuthenticationState.unauthenticated(),
     );
+  }
+
+  Future<void> _onAuthenticationSendVerificationEmail(
+    AuthenticationSendVerificationEmail event,
+    Emitter<AuthenticationState> emit,
+  ) async {
+    final authUser = _authenticationRepository.currentAuthUser;
+    if (authUser != null) {
+      await _authenticationRepository.sendEmailVerification();
+    }
+  }
+
+  void _onAuthenticationEmailVerified(
+    AuthenticationEmailVerified event,
+    Emitter<AuthenticationState> emit,
+  ) {
+    final currentState = state;
+    if (currentState.status == AuthenticationStatus.authenticated) {
+      final user = _authenticationRepository.currentAuthUser;
+      return emit(
+        user != null
+            ? AuthenticationState.authenticated(user: user, emailVerified: true)
+            : const AuthenticationState.unauthenticated(),
+      );
+    }
   }
 }

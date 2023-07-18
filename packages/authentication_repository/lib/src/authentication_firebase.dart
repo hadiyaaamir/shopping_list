@@ -79,6 +79,7 @@ class AuthenticationRepositoryFirebase extends AuthenticationRepository {
   Future<void> sendEmailVerification() async {
     try {
       _firebaseAuth.currentUser?.sendEmailVerification();
+      print('email sent to $currentAuthUser');
     } on firebase_auth.FirebaseAuthException catch (e) {
       print(e);
     } catch (_) {}

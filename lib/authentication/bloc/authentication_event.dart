@@ -11,7 +11,8 @@ final class _AuthenticationStatusChanged extends AuthenticationEvent {
 
 final class AuthenticationLogoutRequested extends AuthenticationEvent {}
 
-final class AuthenticationUserChanged extends AuthenticationEvent {
-  // const AuthenticationUserChanged(this.user);
-  // final User user;
-}
+final class AuthenticationUserChanged extends AuthenticationEvent {}
+
+final class AuthenticationSendVerificationEmail extends AuthenticationEvent {}
+
+final class AuthenticationEmailVerified extends AuthenticationEvent {}
