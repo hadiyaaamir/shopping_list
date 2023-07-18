@@ -22,6 +22,6 @@ abstract class AuthenticationRepository {
   void dispose();
 
   AuthUser? get currentAuthUser;
-  bool get isEmailVerfied;
+  Future<bool> get isEmailVerfied;
   Future<void> sendEmailVerification();
 }

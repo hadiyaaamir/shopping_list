@@ -5,6 +5,12 @@ class AuthenticationRepositoryFirebase extends AuthenticationRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth =
       firebase_auth.FirebaseAuth.instance;
 
+  // Stream<AuthUser> get currentUser =>
+  //     _firebaseAuth.authStateChanges().map((firebaseUser) {
+  //       print('auth repo firebase user: $firebaseUser');
+  //      return firebaseUser == null ? AuthUser.empty : firebaseUser.toAuthUser;
+  //     });
+
   @override
   Stream<AuthenticationStatus> get status async* {
     final currentUser = _firebaseAuth.currentUser;
@@ -48,7 +54,7 @@ class AuthenticationRepositoryFirebase extends AuthenticationRepository {
           .then(
         (value) {
           _controller.add(
-            isEmailVerfied
+            _firebaseAuth.currentUser!.emailVerified
                 ? AuthenticationStatus.authenticated
                 : AuthenticationStatus.unverified,
           );
@@ -81,12 +87,17 @@ class AuthenticationRepositoryFirebase extends AuthenticationRepository {
       ? AuthUser(
           id: _firebaseAuth.currentUser!.uid,
           email: _firebaseAuth.currentUser!.email!,
+          emailVerified: _firebaseAuth.currentUser!.emailVerified,
         )
       : null;
 
-  bool get isEmailVerfied => _firebaseAuth.currentUser != null
-      ? _firebaseAuth.currentUser!.emailVerified
-      : false;
+  Future<bool> get isEmailVerfied async {
+    if (_firebaseAuth.currentUser != null) {
+      await _firebaseAuth.currentUser!.reload();
+      return _firebaseAuth.currentUser!.emailVerified;
+    }
+    return false;
+  }
 
   Future<void> sendEmailVerification() async {
     try {
