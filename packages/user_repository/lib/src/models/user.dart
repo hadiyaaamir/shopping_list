@@ -5,28 +5,28 @@ class User extends Equatable {
     required this.firstName,
     required this.lastName,
     required this.email,
-    required this.designation,
+    required this.username,
   });
 
   final String firstName;
   final String lastName;
   final String email;
-  final String designation;
+  final String username;
 
   @override
-  List<Object?> get props => [firstName, lastName, email, designation];
+  List<Object?> get props => [firstName, lastName, email, username];
 
   User copyWith({
     String? email,
     String? firstName,
     String? lastName,
-    String? designation,
+    String? username,
   }) {
     return User(
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
       email: email ?? this.email,
-      designation: designation ?? this.designation,
+      username: username ?? this.username,
     );
   }
 
@@ -34,7 +34,7 @@ class User extends Equatable {
     firstName: '',
     lastName: '',
     email: '',
-    designation: '',
+    username: '',
   );
 
   bool get profileCreated => this != empty.copyWith(email: this.email);
@@ -45,7 +45,7 @@ class User extends Equatable {
     data['firstName'] = firstName;
     data['lastName'] = lastName;
     data['email'] = email;
-    data['designation'] = designation;
+    data['username'] = username;
     return data;
   }
 
@@ -54,7 +54,7 @@ class User extends Equatable {
       firstName: json['firstName'],
       lastName: json['lastName'],
       email: json['email'],
-      designation: json['designation'],
+      username: json['username'],
     );
   }
 }
