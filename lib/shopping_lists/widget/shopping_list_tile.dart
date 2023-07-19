@@ -32,11 +32,10 @@ class ShoppingListTile extends StatelessWidget {
             title: _TitleRow(
                 shoppingList: shoppingList, shoppingListBloc: shoppingListBloc),
             subtitle: _SubtitleRow(todoList: shoppingList),
-            onTap: () {},
-            // => Navigator.push(
-            //   context,
-            //   ShoppingListOverviewPage.route(todoList: shoppingList),
-            // ),
+            onTap: () => Navigator.push(
+              context,
+              ListItemsPage.route(shoppingList: shoppingList),
+            ),
           ),
         ),
       ),
