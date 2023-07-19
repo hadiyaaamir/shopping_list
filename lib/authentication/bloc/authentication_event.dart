@@ -15,4 +15,4 @@ final class AuthenticationUserChanged extends AuthenticationEvent {}
 
 final class AuthenticationSendVerificationEmail extends AuthenticationEvent {}
 
-final class AuthenticationEmailVerified extends AuthenticationEvent {}
+final class AuthenticationCheckEmail extends AuthenticationEvent {}

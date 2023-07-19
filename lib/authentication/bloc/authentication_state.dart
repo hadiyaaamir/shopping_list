@@ -22,8 +22,8 @@ class AuthenticationState extends Equatable {
           profileCreated: profileCreated,
         );
 
-  const AuthenticationState.unverified()
-      : this._(status: AuthenticationStatus.unverified);
+  const AuthenticationState.unverified({required AuthUser user})
+      : this._(status: AuthenticationStatus.unverified, user: user);
 
   const AuthenticationState.unauthenticated()
       : this._(status: AuthenticationStatus.unauthenticated);

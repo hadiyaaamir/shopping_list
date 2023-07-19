@@ -21,7 +21,7 @@ class AuthenticationBloc
     on<AuthenticationUserChanged>(_onAuthenticationUserChanged);
     on<AuthenticationSendVerificationEmail>(
         _onAuthenticationSendVerificationEmail);
-    on<AuthenticationEmailVerified>(_onAuthenticationEmailVerified);
+    on<AuthenticationCheckEmail>(_onAuthenticationCheckEmail);
 
     _authenticationStatusSubscription = _authenticationRepository.status.listen(
       (status) => add(_AuthenticationStatusChanged(status)),
@@ -53,7 +53,10 @@ class AuthenticationBloc
         return emit(const AuthenticationState.unauthenticated());
 
       case AuthenticationStatus.unverified:
-        return emit(const AuthenticationState.unverified());
+        final authUser = _authenticationRepository.currentAuthUser;
+        return emit(authUser != null
+            ? AuthenticationState.unverified(user: authUser)
+            : const AuthenticationState.unauthenticated());
 
       case AuthenticationStatus.authenticated:
         final authUser = _authenticationRepository.currentAuthUser;
@@ -113,8 +116,8 @@ class AuthenticationBloc
     }
   }
 
-  Future<void> _onAuthenticationEmailVerified(
-    AuthenticationEmailVerified event,
+  Future<void> _onAuthenticationCheckEmail(
+    AuthenticationCheckEmail event,
     Emitter<AuthenticationState> emit,
   ) async {
     final user = _authenticationRepository.currentAuthUser;
@@ -123,7 +126,7 @@ class AuthenticationBloc
       user != null
           ? isEmailVerified
               ? AuthenticationState.authenticated(user: user)
-              : const AuthenticationState.unverified()
+              : AuthenticationState.unverified(user: user)
           : const AuthenticationState.unauthenticated(),
     );
   }

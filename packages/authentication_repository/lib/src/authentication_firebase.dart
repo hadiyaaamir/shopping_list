@@ -5,12 +5,6 @@ class AuthenticationRepositoryFirebase extends AuthenticationRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth =
       firebase_auth.FirebaseAuth.instance;
 
-  // Stream<AuthUser> get currentUser =>
-  //     _firebaseAuth.authStateChanges().map((firebaseUser) {
-  //       print('auth repo firebase user: $firebaseUser');
-  //      return firebaseUser == null ? AuthUser.empty : firebaseUser.toAuthUser;
-  //     });
-
   @override
   Stream<AuthenticationStatus> get status async* {
     final currentUser = _firebaseAuth.currentUser;
