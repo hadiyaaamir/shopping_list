@@ -9,7 +9,10 @@ class ListItemsOverviewView extends StatelessWidget {
         context.select((ListItemsOverviewBloc bloc) => bloc.shoppingList.title);
 
     return Scaffold(
-      appBar: CustomAppBar(title: title, profileButton: true),
+      appBar: CustomAppBar(
+        title: title,
+        actions: [AddUsersButton()],
+      ),
       body: MultiBlocListener(
         listeners: [
           BlocListener<ListItemsOverviewBloc, ListItemsOverviewState>(
