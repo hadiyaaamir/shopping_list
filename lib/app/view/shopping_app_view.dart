@@ -8,14 +8,18 @@ class ShoppingAppView extends StatefulWidget {
 }
 
 class _ShoppingAppViewState extends State<ShoppingAppView> {
-  final _navigatorKey = GlobalKey<NavigatorState>();
-  NavigatorState get _navigator => _navigatorKey.currentState!;
+  // final _navigatorKey = GlobalKey<NavigatorState>();
+  // NavigatorState get _navigator => _navigatorKey.currentState!;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: _navigatorKey,
+    GoRouter router = AppRouter.router;
+
+    return MaterialApp.router(
       title: 'Flutter Login App',
+      routeInformationProvider: router.routeInformationProvider,
+      routeInformationParser: router.routeInformationParser,
+      routerDelegate: router.routerDelegate,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: kSeedColor),
         useMaterial3: true,
@@ -24,20 +28,16 @@ class _ShoppingAppViewState extends State<ShoppingAppView> {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
             switch (state.status) {
+              case AuthenticationStatus.unverified:
+                router.go('/verifyEmail');
+
               case AuthenticationStatus.authenticated:
-                _navigator.pushAndRemoveUntil<void>(
-                  state.emailVerified
-                      ? state.profileCreated
-                          ? ShoppingListsPage.route()
-                          : CreateProfilePage.route()
-                      : VerifyEmailPage.route(),
-                  (route) => false,
-                );
+                router.go(
+                    state.profileCreated ? '/shoppingLists' : '/createProfile');
+
               case AuthenticationStatus.unauthenticated:
-                _navigator.pushAndRemoveUntil<void>(
-                  LoginPage.route(),
-                  (route) => false,
-                );
+                router.go('/login');
+
               case AuthenticationStatus.unknown:
                 break;
             }
@@ -45,7 +45,6 @@ class _ShoppingAppViewState extends State<ShoppingAppView> {
           child: child,
         );
       },
-      onGenerateRoute: (_) => SplashPage.route(),
     );
   }
 }

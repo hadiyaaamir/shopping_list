@@ -5,30 +5,29 @@ class AuthenticationState extends Equatable {
     this.status = AuthenticationStatus.unknown,
     this.user = AuthUser.empty,
     this.profileCreated = false,
-    this.emailVerified = false,
   });
 
   final AuthenticationStatus status;
   final AuthUser user;
   final bool profileCreated;
-  final bool emailVerified;
 
   const AuthenticationState.unknown() : this._();
 
   const AuthenticationState.authenticated({
     required AuthUser user,
     bool profileCreated = false,
-    bool emailVerified = false,
   }) : this._(
           status: AuthenticationStatus.authenticated,
           user: user,
           profileCreated: profileCreated,
-          emailVerified: emailVerified,
         );
+
+  const AuthenticationState.unverified({required AuthUser user})
+      : this._(status: AuthenticationStatus.unverified, user: user);
 
   const AuthenticationState.unauthenticated()
       : this._(status: AuthenticationStatus.unauthenticated);
 
   @override
-  List<Object> get props => [status, user, profileCreated, emailVerified];
+  List<Object> get props => [status, user, profileCreated];
 }

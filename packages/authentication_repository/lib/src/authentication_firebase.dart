@@ -7,8 +7,16 @@ class AuthenticationRepositoryFirebase extends AuthenticationRepository {
 
   @override
   Stream<AuthenticationStatus> get status async* {
-    await Future<void>.delayed(const Duration(seconds: 1));
-    yield AuthenticationStatus.unauthenticated;
+    final currentUser = _firebaseAuth.currentUser;
+
+    if (currentUser == null) {
+      yield AuthenticationStatus.unauthenticated;
+    } else if (!currentUser.emailVerified) {
+      yield AuthenticationStatus.unverified;
+    } else {
+      yield AuthenticationStatus.authenticated;
+    }
+
     yield* _controller.stream;
   }
 
@@ -19,7 +27,7 @@ class AuthenticationRepositoryFirebase extends AuthenticationRepository {
             email: email,
             password: password,
           )
-          .then((_) => _controller.add(AuthenticationStatus.authenticated));
+          .then((_) => _controller.add(AuthenticationStatus.unverified));
     } on firebase_auth.FirebaseAuthException catch (e) {
       _controller.add(AuthenticationStatus.unauthenticated);
       throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
@@ -39,7 +47,11 @@ class AuthenticationRepositoryFirebase extends AuthenticationRepository {
       )
           .then(
         (value) {
-          _controller.add(AuthenticationStatus.authenticated);
+          _controller.add(
+            _firebaseAuth.currentUser!.emailVerified
+                ? AuthenticationStatus.authenticated
+                : AuthenticationStatus.unverified,
+          );
         },
       );
     } on firebase_auth.FirebaseAuthException catch (e) {
@@ -69,17 +81,23 @@ class AuthenticationRepositoryFirebase extends AuthenticationRepository {
       ? AuthUser(
           id: _firebaseAuth.currentUser!.uid,
           email: _firebaseAuth.currentUser!.email!,
+          emailVerified: _firebaseAuth.currentUser!.emailVerified,
         )
       : null;
 
-  bool get isEmailVerfied => _firebaseAuth.currentUser != null
-      ? _firebaseAuth.currentUser!.emailVerified
-      : false;
+  Future<bool> get isEmailVerfied async {
+    if (_firebaseAuth.currentUser != null) {
+      await _firebaseAuth.currentUser!.reload();
+      return _firebaseAuth.currentUser!.emailVerified;
+    }
+    return false;
+  }
 
   Future<void> sendEmailVerification() async {
     try {
       _firebaseAuth.currentUser?.sendEmailVerification();
       print('email sent to $currentAuthUser');
+      _controller.add(AuthenticationStatus.unverified);
     } on firebase_auth.FirebaseAuthException catch (e) {
       print(e);
     } catch (_) {}

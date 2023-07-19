@@ -21,7 +21,7 @@ class AuthenticationBloc
     on<AuthenticationUserChanged>(_onAuthenticationUserChanged);
     on<AuthenticationSendVerificationEmail>(
         _onAuthenticationSendVerificationEmail);
-    on<AuthenticationEmailVerified>(_onAuthenticationEmailVerified);
+    on<AuthenticationCheckEmail>(_onAuthenticationCheckEmail);
 
     _authenticationStatusSubscription = _authenticationRepository.status.listen(
       (status) => add(_AuthenticationStatusChanged(status)),
@@ -52,10 +52,15 @@ class AuthenticationBloc
         print('unauthenticated user');
         return emit(const AuthenticationState.unauthenticated());
 
+      case AuthenticationStatus.unverified:
+        final authUser = _authenticationRepository.currentAuthUser;
+        return emit(authUser != null
+            ? AuthenticationState.unverified(user: authUser)
+            : const AuthenticationState.unauthenticated());
+
       case AuthenticationStatus.authenticated:
         final authUser = _authenticationRepository.currentAuthUser;
         final profileCreated = await _getUserProfileCreated(authUser: authUser);
-        final emailVerified = _authenticationRepository.isEmailVerfied;
 
         print('authenticated user: $authUser');
         return emit(
@@ -63,7 +68,6 @@ class AuthenticationBloc
               ? AuthenticationState.authenticated(
                   user: authUser,
                   profileCreated: profileCreated,
-                  emailVerified: emailVerified,
                 )
               : const AuthenticationState.unauthenticated(),
         );
@@ -92,10 +96,12 @@ class AuthenticationBloc
     Emitter<AuthenticationState> emit,
   ) async {
     final user = _authenticationRepository.currentAuthUser;
+    final profileCreated = await _getUserProfileCreated(authUser: user);
 
     return emit(
       user != null
-          ? AuthenticationState.authenticated(user: user)
+          ? AuthenticationState.authenticated(
+              user: user, profileCreated: profileCreated)
           : const AuthenticationState.unauthenticated(),
     );
   }
@@ -110,18 +116,18 @@ class AuthenticationBloc
     }
   }
 
-  void _onAuthenticationEmailVerified(
-    AuthenticationEmailVerified event,
+  Future<void> _onAuthenticationCheckEmail(
+    AuthenticationCheckEmail event,
     Emitter<AuthenticationState> emit,
-  ) {
-    final currentState = state;
-    if (currentState.status == AuthenticationStatus.authenticated) {
-      final user = _authenticationRepository.currentAuthUser;
-      return emit(
-        user != null
-            ? AuthenticationState.authenticated(user: user, emailVerified: true)
-            : const AuthenticationState.unauthenticated(),
-      );
-    }
+  ) async {
+    final user = _authenticationRepository.currentAuthUser;
+    final isEmailVerified = await _authenticationRepository.isEmailVerfied;
+    return emit(
+      user != null
+          ? isEmailVerified
+              ? AuthenticationState.authenticated(user: user)
+              : AuthenticationState.unverified(user: user)
+          : const AuthenticationState.unauthenticated(),
+    );
   }
 }
