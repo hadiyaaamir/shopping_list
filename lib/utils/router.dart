@@ -4,6 +4,7 @@ import 'package:shopping_list/authentication/authentication.dart';
 import 'package:shopping_list/login/login.dart';
 import 'package:shopping_list/profile/profile.dart';
 import 'package:shopping_list/shopping_lists/shopping_lists.dart';
+
 import 'package:shopping_list/splash/splash.dart';
 
 class AppRouter {

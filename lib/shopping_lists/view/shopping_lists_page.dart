@@ -9,6 +9,12 @@ class ShoppingListsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ShoppingListsView();
+    return BlocProvider(
+      create: (context) => ShoppingListBloc(
+        userId: context.read<AuthenticationRepository>().currentAuthUser!.id,
+        shoppingListRepository: context.read<ShoppingListRepository>(),
+      )..add(const ShoppingListSubscriptionRequested()),
+      child: const ShoppingListsView(),
+    );
   }
 }
