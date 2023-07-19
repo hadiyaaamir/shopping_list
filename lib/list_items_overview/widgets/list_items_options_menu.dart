@@ -1,6 +1,6 @@
 part of 'widgets.dart';
 
-enum ListItemsOptions { toggleAll, clearCompleted }
+enum ListItemsOverviewOption { toggleAll, clearCompleted }
 
 class ListItemsOptionsMenu extends StatelessWidget {
   const ListItemsOptionsMenu({super.key});
@@ -8,11 +8,11 @@ class ListItemsOptionsMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final listItems = context
-        .select((ShoppingListItemsBloc bloc) => bloc.state.filteredTodos);
+        .select((ListItemsOverviewBloc bloc) => bloc.state.filteredItems);
     final hasItems = listItems.isNotEmpty;
     final completedItems = listItems.where((item) => item.isCompleted).length;
 
-    return PopupMenuButton<ListItemsOptions>(
+    return PopupMenuButton<ListItemsOverviewOption>(
       child: const Padding(
         padding: EdgeInsets.only(left: 15),
         child: Icon(Icons.more_vert),
@@ -20,7 +20,7 @@ class ListItemsOptionsMenu extends StatelessWidget {
       itemBuilder: (context) {
         return [
           PopupMenuItem(
-            value: ListItemsOptions.toggleAll,
+            value: ListItemsOverviewOption.toggleAll,
             enabled: hasItems,
             child: Text(
               completedItems == listItems.length
@@ -29,7 +29,7 @@ class ListItemsOptionsMenu extends StatelessWidget {
             ),
           ),
           PopupMenuItem(
-            value: ListItemsOptions.clearCompleted,
+            value: ListItemsOverviewOption.clearCompleted,
             enabled: hasItems && completedItems > 0,
             child: const Text('Clear Completed'),
           ),
@@ -37,14 +37,14 @@ class ListItemsOptionsMenu extends StatelessWidget {
       },
       onSelected: (options) {
         switch (options) {
-          case ListItemsOptions.toggleAll:
+          case ListItemsOverviewOption.toggleAll:
             context
-                .read<ShoppingListItemsBloc>()
-                .add(const ShoppingListItemsToggleAll());
-          case ListItemsOptions.clearCompleted:
+                .read<ListItemsOverviewBloc>()
+                .add(const ListItemsOverviewToggleAll());
+          case ListItemsOverviewOption.clearCompleted:
             context
-                .read<ShoppingListItemsBloc>()
-                .add(const ShoppingListItemsClearCompleted());
+                .read<ListItemsOverviewBloc>()
+                .add(const ListItemsOverviewClearCompleted());
         }
       },
     );

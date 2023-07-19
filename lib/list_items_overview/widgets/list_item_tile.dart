@@ -1,7 +1,7 @@
 part of 'widgets.dart';
 
-class ItemListTile extends StatelessWidget {
-  const ItemListTile({
+class ListItemTile extends StatelessWidget {
+  const ListItemTile({
     super.key,
     required this.listItem,
     required this.onTap,
@@ -16,12 +16,12 @@ class ItemListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final status = context.read<ShoppingListItemsBloc>().state.status;
+    final status = context.read<ListItemsOverviewBloc>().state.status;
 
     return Dismissible(
       key: Key('todoListTile_dismissible_${listItem.id}'),
       onDismissed:
-          status == ShoppingListItemsStatus.loading ? null : onDismissed,
+          status == ListItemsOverviewStatus.loading ? null : onDismissed,
       direction: DismissDirection.endToStart,
       background: Container(
         alignment: Alignment.centerRight,
@@ -31,7 +31,7 @@ class ItemListTile extends StatelessWidget {
       ),
       child: ListTile(
         title: Text(
-          listItem.title,
+          listItem.item,
           style: !listItem.isCompleted
               ? null
               : const TextStyle(
@@ -39,9 +39,9 @@ class ItemListTile extends StatelessWidget {
                   decoration: TextDecoration.lineThrough,
                 ),
         ),
-        subtitle: listItem.description.isNotEmpty
+        subtitle: listItem.quantity.isNotEmpty
             ? Text(
-                listItem.description,
+                listItem.quantity,
                 style: !listItem.isCompleted
                     ? null
                     : const TextStyle(

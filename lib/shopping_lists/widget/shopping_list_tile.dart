@@ -34,7 +34,7 @@ class ShoppingListTile extends StatelessWidget {
             subtitle: _SubtitleRow(todoList: shoppingList),
             onTap: () => Navigator.push(
               context,
-              ListItemsPage.route(shoppingList: shoppingList),
+              ListItemsOverviewPage.route(shoppingList: shoppingList),
             ),
           ),
         ),

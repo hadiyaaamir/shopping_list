@@ -5,12 +5,12 @@ class ListItemsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ShoppingListItemsBloc, ShoppingListItemsState>(
+    return BlocBuilder<ListItemsOverviewBloc, ListItemsOverviewState>(
       builder: (context, state) {
         if (state.listItems.isEmpty) {
-          return (state.status == ShoppingListItemsStatus.loading)
+          return (state.status == ListItemsOverviewStatus.loading)
               ? const Center(child: CircularProgressIndicator())
-              : (state.status != ShoppingListItemsStatus.success)
+              : (state.status != ListItemsOverviewStatus.success)
                   ? const SizedBox()
                   : const _EmptyList();
         }
@@ -34,16 +34,16 @@ class _NonEmptyList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Iterable<ShoppingListItem> filteredTodos = context
-        .select((ShoppingListItemsBloc bloc) => bloc.state.filteredTodos);
+        .select((ListItemsOverviewBloc bloc) => bloc.state.filteredItems);
 
-    final ShoppingListItemsStatus status =
-        context.select((ShoppingListItemsBloc bloc) => bloc.state.status);
+    final ListItemsOverviewStatus status =
+        context.select((ListItemsOverviewBloc bloc) => bloc.state.status);
 
     final ShoppingList shoppingList =
-        context.select((ShoppingListItemsBloc bloc) => bloc.shoppingList);
+        context.select((ListItemsOverviewBloc bloc) => bloc.shoppingList);
 
     return Expanded(
-      child: status == ShoppingListItemsStatus.loading
+      child: status == ListItemsOverviewStatus.loading
           ? const Center(child: CircularProgressIndicator())
           : Scrollbar(
               radius: const Radius.circular(20),
@@ -54,21 +54,22 @@ class _NonEmptyList extends StatelessWidget {
                     itemBuilder: (context, index) {
                       ShoppingListItem listItem =
                           filteredTodos.elementAt(index);
-                      return ItemListTile(
+                      return ListItemTile(
                         listItem: listItem,
                         onTap: () {
+                          //TODO: add nav
                           // Navigator.push(
                           //   context,
-                          //   TodoEditPage.route(listItem: listItem, shoppingList: shoppingList),
+                          //   TodoEditPage.route(todo: todo, todoList: todoList),
                           // );
                         },
                         onDismissed: (_) {
-                          context.read<ShoppingListItemsBloc>().add(
-                              ShoppingListItemsDeleted(listItem: listItem));
+                          context.read<ListItemsOverviewBloc>().add(
+                              ListItemsOverviewDeleted(listItem: listItem));
                         },
                         onToggleCompleted: (isCompleted) {
-                          context.read<ShoppingListItemsBloc>().add(
-                                ShoppingListItemsCompletionToggled(
+                          context.read<ListItemsOverviewBloc>().add(
+                                ListItemsOverviewCompletionToggled(
                                   listItem: listItem,
                                   isCompleted: isCompleted,
                                 ),
@@ -88,7 +89,7 @@ class _EmptyList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ShoppingList shoppingList =
-        context.select((ShoppingListItemsBloc bloc) => bloc.shoppingList);
+        context.select((ListItemsOverviewBloc bloc) => bloc.shoppingList);
 
     return Center(
       child: Column(
@@ -100,7 +101,8 @@ class _EmptyList extends StatelessWidget {
             label: 'Add To Do',
             width: 130,
             onPressed: () {
-              // Navigator.push(context, TodoEditPage.route(shoppingList: shoppingList));
+              //TODO: add nav
+              // Navigator.push(context, TodoEditPage.route(todoList: todoList));
             },
           )
         ],

@@ -1,27 +1,27 @@
-part of 'shopping_list_items_bloc.dart';
+part of 'list_items_overview_bloc.dart';
 
-enum ShoppingListItemsStatus { initial, loading, success, failure }
+enum ListItemsOverviewStatus { initial, loading, success, failure }
 
-final class ShoppingListItemsState extends Equatable {
-  const ShoppingListItemsState({
-    this.status = ShoppingListItemsStatus.initial,
+final class ListItemsOverviewState extends Equatable {
+  const ListItemsOverviewState({
+    this.status = ListItemsOverviewStatus.initial,
     this.listItems = const [],
-    this.filter = ShoppingListItemsFilter.all,
+    this.filter = ListItemsViewFilter.all,
     this.lastDeletedItem,
   });
 
-  final ShoppingListItemsStatus status;
+  final ListItemsOverviewStatus status;
   final List<ShoppingListItem> listItems;
-  final ShoppingListItemsFilter filter;
+  final ListItemsViewFilter filter;
   final ShoppingListItem? lastDeletedItem;
 
-  ShoppingListItemsState copyWith({
-    ShoppingListItemsStatus Function()? status,
+  ListItemsOverviewState copyWith({
+    ListItemsOverviewStatus Function()? status,
     List<ShoppingListItem> Function()? listItems,
-    ShoppingListItemsFilter Function()? filter,
+    ListItemsViewFilter Function()? filter,
     ShoppingListItem? Function()? lastDeletedItem,
   }) {
-    return ShoppingListItemsState(
+    return ListItemsOverviewState(
       status: status != null ? status() : this.status,
       listItems: listItems != null ? listItems() : this.listItems,
       filter: filter != null ? filter() : this.filter,
@@ -30,7 +30,7 @@ final class ShoppingListItemsState extends Equatable {
     );
   }
 
-  Iterable<ShoppingListItem> get filteredTodos => filter.applyAll(listItems);
+  Iterable<ShoppingListItem> get filteredItems => filter.applyAll(listItems);
 
   @override
   List<Object?> get props => [status, listItems, lastDeletedItem, filter];

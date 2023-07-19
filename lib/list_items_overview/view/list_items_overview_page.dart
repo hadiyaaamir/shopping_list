@@ -1,24 +1,24 @@
 part of 'view.dart';
 
-class ListItemsPage extends StatelessWidget {
-  const ListItemsPage({super.key, required this.shoppingList});
+class ListItemsOverviewPage extends StatelessWidget {
+  const ListItemsOverviewPage({super.key, required this.shoppingList});
 
   final ShoppingList shoppingList;
 
   static Route<void> route({required ShoppingList shoppingList}) {
     return MaterialPageRoute<void>(
-      builder: (_) => ListItemsPage(shoppingList: shoppingList),
+      builder: (_) => ListItemsOverviewPage(shoppingList: shoppingList),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ShoppingListItemsBloc(
+      create: (context) => ListItemsOverviewBloc(
         shoppingList: shoppingList,
         shoppingListRepository: context.read<ShoppingListRepository>(),
-      )..add(const ShoppingListItemsSubscriptionRequested()),
-      child: const ListItemsView(),
+      )..add(const ListItemsOverviewSubscriptionRequested()),
+      child: const ListItemsOverviewView(),
     );
   }
 }

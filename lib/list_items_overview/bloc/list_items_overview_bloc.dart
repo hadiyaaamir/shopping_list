@@ -1,54 +1,56 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:shopping_list/shopping_list_items/model/model.dart';
+import 'package:shopping_list/list_items_overview/model/model.dart';
 import 'package:shopping_list_repository/shopping_list_repository.dart';
 
-part 'shopping_list_items_event.dart';
-part 'shopping_list_items_state.dart';
+part 'list_items_overview_event.dart';
+part 'list_items_overview_state.dart';
 
-class ShoppingListItemsBloc
-    extends Bloc<ShoppingListItemsEvent, ShoppingListItemsState> {
-  ShoppingListItemsBloc({
+class ListItemsOverviewBloc
+    extends Bloc<ListItemsOverviewEvent, ListItemsOverviewState> {
+  ListItemsOverviewBloc({
     required ShoppingListRepository shoppingListRepository,
     required this.shoppingList,
   })  : _shoppingListRepository = shoppingListRepository,
-        super(const ShoppingListItemsState()) {
-    on<ShoppingListItemsSubscriptionRequested>(_onSubscriptionRequested);
-    on<ShoppingListItemsCompletionToggled>(_onListItemCompletionToggled);
-    on<ShoppingListItemsDeleted>(_onListItemDeleted);
-    on<ShoppingListItemsUndoDelete>(_onUndoDelete);
-    on<ShoppingListItemsFilterChanged>(_onFilterChanged);
-    on<ShoppingListItemsToggleAll>(_onToggleAll);
-    on<ShoppingListItemsClearCompleted>(_onClearCompleted);
+        super(const ListItemsOverviewState()) {
+    on<ListItemsOverviewSubscriptionRequested>(_onSubscriptionRequested);
+    on<ListItemsOverviewCompletionToggled>(_onListItemCompletionToggled);
+    on<ListItemsOverviewDeleted>(_onListItemDeleted);
+    on<ListItemsOverviewUndoDelete>(_onUndoDelete);
+    on<ListItemsOverviewFilterChanged>(_onFilterChanged);
+    on<ListItemsOverviewToggleAll>(_onToggleAll);
+    on<ListItemsOverviewClearCompleted>(_onClearCompleted);
   }
 
   final ShoppingListRepository _shoppingListRepository;
   final ShoppingList shoppingList;
 
   Future<void> _onSubscriptionRequested(
-    ShoppingListItemsSubscriptionRequested event,
-    Emitter<ShoppingListItemsState> emit,
+    ListItemsOverviewSubscriptionRequested event,
+    Emitter<ListItemsOverviewState> emit,
   ) async {
-    emit(state.copyWith(status: () => ShoppingListItemsStatus.loading));
+    emit(state.copyWith(status: () => ListItemsOverviewStatus.loading));
 
     await emit.forEach<List<ShoppingListItem>>(
       _shoppingListRepository.getShoppingList(listId: shoppingList.id),
-      onData: (items) => state.copyWith(
-        status: () => ShoppingListItemsStatus.success,
-        listItems: () => items,
+      onData: (listItems) => state.copyWith(
+        status: () => ListItemsOverviewStatus.success,
+        listItems: () => listItems,
       ),
       onError: (_, __) => state.copyWith(
-        status: () => ShoppingListItemsStatus.failure,
+        status: () => ListItemsOverviewStatus.failure,
       ),
     );
   }
 
   Future<void> _onListItemCompletionToggled(
-    ShoppingListItemsCompletionToggled event,
-    Emitter<ShoppingListItemsState> emit,
+    ListItemsOverviewCompletionToggled event,
+    Emitter<ListItemsOverviewState> emit,
   ) async {
-    final newListItem = event.listItem.copyWith(isCompleted: event.isCompleted);
-    await _shoppingListRepository.saveListItem(newListItem);
+    final newItem = event.listItem.copyWith(isCompleted: event.isCompleted);
+    await _shoppingListRepository.saveListItem(newItem);
 
     if (event.isCompleted) {
       await _shoppingListRepository.shoppingListIncrementCompleted(
@@ -64,13 +66,13 @@ class ShoppingListItemsBloc
   }
 
   Future<void> _onListItemDeleted(
-    ShoppingListItemsDeleted event,
-    Emitter<ShoppingListItemsState> emit,
+    ListItemsOverviewDeleted event,
+    Emitter<ListItemsOverviewState> emit,
   ) async {
     emit(
       state.copyWith(
         lastDeletedItem: () => event.listItem,
-        status: () => ShoppingListItemsStatus.loading,
+        status: () => ListItemsOverviewStatus.loading,
       ),
     );
 
@@ -83,22 +85,22 @@ class ShoppingListItemsBloc
           : await _shoppingListRepository.shoppingListDecrementActive(
               listId: shoppingList.id);
 
-      emit(state.copyWith(status: () => ShoppingListItemsStatus.success));
+      emit(state.copyWith(status: () => ListItemsOverviewStatus.success));
     } catch (_) {
-      emit(state.copyWith(status: () => ShoppingListItemsStatus.failure));
+      emit(state.copyWith(status: () => ListItemsOverviewStatus.failure));
     }
   }
 
   Future<void> _onUndoDelete(
-    ShoppingListItemsUndoDelete event,
-    Emitter<ShoppingListItemsState> emit,
+    ListItemsOverviewUndoDelete event,
+    Emitter<ListItemsOverviewState> emit,
   ) async {
     if (state.lastDeletedItem != null) {
-      final deletedListItem = state.lastDeletedItem!;
+      final deletedItem = state.lastDeletedItem!;
       emit(state.copyWith(lastDeletedItem: () => null));
-      await _shoppingListRepository.saveListItem(deletedListItem);
+      await _shoppingListRepository.saveListItem(deletedItem);
 
-      deletedListItem.isCompleted
+      deletedItem.isCompleted
           ? await _shoppingListRepository.shoppingListIncrementCompleted(
               listId: shoppingList.id)
           : await _shoppingListRepository.shoppingListIncrementActive(
@@ -107,15 +109,15 @@ class ShoppingListItemsBloc
   }
 
   Future<void> _onFilterChanged(
-    ShoppingListItemsFilterChanged event,
-    Emitter<ShoppingListItemsState> emit,
+    ListItemsOverviewFilterChanged event,
+    Emitter<ListItemsOverviewState> emit,
   ) async {
     emit(state.copyWith(filter: () => event.filter));
   }
 
   Future<void> _onToggleAll(
-    ShoppingListItemsToggleAll event,
-    Emitter<ShoppingListItemsState> emit,
+    ListItemsOverviewToggleAll event,
+    Emitter<ListItemsOverviewState> emit,
   ) async {
     final areAllCompleted =
         state.listItems.every((listItem) => listItem.isCompleted);
@@ -136,12 +138,16 @@ class ShoppingListItemsBloc
   }
 
   Future<void> _onClearCompleted(
-    ShoppingListItemsClearCompleted event,
-    Emitter<ShoppingListItemsState> emit,
+    ListItemsOverviewClearCompleted event,
+    Emitter<ListItemsOverviewState> emit,
   ) async {
     int cleared = await _shoppingListRepository.clearCompletedItems(
         listId: shoppingList.id);
     await _shoppingListRepository.shoppingListDecrementCompleted(
         listId: shoppingList.id, value: cleared);
+    // final newTodoList = state.shoppingList.copyWith(
+    //   completedItems: state.todoList.completedItems - cleared,
+    // );
+    // await _shoppingListRepository.saveTodoList(newTodoList);
   }
 }

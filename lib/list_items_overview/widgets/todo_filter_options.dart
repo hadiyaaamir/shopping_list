@@ -5,7 +5,7 @@ class ListItemsFilterOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List filters = ShoppingListItemsFilter.values.map((e) => e).toList();
+    List filters = ListItemsViewFilter.values.map((e) => e).toList();
     return Wrap(
       spacing: 10,
       children: List.generate(
@@ -20,12 +20,12 @@ class FilterButton extends StatelessWidget {
     required this.filter,
   });
 
-  final ShoppingListItemsFilter filter;
+  final ListItemsViewFilter filter;
 
   @override
   Widget build(BuildContext context) {
     final activeFilter =
-        context.select((ShoppingListItemsBloc bloc) => bloc.state.filter);
+        context.select((ListItemsOverviewBloc bloc) => bloc.state.filter);
     final colorScheme = Theme.of(context).colorScheme;
 
     bool isSelected = activeFilter == filter;
@@ -51,8 +51,8 @@ class FilterButton extends StatelessWidget {
           ),
         ),
         onTap: () => context
-            .read<ShoppingListItemsBloc>()
-            .add(ShoppingListItemsFilterChanged(filter: filter)),
+            .read<ListItemsOverviewBloc>()
+            .add(ListItemsOverviewFilterChanged(filter: filter)),
       ),
     );
   }

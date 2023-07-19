@@ -1,22 +1,22 @@
 part of 'view.dart';
 
-class ListItemsView extends StatelessWidget {
-  const ListItemsView({super.key});
+class ListItemsOverviewView extends StatelessWidget {
+  const ListItemsOverviewView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final String title =
-        context.select((ShoppingListItemsBloc bloc) => bloc.shoppingList.title);
+        context.select((ListItemsOverviewBloc bloc) => bloc.shoppingList.title);
 
     return Scaffold(
       appBar: CustomAppBar(title: title, profileButton: true),
       body: MultiBlocListener(
         listeners: [
-          BlocListener<ShoppingListItemsBloc, ShoppingListItemsState>(
+          BlocListener<ListItemsOverviewBloc, ListItemsOverviewState>(
             listenWhen: (previous, current) =>
                 previous.status != current.status,
             listener: (context, state) {
-              if (state.status == ShoppingListItemsStatus.failure) {
+              if (state.status == ListItemsOverviewStatus.failure) {
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
                   ..showSnackBar(
@@ -25,7 +25,7 @@ class ListItemsView extends StatelessWidget {
               }
             },
           ),
-          BlocListener<ShoppingListItemsBloc, ShoppingListItemsState>(
+          BlocListener<ListItemsOverviewBloc, ListItemsOverviewState>(
             listenWhen: (previous, current) =>
                 previous.lastDeletedItem != current.lastDeletedItem &&
                 current.lastDeletedItem != null,
@@ -36,14 +36,14 @@ class ListItemsView extends StatelessWidget {
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
                   SnackBar(
-                    content: Text('Deleted ${deletedItem.title}'),
+                    content: Text('Deleted ${deletedItem.item}'),
                     action: SnackBarAction(
                       label: "Undo",
                       onPressed: () {
                         messenger.hideCurrentSnackBar();
                         context
-                            .read<ShoppingListItemsBloc>()
-                            .add(const ShoppingListItemsUndoDelete());
+                            .read<ListItemsOverviewBloc>()
+                            .add(const ListItemsOverviewUndoDelete());
                       },
                     ),
                   ),
@@ -63,15 +63,15 @@ class _AddTodoButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ShoppingListItemsBloc, ShoppingListItemsState>(
+    return BlocBuilder<ListItemsOverviewBloc, ListItemsOverviewState>(
       builder: (context, state) {
         final ShoppingList shoppingList =
-            context.select((ShoppingListItemsBloc bloc) => bloc.shoppingList);
+            context.select((ListItemsOverviewBloc bloc) => bloc.shoppingList);
 
         return FloatingActionIconButton(
-            isVisible: state.listItems.isNotEmpty, onPressed: () {}
-            // => Navigator.push(
-            // context, TodoEditPage.route(shoppingList: shoppingList)),
+            isVisible: state.listItems.isNotEmpty,
+            onPressed: () {} //TODO: add navigation
+            // Navigator.push(context, TodoEditPage.route(shoppingList: shoppingList)),
             );
       },
     );
