@@ -29,7 +29,6 @@ dependencies:
     path: packages/form_inputs
   shopping_list_repository:
     path: packages/shopping_list_repository
-  go_router: ^9.0.3
 
 
 dev_dependencies:
