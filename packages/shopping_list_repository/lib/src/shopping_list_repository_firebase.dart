@@ -17,10 +17,16 @@ class ShoppingListRepositoryFirebase extends ShoppingListRepository {
 
   Stream<List<ShoppingList>> getAllLists({required String userId}) {
     return shoppingListCollection
-        .where('userId', isEqualTo: userId)
         .orderBy('dateCreated', descending: true)
         .snapshots()
-        .map((snapshot) => snapshot.docs.map((e) => e.data()).toList());
+        .map((snapshot) {
+      return snapshot.docs
+          .map((doc) => doc.data())
+          .where((shoppingList) =>
+              shoppingList.userId == userId ||
+              shoppingList.users.contains(userId))
+          .toList();
+    });
   }
 
   @override
