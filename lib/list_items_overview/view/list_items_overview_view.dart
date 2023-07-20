@@ -8,10 +8,13 @@ class ListItemsOverviewView extends StatelessWidget {
     final String title =
         context.select((ListItemsOverviewBloc bloc) => bloc.shoppingList.title);
 
+    final ShoppingList shoppingList =
+        context.select((ListItemsOverviewBloc bloc) => bloc.shoppingList);
+
     return Scaffold(
       appBar: CustomAppBar(
         title: title,
-        actions: [AddUsersButton()],
+        actions: [AddUsersButton(shoppingList: shoppingList)],
       ),
       body: MultiBlocListener(
         listeners: [

@@ -8,9 +8,6 @@ class ShoppingAppView extends StatefulWidget {
 }
 
 class _ShoppingAppViewState extends State<ShoppingAppView> {
-  // final _navigatorKey = GlobalKey<NavigatorState>();
-  // NavigatorState get _navigator => _navigatorKey.currentState!;
-
   @override
   Widget build(BuildContext context) {
     GoRouter router = AppRouter.router;
@@ -33,7 +30,8 @@ class _ShoppingAppViewState extends State<ShoppingAppView> {
 
               case AuthenticationStatus.authenticated:
                 router.go(
-                    state.profileCreated ? '/shoppingLists' : '/createProfile');
+                  state.profileCreated ? '/shoppingLists' : '/createProfile',
+                );
 
               case AuthenticationStatus.unauthenticated:
                 router.go('/login');
