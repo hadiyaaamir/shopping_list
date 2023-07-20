@@ -8,7 +8,7 @@ class ListUsersView extends StatelessWidget {
     String userId =
         context.select((ListUsersBloc bloc) => bloc.shoppingList.userId);
 
-    final List<User> users =
+    final List<RoleUser> users =
         context.select((ListUsersBloc bloc) => bloc.state.users);
 
     return Scaffold(
@@ -34,7 +34,10 @@ class ListUsersView extends StatelessWidget {
               } else if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else {
-                final User owner = snapshot.data!;
+                final RoleUser owner = RoleUser(
+                  user: snapshot.data!,
+                  listUser: ListUser(id: userId, role: ListUserRoles.owner),
+                );
 
                 return ListView.separated(
                   separatorBuilder: (context, index) => const Divider(),

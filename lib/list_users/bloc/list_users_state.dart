@@ -9,11 +9,11 @@ final class ListUsersState extends Equatable {
   });
 
   final ListUsersStatus status;
-  final List<User> users;
+  final List<RoleUser> users;
 
   ListUsersState copyWith({
     ListUsersStatus Function()? status,
-    List<User> Function()? users,
+    List<RoleUser> Function()? users,
   }) {
     return ListUsersState(
       status: status != null ? status() : this.status,

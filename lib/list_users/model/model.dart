@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:shopping_list/list_users/list_users.dart';
+import 'package:equatable/equatable.dart';
+
 import 'package:shopping_list_repository/shopping_list_repository.dart';
 import 'package:user_repository/user_repository.dart';
 
-part 'user_list.dart';
+part 'role_user.dart';

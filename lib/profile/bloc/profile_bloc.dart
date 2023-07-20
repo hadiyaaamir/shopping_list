@@ -75,6 +75,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
             .createUser(
                 userId: _authenticationRepository.currentAuthUser!.id,
                 user: User(
+                  id: _authenticationRepository.currentAuthUser!.id,
                   firstName: state.firstName.value,
                   lastName: state.lastName.value,
                   email: _authenticationRepository.currentAuthUser!.email,
