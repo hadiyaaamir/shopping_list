@@ -5,13 +5,13 @@ class UserListTile extends StatelessWidget {
     super.key,
     required this.user,
   });
-  final ListUser user;
+  final User user;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(user.id),
-      subtitle: Text(user.role.toStringValue()),
+      title: Text(user.firstName),
+      // subtitle: Text(user.role.toStringValue()),
     );
   }
 }

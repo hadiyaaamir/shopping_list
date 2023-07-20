@@ -41,4 +41,10 @@ class UserRepositoryHardcoded extends UserRepository {
     // TODO: implement userProfileCreated
     throw UnimplementedError();
   }
+
+  @override
+  Future<List<User>> getUsersById(List<String> userIds) {
+    // TODO: implement getUsersById
+    throw UnimplementedError();
+  }
 }
