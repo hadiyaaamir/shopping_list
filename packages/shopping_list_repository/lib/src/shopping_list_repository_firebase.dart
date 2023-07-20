@@ -38,7 +38,7 @@ class ShoppingListRepositoryFirebase extends ShoppingListRepository {
         .map((snapshot) => snapshot.docs.map((e) => e.data()).toList());
   }
 
-  Stream<List<String>> getUsersForList({required String listId}) {
+  Stream<List<ListUser>> getUsersForList({required String listId}) {
     return shoppingListCollection.doc(listId).snapshots().map(
           (snapshot) => (snapshot.data() != null ? snapshot.data()!.users : []),
         );

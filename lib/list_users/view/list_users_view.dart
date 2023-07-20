@@ -5,9 +5,12 @@ class ListUsersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String owner =
+    String userId =
         context.select((ListUsersBloc bloc) => bloc.shoppingList.userId);
-    List users = context.select((ListUsersBloc bloc) => bloc.state.users);
+    ListUser owner = ListUser(id: userId, role: ListUserRoles.owner);
+
+    List<ListUser> users =
+        context.select((ListUsersBloc bloc) => bloc.state.users);
 
     return Scaffold(
       appBar: const CustomAppBar(title: 'Users'),
@@ -36,18 +39,5 @@ class ListUsersView extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class UserListTile extends StatelessWidget {
-  const UserListTile({
-    super.key,
-    required this.user,
-  });
-  final String user;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(title: Text(user));
   }
 }

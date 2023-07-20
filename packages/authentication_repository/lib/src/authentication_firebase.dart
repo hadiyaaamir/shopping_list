@@ -81,7 +81,6 @@ class AuthenticationRepositoryFirebase extends AuthenticationRepository {
       ? AuthUser(
           id: _firebaseAuth.currentUser!.uid,
           email: _firebaseAuth.currentUser!.email!,
-          emailVerified: _firebaseAuth.currentUser!.emailVerified,
         )
       : null;
 

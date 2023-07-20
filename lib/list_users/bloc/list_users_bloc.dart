@@ -25,7 +25,7 @@ class ListUsersBloc extends Bloc<ListUsersEvent, ListUsersState> {
   ) async {
     emit(state.copyWith(status: () => ListUsersStatus.loading));
 
-    await emit.forEach<List<String>>(
+    await emit.forEach<List<ListUser>>(
         _shoppingListRepository.getUsersForList(listId: shoppingList.id),
         onData: (users) => state.copyWith(
               status: () => ListUsersStatus.success,
