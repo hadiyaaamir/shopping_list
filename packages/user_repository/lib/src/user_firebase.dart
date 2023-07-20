@@ -32,7 +32,6 @@ class UserRepositoryFirebase extends UserRepository {
           final user = User.fromJson(snapshot.data()!);
           users.add(user);
         } else {
-          // If the document doesn't exist, add a default empty User
           users.add(User.empty);
         }
       }

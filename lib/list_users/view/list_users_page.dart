@@ -16,9 +16,8 @@ class ListUsersPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => ListUsersBloc(
         shoppingList: shoppingList,
-        shoppingListRepository: context.read<ShoppingListRepository>(),
         userRepository: context.read<UserRepository>(),
-      )..add(const ListUsersSubscriptionRequested()),
+      )..add(const ListUsersGetUsersDetails()),
       child: const ListUsersView(),
     );
   }
