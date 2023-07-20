@@ -17,10 +17,16 @@ class ShoppingListRepositoryFirebase extends ShoppingListRepository {
 
   Stream<List<ShoppingList>> getAllLists({required String userId}) {
     return shoppingListCollection
-        .where('userId', isEqualTo: userId)
         .orderBy('dateCreated', descending: true)
         .snapshots()
-        .map((snapshot) => snapshot.docs.map((e) => e.data()).toList());
+        .map((snapshot) {
+      return snapshot.docs
+          .map((doc) => doc.data())
+          .where((shoppingList) =>
+              shoppingList.userId == userId ||
+              shoppingList.users.contains(userId))
+          .toList();
+    });
   }
 
   @override
@@ -30,6 +36,12 @@ class ShoppingListRepositoryFirebase extends ShoppingListRepository {
         .orderBy('isCompleted')
         .snapshots()
         .map((snapshot) => snapshot.docs.map((e) => e.data()).toList());
+  }
+
+  Stream<List<ListUser>> getUsersForList({required String listId}) {
+    return shoppingListCollection.doc(listId).snapshots().map(
+          (snapshot) => (snapshot.data() != null ? snapshot.data()!.users : []),
+        );
   }
 
   @override

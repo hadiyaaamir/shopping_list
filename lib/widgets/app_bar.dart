@@ -6,27 +6,33 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     this.title = '',
     this.profileButton = false,
+    this.actions,
   });
 
   final String title;
   final bool profileButton;
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
+    List<Widget>? appActions = profileButton
+        ? [
+            IconButton(
+              onPressed: () => Navigator.push(context, ProfilePage.route()),
+              icon: const Icon(Icons.account_circle, size: 30),
+            ),
+          ]
+        : [];
+
+    if (actions != null) appActions.addAll(actions!);
+
     return AppBar(
       title: Text(
         title,
         style: Theme.of(context).textTheme.headlineMedium,
       ),
       centerTitle: true,
-      actions: profileButton
-          ? [
-              IconButton(
-                onPressed: () => Navigator.push(context, ProfilePage.route()),
-                icon: const Icon(Icons.account_circle, size: 30),
-              )
-            ]
-          : null,
+      actions: appActions,
     );
   }
 

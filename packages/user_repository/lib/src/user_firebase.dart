@@ -22,6 +22,27 @@ class UserRepositoryFirebase extends UserRepository {
     return _user!;
   }
 
+  Future<List<User>> getUsersById(List<String> userIds) async {
+    try {
+      final List<User> users = [];
+
+      for (String userId in userIds) {
+        final snapshot = await usersCollection.doc(userId).get();
+        if (snapshot.exists) {
+          final user = User.fromJson(snapshot.data()!);
+          users.add(user);
+        } else {
+          // If the document doesn't exist, add a default empty User
+          users.add(User.empty);
+        }
+      }
+      return users;
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
   Future<bool> userProfileCreated(
       {required String userId, required String email}) async {
     resetUser();

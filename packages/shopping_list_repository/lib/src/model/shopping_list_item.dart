@@ -2,10 +2,10 @@ part of 'model.dart';
 
 class ShoppingListItem extends Equatable {
   ShoppingListItem({
-    required this.title,
+    required this.item,
     required this.listId,
     String? id,
-    this.description = '',
+    this.quantity = '',
     this.isCompleted = false,
     DateTime? dateCreated,
   })  : assert(
@@ -18,24 +18,24 @@ class ShoppingListItem extends Equatable {
   final String id;
 
   final String listId;
-  final String title;
-  final String description;
+  final String item;
+  final String quantity;
   final bool isCompleted;
   final DateTime dateCreated;
 
   ShoppingListItem copyWith({
     String? id,
     String? listId,
-    String? title,
-    String? description,
+    String? item,
+    String? quantity,
     bool? isCompleted,
     DateTime? dateCreated,
   }) {
     return ShoppingListItem(
       id: id ?? this.id,
       listId: listId ?? this.listId,
-      title: title ?? this.title,
-      description: description ?? this.description,
+      item: item ?? this.item,
+      quantity: quantity ?? this.quantity,
       isCompleted: isCompleted ?? this.isCompleted,
       dateCreated: dateCreated ?? this.dateCreated,
     );
@@ -43,10 +43,10 @@ class ShoppingListItem extends Equatable {
 
   static ShoppingListItem fromJson(Map<String, dynamic> json) =>
       ShoppingListItem(
-        title: json['title'] as String,
+        item: json['item'] as String,
         id: json['id'] as String?,
         listId: json['listId'] as String,
-        description: json['description'] as String? ?? '',
+        quantity: json['quantity'] as String? ?? '',
         isCompleted: json['isCompleted'] as bool? ?? false,
         dateCreated: json['dateCreated'].toDate(),
       );
@@ -54,12 +54,13 @@ class ShoppingListItem extends Equatable {
   Map<String, dynamic> toJson() => <String, dynamic>{
         'id': id,
         'listId': listId,
-        'title': title,
-        'description': description,
+        'item': item,
+        'quantity': quantity,
         'isCompleted': isCompleted,
         'dateCreated': dateCreated,
       };
 
   @override
-  List<Object> get props => [id, title, description, isCompleted, dateCreated];
+  List<Object> get props =>
+      [id, listId, item, quantity, isCompleted, dateCreated];
 }

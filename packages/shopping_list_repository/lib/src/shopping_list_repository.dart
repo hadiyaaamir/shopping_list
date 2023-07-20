@@ -9,6 +9,7 @@ abstract class ShoppingListRepository {
 
   Stream<List<ShoppingList>> getAllLists({required String userId});
   Stream<List<ShoppingListItem>> getShoppingList({required String listId});
+  Stream<List<ListUser>> getUsersForList({required String listId});
 
   Future<void> saveShoppingList(ShoppingList shoppingList);
   Future<void> saveListItem(ShoppingListItem listItem);

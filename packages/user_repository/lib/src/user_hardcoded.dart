@@ -9,7 +9,7 @@ class UserRepositoryHardcoded extends UserRepository {
     return Future.delayed(
       const Duration(milliseconds: 300),
       () => _user = User(
-        // id: const Uuid().v4(),
+        id: 'id',
         firstName: 'Hadiya',
         lastName: 'Aamir',
         email: 'h.aamir@gmail.com',
@@ -39,6 +39,12 @@ class UserRepositoryHardcoded extends UserRepository {
   Future<bool> userProfileCreated(
       {required String userId, required String email}) {
     // TODO: implement userProfileCreated
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<User>> getUsersById(List<String> userIds) {
+    // TODO: implement getUsersById
     throw UnimplementedError();
   }
 }
