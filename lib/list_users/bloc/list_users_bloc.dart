@@ -43,12 +43,6 @@ class ListUsersBloc extends Bloc<ListUsersEvent, ListUsersState> {
     }
   }
 
-  // Future<List<User>> _getUserDetails(List<ListUser> listUsers) async {
-  //   final List<String> userIds = listUsers.map((user) => user.id).toList();
-  //   final List<User> users = await _userRepository.getUsersById(userIds);
-  //   return users;
-  // }
-
   Future<List<RoleUser>> _getUserDetails(List<ListUser> listUsers) async {
     final List<String> userIds = listUsers.map((user) => user.id).toList();
     final List<User> users = await _userRepository.getUsersById(userIds);
