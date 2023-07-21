@@ -11,10 +11,24 @@ class ListItemsOverviewView extends StatelessWidget {
     final ShoppingList shoppingList =
         context.select((ListItemsOverviewBloc bloc) => bloc.shoppingList);
 
+    final AuthUser currentAuthUser =
+        context.read<AuthenticationRepository>().currentAuthUser!;
+
+    final bool isOwner = currentAuthUser.id == shoppingList.userId;
+
+    // final ListUser currentListUser = shoppingList.users.firstWhere(
+    //   (user) => user.id == currentAuthUser.id,
+    // );
+
     return Scaffold(
       appBar: CustomAppBar(
         title: title,
-        actions: [AddUsersButton(shoppingList: shoppingList)],
+        actions: [
+          AddUsersButton(
+            shoppingList: shoppingList,
+            isVisible: isOwner,
+          )
+        ],
       ),
       body: MultiBlocListener(
         listeners: [
