@@ -75,10 +75,10 @@ class _AddTodoButton extends StatelessWidget {
             context.select((ListItemsOverviewBloc bloc) => bloc.shoppingList);
 
         return FloatingActionIconButton(
-            isVisible: state.listItems.isNotEmpty,
-            onPressed: () {} //TODO: add navigation
-            // Navigator.push(context, TodoEditPage.route(shoppingList: shoppingList)),
-            );
+          isVisible: state.listItems.isNotEmpty,
+          onPressed: () => Navigator.push(
+              context, ListItemEditPage.route(shoppingList: shoppingList)),
+        );
       },
     );
   }

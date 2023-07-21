@@ -57,11 +57,11 @@ class _NonEmptyList extends StatelessWidget {
                       return ListItemTile(
                         listItem: listItem,
                         onTap: () {
-                          //TODO: add nav
-                          // Navigator.push(
-                          //   context,
-                          //   TodoEditPage.route(todo: todo, todoList: todoList),
-                          // );
+                          Navigator.push(
+                            context,
+                            ListItemEditPage.route(
+                                listItem: listItem, shoppingList: shoppingList),
+                          );
                         },
                         onDismissed: (_) {
                           context.read<ListItemsOverviewBloc>().add(
@@ -101,8 +101,8 @@ class _EmptyList extends StatelessWidget {
             label: 'Add List Item',
             width: 160,
             onPressed: () {
-              //TODO: add nav
-              // Navigator.push(context, TodoEditPage.route(todoList: todoList));
+              Navigator.push(
+                  context, ListItemEditPage.route(shoppingList: shoppingList));
             },
           )
         ],
