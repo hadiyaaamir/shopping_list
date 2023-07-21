@@ -50,13 +50,13 @@ class ShoppingListsView extends StatelessWidget {
         ],
         child: const ShoppingListsList(),
       ),
-      floatingActionButton: const _AddTodoListButton(),
+      floatingActionButton: const _AddShoppingListButton(),
     );
   }
 }
 
-class _AddTodoListButton extends StatelessWidget {
-  const _AddTodoListButton();
+class _AddShoppingListButton extends StatelessWidget {
+  const _AddShoppingListButton();
 
   @override
   Widget build(BuildContext context) {

@@ -48,6 +48,22 @@ class ShoppingListRepositoryFirebase extends ShoppingListRepository {
     await shoppingListCollection.doc(shoppingList.id).set(shoppingList);
   }
 
+  Future<void> addUserToList(
+      {required String listId, required ListUser user}) async {
+    final shoppingList = await shoppingListCollection.doc(listId).get();
+    if (shoppingList.exists) {
+      final List<ListUser> updatedListUsers = [
+        ...shoppingList.data()!.users,
+        user
+      ];
+      print('updated users: $updatedListUsers');
+      await saveShoppingList(
+          shoppingList.data()!.copyWith(users: updatedListUsers));
+      // .doc(listId)
+      // .update({'users': updatedListUsers});
+    }
+  }
+
   @override
   Future<void> deleteListItem(String id) async {
     final todoFirestore = await listItemCollection.doc(id).get();

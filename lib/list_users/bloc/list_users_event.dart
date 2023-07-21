@@ -10,3 +10,25 @@ sealed class ListUsersEvent extends Equatable {
 final class ListUsersGetUsersDetails extends ListUsersEvent {
   const ListUsersGetUsersDetails();
 }
+
+final class ListUsersIdentifierChanged extends ListUsersEvent {
+  const ListUsersIdentifierChanged({required this.identifier});
+
+  final String identifier;
+
+  @override
+  List<Object> get props => [identifier];
+}
+
+final class ListUsersRoleChanged extends ListUsersEvent {
+  const ListUsersRoleChanged({required this.userRole});
+
+  final ListUserRoles userRole;
+
+  @override
+  List<Object> get props => [userRole];
+}
+
+final class ListUsersAdded extends ListUsersEvent {
+  const ListUsersAdded();
+}

@@ -9,3 +9,4 @@ import 'package:user_repository/user_repository.dart';
 part 'list_users_page.dart';
 part 'list_users_view.dart';
 part 'users_list.dart';
+part 'add_user_dialog.dart';

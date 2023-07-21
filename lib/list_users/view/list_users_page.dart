@@ -17,6 +17,7 @@ class ListUsersPage extends StatelessWidget {
       create: (context) => ListUsersBloc(
         shoppingList: shoppingList,
         userRepository: context.read<UserRepository>(),
+        shoppingListRepository: context.read<ShoppingListRepository>(),
       )..add(const ListUsersGetUsersDetails()),
       child: const ListUsersView(),
     );
