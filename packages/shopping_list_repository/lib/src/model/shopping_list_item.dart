@@ -4,6 +4,7 @@ class ShoppingListItem extends Equatable {
   ShoppingListItem({
     required this.item,
     required this.listId,
+    required this.userId,
     String? id,
     this.quantity = '',
     this.isCompleted = false,
@@ -16,8 +17,8 @@ class ShoppingListItem extends Equatable {
         id = id ?? const Uuid().v4();
 
   final String id;
-
   final String listId;
+  final String userId;
   final String item;
   final String quantity;
   final bool isCompleted;
@@ -26,6 +27,7 @@ class ShoppingListItem extends Equatable {
   ShoppingListItem copyWith({
     String? id,
     String? listId,
+    String? userId,
     String? item,
     String? quantity,
     bool? isCompleted,
@@ -34,6 +36,7 @@ class ShoppingListItem extends Equatable {
     return ShoppingListItem(
       id: id ?? this.id,
       listId: listId ?? this.listId,
+      userId: userId ?? this.userId,
       item: item ?? this.item,
       quantity: quantity ?? this.quantity,
       isCompleted: isCompleted ?? this.isCompleted,
@@ -46,6 +49,7 @@ class ShoppingListItem extends Equatable {
         item: json['item'] as String,
         id: json['id'] as String?,
         listId: json['listId'] as String,
+        userId: json['userId'] as String,
         quantity: json['quantity'] as String? ?? '',
         isCompleted: json['isCompleted'] as bool? ?? false,
         dateCreated: json['dateCreated'].toDate(),
@@ -54,6 +58,7 @@ class ShoppingListItem extends Equatable {
   Map<String, dynamic> toJson() => <String, dynamic>{
         'id': id,
         'listId': listId,
+        'userId': userId,
         'item': item,
         'quantity': quantity,
         'isCompleted': isCompleted,
@@ -62,5 +67,5 @@ class ShoppingListItem extends Equatable {
 
   @override
   List<Object> get props =>
-      [id, listId, item, quantity, isCompleted, dateCreated];
+      [id, listId, userId, item, quantity, isCompleted, dateCreated];
 }

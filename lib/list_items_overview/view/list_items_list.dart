@@ -98,8 +98,8 @@ class _EmptyList extends StatelessWidget {
           const Text('Your List is Empty'),
           const SizedBox(height: 10),
           Button(
-            label: 'Add To Do',
-            width: 130,
+            label: 'Add List Item',
+            width: 160,
             onPressed: () {
               //TODO: add nav
               // Navigator.push(context, TodoEditPage.route(todoList: todoList));
