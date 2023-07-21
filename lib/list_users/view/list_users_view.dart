@@ -48,7 +48,10 @@ class _AddUserButton extends StatelessWidget {
           label: 'Add User',
           onPressed: () => showDialog(
             context: context,
-            builder: (context) => AddUserDialog(listUsersBloc: listUsersBloc),
+            builder: (context) => BlocProvider.value(
+              value: listUsersBloc,
+              child: AddUserDialog(),
+            ),
           ),
         );
       },

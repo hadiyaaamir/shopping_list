@@ -69,6 +69,7 @@ class ListUsersBloc extends Bloc<ListUsersEvent, ListUsersState> {
     ListUsersRoleChanged event,
     Emitter<ListUsersState> emit,
   ) async {
+    print('${event.userRole}');
     emit(state.copyWith(userRole: event.userRole));
   }
 
@@ -117,7 +118,6 @@ class ListUsersBloc extends Bloc<ListUsersEvent, ListUsersState> {
         ),
       );
     } catch (e) {
-      print(e);
       emit(state.copyWith(status: () => ListUsersStatus.failure));
     }
   }
