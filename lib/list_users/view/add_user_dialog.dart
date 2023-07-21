@@ -28,6 +28,7 @@ class AddUserDialog extends StatelessWidget {
                   userRole: newRole ?? ListUserRoles.editor));
             },
             items: ListUserRoles.values
+                .where((role) => role != ListUserRoles.owner)
                 .map<DropdownMenuItem<ListUserRoles>>((ListUserRoles value) {
               return DropdownMenuItem<ListUserRoles>(
                 value: value,
