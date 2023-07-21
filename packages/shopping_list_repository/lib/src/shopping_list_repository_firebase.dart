@@ -56,11 +56,14 @@ class ShoppingListRepositoryFirebase extends ShoppingListRepository {
         ...shoppingList.data()!.users,
         user
       ];
-      print('updated users: $updatedListUsers');
+      if (shoppingList
+          .data()!
+          .users
+          .any((existingUser) => existingUser.id == user.id)) {
+        throw UserAlreadyExistsException('User already exists in the list.');
+      }
       await saveShoppingList(
           shoppingList.data()!.copyWith(users: updatedListUsers));
-      // .doc(listId)
-      // .update({'users': updatedListUsers});
     }
   }
 
@@ -190,4 +193,10 @@ class ShoppingListRepositoryFirebase extends ShoppingListRepository {
       }
     });
   }
+}
+
+class UserAlreadyExistsException implements Exception {
+  final String message;
+
+  UserAlreadyExistsException(this.message);
 }

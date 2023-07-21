@@ -20,7 +20,10 @@ class ListUsersView extends StatelessWidget {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
-                const SnackBar(content: Text('Unexpected error occured')),
+                SnackBar(
+                  content:
+                      Text(state.errorMessage ?? 'Unexpected error occured'),
+                ),
               );
           }
         },

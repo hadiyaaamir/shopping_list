@@ -9,4 +9,4 @@ import 'package:shopping_list_repository/shopping_list_repository.dart';
 
 part 'shopping_lists_page.dart';
 part 'shopping_lists_view.dart';
-part 'todo_lists_list.dart';
+part 'shiopping_lists_list.dart';

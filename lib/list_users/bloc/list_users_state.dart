@@ -8,6 +8,7 @@ final class ListUsersState extends Equatable {
     this.users = const [],
     this.userIdentifier = const StringInput.pure(),
     this.userRole = ListUserRoles.editor,
+    this.errorMessage,
   });
 
   final ListUsersStatus status;
@@ -15,21 +16,25 @@ final class ListUsersState extends Equatable {
 
   final StringInput userIdentifier;
   final ListUserRoles userRole;
+  final String? errorMessage;
 
   ListUsersState copyWith({
     ListUsersStatus Function()? status,
     List<RoleUser> Function()? users,
     StringInput? userIdentifier,
     ListUserRoles? userRole,
+    String? errorMessage,
   }) {
     return ListUsersState(
       status: status != null ? status() : this.status,
       users: users != null ? users() : this.users,
       userIdentifier: userIdentifier ?? this.userIdentifier,
       userRole: userRole ?? this.userRole,
+      errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 
   @override
-  List<Object> get props => [status, users, userIdentifier, userRole];
+  List<Object?> get props =>
+      [status, users, userIdentifier, userRole, errorMessage];
 }

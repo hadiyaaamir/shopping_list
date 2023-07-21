@@ -85,7 +85,12 @@ class ListUsersBloc extends Bloc<ListUsersEvent, ListUsersState> {
           identifier: state.userIdentifier.value);
 
       if (user == null) {
-        emit(state.copyWith(status: () => ListUsersStatus.failure));
+        emit(
+          state.copyWith(
+            status: () => ListUsersStatus.failure,
+            errorMessage: 'User does not exist',
+          ),
+        );
       } else {
         final ListUser listUser = ListUser(id: user.id, role: state.userRole);
         final RoleUser roleUser = RoleUser(user: user, listUser: listUser);
@@ -104,6 +109,13 @@ class ListUsersBloc extends Bloc<ListUsersEvent, ListUsersState> {
           ),
         );
       }
+    } on UserAlreadyExistsException catch (e) {
+      emit(
+        state.copyWith(
+          status: () => ListUsersStatus.failure,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
       print(e);
       emit(state.copyWith(status: () => ListUsersStatus.failure));
