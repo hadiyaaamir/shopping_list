@@ -16,9 +16,13 @@ class ListItemsOverviewView extends StatelessWidget {
 
     final bool isOwner = currentAuthUser.id == shoppingList.userId;
 
-    // final ListUser currentListUser = shoppingList.users.firstWhere(
-    //   (user) => user.id == currentAuthUser.id,
-    // );
+    final ListUser? currentListUser = isOwner
+        ? ListUser(id: currentAuthUser.id, role: ListUserRoles.owner)
+        : shoppingList.users.isNotEmpty
+            ? shoppingList.users.firstWhere(
+                (user) => user.id == currentAuthUser.id,
+              )
+            : null;
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -71,15 +75,20 @@ class ListItemsOverviewView extends StatelessWidget {
             },
           ),
         ],
-        child: const ListItemsList(),
+        child: ListItemsList(currentListUser: currentListUser),
       ),
-      floatingActionButton: const _AddTodoButton(),
+      floatingActionButton: _AddTodoButton(
+          isVisible: currentListUser != null
+              ? currentListUser.role != ListUserRoles.viewer
+              : false),
     );
   }
 }
 
 class _AddTodoButton extends StatelessWidget {
-  const _AddTodoButton();
+  const _AddTodoButton({required this.isVisible});
+
+  final bool isVisible;
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +98,7 @@ class _AddTodoButton extends StatelessWidget {
             context.select((ListItemsOverviewBloc bloc) => bloc.shoppingList);
 
         return FloatingActionIconButton(
-          isVisible: state.listItems.isNotEmpty,
+          isVisible: state.listItems.isNotEmpty && isVisible,
           onPressed: () => Navigator.push(
               context, ListItemEditPage.route(shoppingList: shoppingList)),
         );

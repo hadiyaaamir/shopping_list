@@ -7,19 +7,59 @@ class ListItemTile extends StatelessWidget {
     required this.onTap,
     required this.onToggleCompleted,
     required this.onDismissed,
+    required this.currentListUser,
   });
 
   final ShoppingListItem listItem;
-  final Function() onTap;
-  final DismissDirectionCallback onDismissed;
+  final Function()? onTap;
+  final DismissDirectionCallback? onDismissed;
   final ValueChanged<bool> onToggleCompleted;
+
+  final ListUser? currentListUser;
 
   @override
   Widget build(BuildContext context) {
     final status = context.read<ListItemsOverviewBloc>().state.status;
 
+    ListUserRoles userRole =
+        currentListUser != null ? currentListUser!.role : ListUserRoles.viewer;
+
+    bool allowEdit = (userRole != ListUserRoles.viewer) &&
+        (userRole == ListUserRoles.owner ||
+            listItem.userId == currentListUser?.id);
+
+    final _ItemListTile listTile = _ItemListTile(
+      listItem: listItem,
+      allowEdit: allowEdit,
+      onTap: onTap,
+      onToggleCompleted: onToggleCompleted,
+    );
+
+    return allowEdit
+        ? _DismissibleListTile(
+            status: status,
+            onDismissed: onDismissed,
+            listTile: listTile,
+          )
+        : listTile;
+  }
+}
+
+class _DismissibleListTile extends StatelessWidget {
+  const _DismissibleListTile({
+    required this.status,
+    required this.onDismissed,
+    required this.listTile,
+  });
+
+  final ListItemsOverviewStatus status;
+  final DismissDirectionCallback? onDismissed;
+  final _ItemListTile listTile;
+
+  @override
+  Widget build(BuildContext context) {
     return Dismissible(
-      key: Key('todoListTile_dismissible_${listItem.id}'),
+      key: Key('todoListTile_dismissible_${listTile.listItem.id}'),
       onDismissed:
           status == ListItemsOverviewStatus.loading ? null : onDismissed,
       direction: DismissDirection.endToStart,
@@ -29,37 +69,57 @@ class ListItemTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Icon(Icons.delete, color: Theme.of(context).colorScheme.onError),
       ),
-      child: ListTile(
-        title: Text(
-          listItem.item,
-          style: !listItem.isCompleted
-              ? null
-              : const TextStyle(
-                  color: Colors.grey,
-                  decoration: TextDecoration.lineThrough,
-                ),
-        ),
-        subtitle: listItem.quantity.isNotEmpty
-            ? Text(
-                listItem.quantity,
-                style: !listItem.isCompleted
-                    ? null
-                    : const TextStyle(
-                        color: Colors.grey,
-                        decoration: TextDecoration.lineThrough,
-                      ),
-              )
-            : null,
-        onTap: onTap,
-        leading: Checkbox(
-          shape: const ContinuousRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(8)),
-          ),
-          value: listItem.isCompleted,
-          onChanged: (value) => onToggleCompleted(value!),
-        ),
-        trailing: const Icon(Icons.keyboard_arrow_right_rounded),
+      child: listTile,
+    );
+  }
+}
+
+class _ItemListTile extends StatelessWidget {
+  const _ItemListTile({
+    required this.listItem,
+    required this.allowEdit,
+    required this.onTap,
+    required this.onToggleCompleted,
+  });
+
+  final ShoppingListItem listItem;
+  final bool allowEdit;
+  final Function()? onTap;
+  final ValueChanged<bool> onToggleCompleted;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(
+        listItem.item,
+        style: !listItem.isCompleted
+            ? null
+            : const TextStyle(
+                color: Colors.grey,
+                decoration: TextDecoration.lineThrough,
+              ),
       ),
+      subtitle: listItem.quantity.isNotEmpty
+          ? Text(
+              listItem.quantity,
+              style: !listItem.isCompleted
+                  ? null
+                  : const TextStyle(
+                      color: Colors.grey,
+                      decoration: TextDecoration.lineThrough,
+                    ),
+            )
+          : null,
+      onTap: allowEdit ? onTap : null,
+      leading: Checkbox(
+        shape: const ContinuousRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+        ),
+        value: listItem.isCompleted,
+        onChanged: (value) => onToggleCompleted(value!),
+      ),
+      trailing:
+          allowEdit ? const Icon(Icons.keyboard_arrow_right_rounded) : null,
     );
   }
 }
