@@ -24,7 +24,7 @@ class ShoppingListRepositoryFirebase extends ShoppingListRepository {
           .map((doc) => doc.data())
           .where((shoppingList) =>
               shoppingList.userId == userId ||
-              shoppingList.users.contains(userId))
+              shoppingList.users.any((user) => user.id == userId))
           .toList();
     });
   }
@@ -38,12 +38,6 @@ class ShoppingListRepositoryFirebase extends ShoppingListRepository {
         .map((snapshot) => snapshot.docs.map((e) => e.data()).toList());
   }
 
-  Stream<List<ListUser>> getUsersForList({required String listId}) {
-    return shoppingListCollection.doc(listId).snapshots().map(
-          (snapshot) => (snapshot.data() != null ? snapshot.data()!.users : []),
-        );
-  }
-
   @override
   Future<void> saveListItem(ShoppingListItem listItem) async {
     await listItemCollection.doc(listItem.id).set(listItem);
@@ -52,6 +46,25 @@ class ShoppingListRepositoryFirebase extends ShoppingListRepository {
   @override
   Future<void> saveShoppingList(ShoppingList shoppingList) async {
     await shoppingListCollection.doc(shoppingList.id).set(shoppingList);
+  }
+
+  Future<void> addUserToList(
+      {required String listId, required ListUser user}) async {
+    final shoppingList = await shoppingListCollection.doc(listId).get();
+    if (shoppingList.exists) {
+      final List<ListUser> updatedListUsers = [
+        ...shoppingList.data()!.users,
+        user
+      ];
+      if (shoppingList
+          .data()!
+          .users
+          .any((existingUser) => existingUser.id == user.id)) {
+        throw UserAlreadyExistsException('User already exists in the list.');
+      }
+      await saveShoppingList(
+          shoppingList.data()!.copyWith(users: updatedListUsers));
+    }
   }
 
   @override
@@ -180,4 +193,10 @@ class ShoppingListRepositoryFirebase extends ShoppingListRepository {
       }
     });
   }
+}
+
+class UserAlreadyExistsException implements Exception {
+  final String message;
+
+  UserAlreadyExistsException(this.message);
 }

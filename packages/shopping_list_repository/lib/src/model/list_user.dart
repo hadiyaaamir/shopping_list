@@ -26,6 +26,24 @@ extension ListUserRolesExtension on ListUserRoles {
         return 'viewer';
     }
   }
+
+  String toTitleCaseString() {
+    String strRole = toStringValue();
+    if (strRole.length > 1)
+      strRole = strRole[0].toUpperCase() + strRole.substring(1);
+    return strRole;
+  }
+
+  String toStringInformation() {
+    switch (this) {
+      case ListUserRoles.editor:
+        return 'Can add items and edit/delete their own items';
+      case ListUserRoles.viewer:
+        return 'Can only check/uncheck items';
+      default:
+        return '';
+    }
+  }
 }
 
 class ListUser extends Equatable {

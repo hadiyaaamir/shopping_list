@@ -1,10 +1,16 @@
 part of 'view.dart';
 
 class ListItemsList extends StatelessWidget {
-  const ListItemsList({super.key});
+  const ListItemsList({super.key, required this.currentListUser});
+
+  final ListUser? currentListUser;
 
   @override
   Widget build(BuildContext context) {
+    bool isNotViewer = currentListUser != null
+        ? currentListUser!.role != ListUserRoles.viewer
+        : false;
+
     return BlocBuilder<ListItemsOverviewBloc, ListItemsOverviewState>(
       builder: (context, state) {
         if (state.listItems.isEmpty) {
@@ -12,15 +18,15 @@ class ListItemsList extends StatelessWidget {
               ? const Center(child: CircularProgressIndicator())
               : (state.status != ListItemsOverviewStatus.success)
                   ? const SizedBox()
-                  : const _EmptyList();
+                  : _EmptyList(isButtonVisible: isNotViewer);
         }
-        return const Column(
+        return Column(
           children: [
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [ListItemsFilterOptions(), ListItemsOptionsMenu()],
             ),
-            _NonEmptyList(),
+            _NonEmptyList(currentListUser: currentListUser),
           ],
         );
       },
@@ -29,7 +35,9 @@ class ListItemsList extends StatelessWidget {
 }
 
 class _NonEmptyList extends StatelessWidget {
-  const _NonEmptyList();
+  const _NonEmptyList({required this.currentListUser});
+
+  final ListUser? currentListUser;
 
   @override
   Widget build(BuildContext context) {
@@ -56,12 +64,13 @@ class _NonEmptyList extends StatelessWidget {
                           filteredTodos.elementAt(index);
                       return ListItemTile(
                         listItem: listItem,
+                        currentListUser: currentListUser,
                         onTap: () {
-                          //TODO: add nav
-                          // Navigator.push(
-                          //   context,
-                          //   TodoEditPage.route(todo: todo, todoList: todoList),
-                          // );
+                          Navigator.push(
+                            context,
+                            ListItemEditPage.route(
+                                listItem: listItem, shoppingList: shoppingList),
+                          );
                         },
                         onDismissed: (_) {
                           context.read<ListItemsOverviewBloc>().add(
@@ -84,7 +93,9 @@ class _NonEmptyList extends StatelessWidget {
 }
 
 class _EmptyList extends StatelessWidget {
-  const _EmptyList();
+  const _EmptyList({required this.isButtonVisible});
+
+  final bool isButtonVisible;
 
   @override
   Widget build(BuildContext context) {
@@ -97,13 +108,16 @@ class _EmptyList extends StatelessWidget {
         children: [
           const Text('Your List is Empty'),
           const SizedBox(height: 10),
-          Button(
-            label: 'Add To Do',
-            width: 130,
-            onPressed: () {
-              //TODO: add nav
-              // Navigator.push(context, TodoEditPage.route(todoList: todoList));
-            },
+          Visibility(
+            visible: isButtonVisible,
+            child: Button(
+              label: 'Add List Item',
+              width: 160,
+              onPressed: () {
+                Navigator.push(context,
+                    ListItemEditPage.route(shoppingList: shoppingList));
+              },
+            ),
           )
         ],
       ),

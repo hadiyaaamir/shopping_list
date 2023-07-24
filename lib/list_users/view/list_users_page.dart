@@ -1,13 +1,22 @@
 part of 'view.dart';
 
 class ListUsersPage extends StatelessWidget {
-  const ListUsersPage({super.key, required this.shoppingList});
+  const ListUsersPage({
+    super.key,
+    required this.shoppingList,
+  });
 
   final ShoppingList shoppingList;
 
-  static Route<void> route({required ShoppingList shoppingList}) {
+  static Route<void> route({
+    required ShoppingList shoppingList,
+    required ListItemsOverviewBloc listItemsOverviewBloc,
+  }) {
     return MaterialPageRoute<void>(
-      builder: (_) => ListUsersPage(shoppingList: shoppingList),
+      builder: (_) => BlocProvider.value(
+        value: listItemsOverviewBloc,
+        child: ListUsersPage(shoppingList: shoppingList),
+      ),
     );
   }
 
@@ -16,9 +25,11 @@ class ListUsersPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => ListUsersBloc(
         shoppingList: shoppingList,
-        shoppingListRepository: context.read<ShoppingListRepository>(),
         userRepository: context.read<UserRepository>(),
-      )..add(const ListUsersSubscriptionRequested()),
+        shoppingListRepository: context.read<ShoppingListRepository>(),
+        listUsers:
+            BlocProvider.of<ListItemsOverviewBloc>(context).state.listUsers,
+      )..add(const ListUsersGetUsersDetails()),
       child: const ListUsersView(),
     );
   }

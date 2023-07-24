@@ -32,7 +32,6 @@ class UserRepositoryFirebase extends UserRepository {
           final user = User.fromJson(snapshot.data()!);
           users.add(user);
         } else {
-          // If the document doesn't exist, add a default empty User
           users.add(User.empty);
         }
       }
@@ -40,6 +39,32 @@ class UserRepositoryFirebase extends UserRepository {
     } catch (e) {
       print(e);
       return [];
+    }
+  }
+
+  Future<User?> getUserByIdentifier({required String identifier}) async {
+    try {
+      final querySnapshot =
+          await usersCollection.where('email', isEqualTo: identifier).get();
+
+      if (querySnapshot.docs.isEmpty) {
+        final usernameQuerySnapshot = await usersCollection
+            .where('username', isEqualTo: identifier)
+            .get();
+
+        if (usernameQuerySnapshot.docs.isEmpty) {
+          return null;
+        } else {
+          final user = User.fromJson(usernameQuerySnapshot.docs.first.data());
+          return user;
+        }
+      } else {
+        final user = User.fromJson(querySnapshot.docs.first.data());
+        return user;
+      }
+    } catch (e) {
+      print(e);
+      return null;
     }
   }
 

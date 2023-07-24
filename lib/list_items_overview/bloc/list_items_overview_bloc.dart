@@ -22,6 +22,7 @@ class ListItemsOverviewBloc
     on<ListItemsOverviewFilterChanged>(_onFilterChanged);
     on<ListItemsOverviewToggleAll>(_onToggleAll);
     on<ListItemsOverviewClearCompleted>(_onClearCompleted);
+    on<ListItemsOverviewListUsersEdited>(_onListUsersEdited);
   }
 
   final ShoppingListRepository _shoppingListRepository;
@@ -33,11 +34,14 @@ class ListItemsOverviewBloc
   ) async {
     emit(state.copyWith(status: () => ListItemsOverviewStatus.loading));
 
+    print('shopping list users : ${shoppingList.users}');
+
     await emit.forEach<List<ShoppingListItem>>(
       _shoppingListRepository.getShoppingList(listId: shoppingList.id),
       onData: (listItems) => state.copyWith(
         status: () => ListItemsOverviewStatus.success,
         listItems: () => listItems,
+        listUsers: () => shoppingList.users,
       ),
       onError: (_, __) => state.copyWith(
         status: () => ListItemsOverviewStatus.failure,
@@ -145,9 +149,15 @@ class ListItemsOverviewBloc
         listId: shoppingList.id);
     await _shoppingListRepository.shoppingListDecrementCompleted(
         listId: shoppingList.id, value: cleared);
-    // final newTodoList = state.shoppingList.copyWith(
-    //   completedItems: state.todoList.completedItems - cleared,
-    // );
-    // await _shoppingListRepository.saveTodoList(newTodoList);
+  }
+
+  void _onListUsersEdited(
+    ListItemsOverviewListUsersEdited event,
+    Emitter<ListItemsOverviewState> emit,
+  ) {
+    print('list users: ${event.listUsers}');
+    emit(state.copyWith(
+        listUsers: () => event.listUsers,
+        status: () => ListItemsOverviewStatus.success));
   }
 }

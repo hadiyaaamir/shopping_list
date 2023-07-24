@@ -54,3 +54,12 @@ final class ListItemsOverviewToggleAll extends ListItemsOverviewEvent {
 final class ListItemsOverviewClearCompleted extends ListItemsOverviewEvent {
   const ListItemsOverviewClearCompleted();
 }
+
+final class ListItemsOverviewListUsersEdited extends ListItemsOverviewEvent {
+  const ListItemsOverviewListUsersEdited({required this.listUsers});
+
+  final List<ListUser> listUsers;
+
+  @override
+  List<Object> get props => [listUsers];
+}
