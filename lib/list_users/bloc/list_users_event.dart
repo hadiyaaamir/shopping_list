@@ -30,5 +30,9 @@ final class ListUsersRoleChanged extends ListUsersEvent {
 }
 
 final class ListUsersAdded extends ListUsersEvent {
-  const ListUsersAdded();
+  const ListUsersAdded({required this.onSuccess});
+  final void Function() onSuccess;
+
+  @override
+  List<Object> get props => [];
 }

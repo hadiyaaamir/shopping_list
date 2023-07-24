@@ -1,9 +1,7 @@
 part of 'view.dart';
 
 class ListUsersView extends StatelessWidget {
-  const ListUsersView({super.key, required this.listItemsOverviewBloc});
-
-  final ListItemsOverviewBloc listItemsOverviewBloc;
+  const ListUsersView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,19 +30,19 @@ class ListUsersView extends StatelessWidget {
         child: UsersList(userId: userId, users: users),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton:
-          _AddUserButton(listItemsOverviewBloc: listItemsOverviewBloc),
+      floatingActionButton: const _AddUserButton(),
     );
   }
 }
 
 class _AddUserButton extends StatelessWidget {
-  const _AddUserButton({required this.listItemsOverviewBloc});
-  final ListItemsOverviewBloc listItemsOverviewBloc;
+  const _AddUserButton();
 
   @override
   Widget build(BuildContext context) {
     final listUsersBloc = BlocProvider.of<ListUsersBloc>(context);
+    final listItemsOverviewBloc =
+        BlocProvider.of<ListItemsOverviewBloc>(context);
 
     return BlocBuilder<ListUsersBloc, ListUsersState>(
       builder: (context, state) {
@@ -52,10 +50,12 @@ class _AddUserButton extends StatelessWidget {
           label: 'Add User',
           onPressed: () => showDialog(
             context: context,
-            builder: (context) => BlocProvider.value(
-              value: listUsersBloc,
-              child:
-                  AddUserDialog(listItemsOverviewBloc: listItemsOverviewBloc),
+            builder: (context) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(value: listUsersBloc),
+                BlocProvider.value(value: listItemsOverviewBloc)
+              ],
+              child: const AddUserDialog(),
             ),
           ),
         );

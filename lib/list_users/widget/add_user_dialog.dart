@@ -1,8 +1,7 @@
 part of 'widget.dart';
 
 class AddUserDialog extends StatelessWidget {
-  const AddUserDialog({super.key, required this.listItemsOverviewBloc});
-  final ListItemsOverviewBloc listItemsOverviewBloc;
+  const AddUserDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,18 +37,20 @@ class AddUserDialog extends StatelessWidget {
           child: const Text('Cancel'),
         ),
         TextButton(
-          onPressed: () {
-            context.read<ListUsersBloc>().add(const ListUsersAdded());
+          onPressed: () async {
+            context.read<ListUsersBloc>().add(ListUsersAdded(
+              onSuccess: () {
+                final ListUsersState state =
+                    context.read<ListUsersBloc>().state;
+                final List<ListUser> listUsers =
+                    state.users.map((roleUser) => roleUser.listUser).toList();
 
-            final ListUsersState state = context.read<ListUsersBloc>().state;
-            final List<ListUser> listUsers =
-                state.users.map((roleUser) => roleUser.listUser).toList();
-            listItemsOverviewBloc
-                .add(ListItemsOverviewListUsersEdited(listUsers: listUsers));
-            Navigator.pop(context);
-            // context.read<ListItemsOverviewBloc>().add(
-            //       ListItemsOverviewListUsersEdited(listUsers: listUsers),
-            //     );
+                context.read<ListItemsOverviewBloc>().add(
+                      ListItemsOverviewListUsersEdited(listUsers: listUsers),
+                    );
+                Navigator.pop(context);
+              },
+            ));
           },
           child: const Text('Add'),
         ),

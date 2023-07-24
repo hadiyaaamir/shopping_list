@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:form_inputs/form_inputs.dart';
-import 'package:shopping_list/list_items_overview/bloc/list_items_overview_bloc.dart';
 import 'package:shopping_list/list_users/list_users.dart';
 import 'package:shopping_list_repository/shopping_list_repository.dart';
 import 'package:user_repository/user_repository.dart';
@@ -28,7 +27,6 @@ class ListUsersBloc extends Bloc<ListUsersEvent, ListUsersState> {
 
   final UserRepository _userRepository;
   final ShoppingListRepository _shoppingListRepository;
-  // final ListItemsOverviewBloc _listItemsOverviewBloc;
   final ShoppingList shoppingList;
   final List<ListUser> listUsers;
 
@@ -39,8 +37,6 @@ class ListUsersBloc extends Bloc<ListUsersEvent, ListUsersState> {
     emit(state.copyWith(status: () => ListUsersStatus.loading));
 
     try {
-      // final List<ListUser> listUsers = _listItemsOverviewBloc.state.listUsers;
-
       final List<String> userIds = listUsers.map((user) => user.id).toList();
       final List<User> users = await _userRepository.getUsersById(userIds);
 
@@ -112,6 +108,8 @@ class ListUsersBloc extends Bloc<ListUsersEvent, ListUsersState> {
             userRole: ListUserRoles.editor,
           ),
         );
+
+        event.onSuccess();
       }
     } on UserAlreadyExistsException catch (e) {
       emit(

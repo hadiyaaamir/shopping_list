@@ -155,8 +155,9 @@ class ListItemsOverviewBloc
     ListItemsOverviewListUsersEdited event,
     Emitter<ListItemsOverviewState> emit,
   ) {
+    print('list users: ${event.listUsers}');
     emit(state.copyWith(
-      listUsers: () => event.listUsers,
-    ));
+        listUsers: () => event.listUsers,
+        status: () => ListItemsOverviewStatus.success));
   }
 }
