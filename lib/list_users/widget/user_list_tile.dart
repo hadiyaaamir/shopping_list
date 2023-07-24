@@ -12,19 +12,75 @@ class UserListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ListTile listTile = ListTile(
-      title: Text('${user.user.firstName} ${user.user.lastName}'),
-      subtitle: Text(user.user.email),
-      trailing: Text(user.listUser.role.toStringValue().toUpperCase()),
-    );
-
     return onDismissed != null
         ? _DismissibleListTile(
-            listTile: listTile,
+            listTile: _ListTile(user: user),
             dismissibleKey: Key('userTile_dismissible_${user.listUser.id}'),
             onDismissed: onDismissed,
           )
-        : listTile;
+        : _ListTile(user: user, roleDropdown: false);
+  }
+}
+
+class _ListTile extends StatelessWidget {
+  const _ListTile({required this.user, this.roleDropdown = true});
+
+  final RoleUser user;
+  final bool roleDropdown;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text('${user.user.firstName} ${user.user.lastName}'),
+      subtitle: Text(user.user.email),
+      trailing: roleDropdown
+          ? _Dropdown(user: user)
+          : Text(user.listUser.role.toStringValue().toUpperCase()),
+    );
+  }
+}
+
+class _Dropdown extends StatelessWidget {
+  const _Dropdown({required this.user});
+
+  final RoleUser user;
+
+  @override
+  Widget build(BuildContext context) {
+    final List<ListUserRoles> userRolesList = ListUserRoles.values
+        .where((role) => role != ListUserRoles.owner)
+        .toList();
+
+    return DropdownButton<ListUserRoles>(
+      value: user.listUser.role,
+      items: userRolesList.map((role) {
+        return DropdownMenuItem<ListUserRoles>(
+          value: role,
+          child: Text(role.toStringValue().toUpperCase(),
+              style: Theme.of(context).textTheme.labelSmall),
+        );
+      }).toList(),
+      onChanged: (newValue) {
+        final editedUser = user.listUser.copyWith(role: newValue);
+
+        context.read<ListUsersBloc>().add(
+              ListUsersEdited(
+                editedUser: editedUser,
+                onSuccess: () {
+                  final List<ListUser> listUsers = context
+                      .read<ListUsersBloc>()
+                      .state
+                      .users
+                      .map((roleUser) => roleUser.listUser)
+                      .toList();
+
+                  context.read<ListItemsOverviewBloc>().add(
+                      ListItemsOverviewListUsersEdited(listUsers: listUsers));
+                },
+              ),
+            );
+      },
+    );
   }
 }
 
@@ -35,7 +91,7 @@ class _DismissibleListTile extends StatelessWidget {
     required this.onDismissed,
   });
 
-  final ListTile listTile;
+  final _ListTile listTile;
   final Key dismissibleKey;
   final DismissDirectionCallback? onDismissed;
 
