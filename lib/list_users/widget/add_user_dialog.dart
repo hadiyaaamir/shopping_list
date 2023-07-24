@@ -21,19 +21,11 @@ class AddUserDialog extends StatelessWidget {
                 decoration:
                     const InputDecoration(hintText: 'Email or Username'),
               ),
+              const SizedBox(height: 20),
               ...ListUserRoles.values
                   .where((role) => role != ListUserRoles.owner)
-                  .map<Widget>((ListUserRoles value) {
-                return RadioListTile<ListUserRoles>(
-                  title: Text(value.toStringValue()),
-                  value: value,
-                  groupValue: context
-                      .select((ListUsersBloc bloc) => bloc.state.userRole),
-                  onChanged: (ListUserRoles? newRole) {
-                    context.read<ListUsersBloc>().add(ListUsersRoleChanged(
-                        userRole: newRole ?? ListUserRoles.editor));
-                  },
-                );
+                  .map<Widget>((ListUserRoles role) {
+                return _RoleRadioButton(role: role);
               }).toList(),
             ],
           );
@@ -52,6 +44,30 @@ class AddUserDialog extends StatelessWidget {
           child: const Text('Add'),
         ),
       ],
+    );
+  }
+}
+
+class _RoleRadioButton extends StatelessWidget {
+  const _RoleRadioButton({required this.role});
+
+  final ListUserRoles role;
+
+  @override
+  Widget build(BuildContext context) {
+    return RadioListTile<ListUserRoles>(
+      contentPadding: EdgeInsets.zero,
+      title: Text(role.toTitleCaseString()),
+      subtitle: Text(
+        role.toStringInformation(),
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+      value: role,
+      groupValue: context.select((ListUsersBloc bloc) => bloc.state.userRole),
+      onChanged: (ListUserRoles? newRole) {
+        context.read<ListUsersBloc>().add(
+            ListUsersRoleChanged(userRole: newRole ?? ListUserRoles.editor));
+      },
     );
   }
 }
