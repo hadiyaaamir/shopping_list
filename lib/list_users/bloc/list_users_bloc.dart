@@ -23,6 +23,7 @@ class ListUsersBloc extends Bloc<ListUsersEvent, ListUsersState> {
     on<ListUsersIdentifierChanged>(_onUserIdentifierChanged);
     on<ListUsersRoleChanged>(_onUserRoleChanged);
     on<ListUsersAdded>(_onUserAdded);
+    on<ListUsersDeleted>(_onUserDeleted);
   }
 
   final UserRepository _userRepository;
@@ -122,4 +123,68 @@ class ListUsersBloc extends Bloc<ListUsersEvent, ListUsersState> {
       emit(state.copyWith(status: () => ListUsersStatus.failure));
     }
   }
+
+  Future<void> _onUserDeleted(
+    ListUsersDeleted event,
+    Emitter<ListUsersState> emit,
+  ) async {
+    emit(state.copyWith(status: () => ListUsersStatus.loading));
+
+    try {
+      await _shoppingListRepository.deleteShoppingListUser(
+        listId: shoppingList.id,
+        userId: event.userId,
+      );
+
+      List<RoleUser> updatedUserList = state.users
+          .where((roleUser) => roleUser.listUser.id != event.userId)
+          .toList();
+
+      emit(
+        state.copyWith(
+          status: () => ListUsersStatus.success,
+          users: () => updatedUserList,
+          userIdentifier: const StringInput.pure(),
+          userRole: ListUserRoles.editor,
+        ),
+      );
+      event.onSuccess();
+    } catch (e) {
+      print(e);
+      emit(state.copyWith(status: () => ListUsersStatus.failure));
+    }
+  }
+
+  // Future<void> _onUserEdited(
+  //   ListUsersEdited event,
+  //   Emitter<ListUsersState> emit,
+  // ) async {
+  //   emit(state.copyWith(status: () => ListUsersStatus.loading));
+
+  //   try {
+
+  //     // if (user != null) {
+  //       // final ListUser listUser = event.editedUser;
+  //       // final RoleUser roleUser = RoleUser(user: , listUser: listUser);
+
+  //      final updatedUserList = await _shoppingListRepository.editShoppingListUser(
+  //         editedUser: event.editedUser,
+  //         listId: shoppingList.id,
+  //       );
+
+  //       emit(
+  //         state.copyWith(
+  //           status: () => ListUsersStatus.success,
+  //           users: updatedUserList == null ? null : () => updatedUserList,
+  //           userIdentifier: const StringInput.pure(),
+  //           userRole: ListUserRoles.editor,
+  //         ),
+  //       );
+
+  //       event.onSuccess();
+  //     // }
+  //   } catch (e) {
+  //     emit(state.copyWith(status: () => ListUsersStatus.failure));
+  //   }
+  // }
 }

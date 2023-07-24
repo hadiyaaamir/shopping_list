@@ -92,6 +92,8 @@ class ShoppingListRepositoryFirebase extends ShoppingListRepository {
           .users
           .where((user) => user.id != userId)
           .toList();
+      // print('user id: $userId');
+      // print('updated list:  $updatedListUsers');
 
       await saveShoppingList(
         shoppingList.data()!.copyWith(users: updatedListUsers),

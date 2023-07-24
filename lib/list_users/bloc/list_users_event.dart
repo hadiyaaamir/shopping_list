@@ -36,3 +36,23 @@ final class ListUsersAdded extends ListUsersEvent {
   @override
   List<Object> get props => [];
 }
+
+class ListUsersEdited extends ListUsersEvent {
+  const ListUsersEdited({required this.editedUser, required this.onSuccess});
+
+  final ListUser editedUser;
+  final void Function() onSuccess;
+
+  @override
+  List<Object> get props => [editedUser];
+}
+
+class ListUsersDeleted extends ListUsersEvent {
+  const ListUsersDeleted({required this.userId, required this.onSuccess});
+
+  final String userId;
+  final void Function() onSuccess;
+
+  @override
+  List<Object> get props => [userId];
+}
