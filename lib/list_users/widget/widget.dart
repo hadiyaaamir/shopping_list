@@ -7,5 +7,5 @@ import 'package:shopping_list/list_users/list_users.dart';
 
 import 'package:shopping_list_repository/shopping_list_repository.dart';
 
-part 'user_list.dart';
+part 'user_list_tile.dart';
 part 'add_user_dialog.dart';
