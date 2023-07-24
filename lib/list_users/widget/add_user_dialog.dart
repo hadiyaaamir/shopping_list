@@ -1,7 +1,8 @@
 part of 'widget.dart';
 
 class AddUserDialog extends StatelessWidget {
-  const AddUserDialog({super.key});
+  const AddUserDialog({super.key, required this.listItemsOverviewBloc});
+  final ListItemsOverviewBloc listItemsOverviewBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +40,16 @@ class AddUserDialog extends StatelessWidget {
         TextButton(
           onPressed: () {
             context.read<ListUsersBloc>().add(const ListUsersAdded());
+
+            final ListUsersState state = context.read<ListUsersBloc>().state;
+            final List<ListUser> listUsers =
+                state.users.map((roleUser) => roleUser.listUser).toList();
+            listItemsOverviewBloc
+                .add(ListItemsOverviewListUsersEdited(listUsers: listUsers));
             Navigator.pop(context);
+            // context.read<ListItemsOverviewBloc>().add(
+            //       ListItemsOverviewListUsersEdited(listUsers: listUsers),
+            //     );
           },
           child: const Text('Add'),
         ),

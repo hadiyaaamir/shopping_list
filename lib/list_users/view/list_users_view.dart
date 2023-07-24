@@ -1,7 +1,9 @@
 part of 'view.dart';
 
 class ListUsersView extends StatelessWidget {
-  const ListUsersView({super.key});
+  const ListUsersView({super.key, required this.listItemsOverviewBloc});
+
+  final ListItemsOverviewBloc listItemsOverviewBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +32,15 @@ class ListUsersView extends StatelessWidget {
         child: UsersList(userId: userId, users: users),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: const _AddUserButton(),
+      floatingActionButton:
+          _AddUserButton(listItemsOverviewBloc: listItemsOverviewBloc),
     );
   }
 }
 
 class _AddUserButton extends StatelessWidget {
-  const _AddUserButton();
+  const _AddUserButton({required this.listItemsOverviewBloc});
+  final ListItemsOverviewBloc listItemsOverviewBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +54,8 @@ class _AddUserButton extends StatelessWidget {
             context: context,
             builder: (context) => BlocProvider.value(
               value: listUsersBloc,
-              child: AddUserDialog(),
+              child:
+                  AddUserDialog(listItemsOverviewBloc: listItemsOverviewBloc),
             ),
           ),
         );
