@@ -31,11 +31,33 @@ class _ListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      contentPadding: const EdgeInsets.only(right: 0),
       title: Text('${user.user.firstName} ${user.user.lastName}'),
       subtitle: Text(user.user.email),
-      trailing: roleDropdown
-          ? _Dropdown(user: user)
-          : Text(user.listUser.role.toStringValue().toUpperCase()),
+      trailing: roleDropdown ? _Dropdown(user: user) : _RoleText(user: user),
+    );
+  }
+}
+
+class _RoleText extends StatelessWidget {
+  const _RoleText({required this.user});
+
+  final RoleUser user;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 1.5,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+        child: Text(user.listUser.role.toStringValue().toUpperCase()),
+      ),
     );
   }
 }

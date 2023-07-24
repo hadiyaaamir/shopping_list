@@ -38,24 +38,32 @@ class AddUserDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () async {
-            context.read<ListUsersBloc>().add(ListUsersAdded(
-              onSuccess: () {
-                final ListUsersState state =
-                    context.read<ListUsersBloc>().state;
-                final List<ListUser> listUsers =
-                    state.users.map((roleUser) => roleUser.listUser).toList();
+            context.read<ListUsersBloc>().add(ListUsersAdded(onSuccess: () {
+              final ListUsersState state = context.read<ListUsersBloc>().state;
+              final List<ListUser> listUsers =
+                  state.users.map((roleUser) => roleUser.listUser).toList();
 
-                context.read<ListItemsOverviewBloc>().add(
-                      ListItemsOverviewListUsersEdited(listUsers: listUsers),
-                    );
-                Navigator.pop(context);
-              },
-            ));
+              context.read<ListItemsOverviewBloc>().add(
+                    ListItemsOverviewListUsersEdited(listUsers: listUsers),
+                  );
+              Navigator.pop(context);
+            }));
           },
           child: const Text('Add'),
         ),
       ],
     );
+  }
+
+  onSuccess(context) {
+    final ListUsersState state = context.read<ListUsersBloc>().state;
+    final List<ListUser> listUsers =
+        state.users.map((roleUser) => roleUser.listUser).toList();
+
+    context.read<ListItemsOverviewBloc>().add(
+          ListItemsOverviewListUsersEdited(listUsers: listUsers),
+        );
+    Navigator.pop(context);
   }
 }
 
