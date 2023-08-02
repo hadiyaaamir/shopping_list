@@ -4,6 +4,7 @@ import 'package:shopping_list/authentication/authentication.dart';
 import 'package:shopping_list/login/login.dart';
 import 'package:shopping_list/profile/profile.dart';
 import 'package:shopping_list/shopping_lists/shopping_lists.dart';
+import 'package:shopping_list/signup/view/view.dart';
 
 import 'package:shopping_list/splash/splash.dart';
 
@@ -26,7 +27,7 @@ class AppRouter {
       GoRoute(
         path: '/signup',
         builder: (BuildContext context, GoRouterState state) {
-          return const SplashPage();
+          return const SignupPage();
         },
       ),
       GoRoute(

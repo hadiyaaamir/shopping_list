@@ -119,7 +119,9 @@ class _SignupLink extends StatelessWidget {
     return LinkText(
       text: 'Don\'t have an account? ',
       boldText: 'Sign Up',
-      onTap: () => Navigator.pushReplacement(context, SignupPage.route()),
+      onTap: () => context.go('/signup'),
+      //  AppRouter.router.go('/signup'),
+      // Navigator.pushReplacement(context, SignupPage.route()),
     );
   }
 }
