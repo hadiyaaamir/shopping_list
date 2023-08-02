@@ -31,7 +31,7 @@ class _ListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: const EdgeInsets.only(right: 0),
+      contentPadding: const EdgeInsets.only(top: 5, bottom: 10, left: 5),
       title: Text('${user.user.firstName} ${user.user.lastName}'),
       subtitle: Text(user.user.email),
       trailing: roleDropdown ? _Dropdown(user: user) : _RoleText(user: user),
