@@ -22,6 +22,8 @@ class ListItemEditView extends StatelessWidget {
           child: Column(children: [
             _ItemInput(),
             SizedBox(height: 20),
+            _QuantityInput(),
+            SizedBox(height: 20),
             _DescriptionInput(),
           ]),
         ),
@@ -55,8 +57,8 @@ class _ItemInput extends StatelessWidget {
   }
 }
 
-class _DescriptionInput extends StatelessWidget {
-  const _DescriptionInput();
+class _QuantityInput extends StatelessWidget {
+  const _QuantityInput();
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +66,7 @@ class _DescriptionInput extends StatelessWidget {
       buildWhen: (previous, current) => previous.quantity != current.quantity,
       builder: (context, state) {
         return CustomTextField(
-          key: const Key('editItemForm_descriptionInput_textField'),
+          key: const Key('editItemForm_quantityInput_textField'),
           label: 'Quantity',
           initialValue: state.quantity.value,
           errorText: state.quantity.displayError != null
@@ -73,6 +75,32 @@ class _DescriptionInput extends StatelessWidget {
           onChanged: (quantity) => context
               .read<ListItemEditBloc>()
               .add(ListItemEditQuantityChanged(quantity: quantity)),
+        );
+      },
+    );
+  }
+}
+
+class _DescriptionInput extends StatelessWidget {
+  const _DescriptionInput();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ListItemEditBloc, ListItemEditState>(
+      buildWhen: (previous, current) =>
+          previous.description != current.description,
+      builder: (context, state) {
+        return CustomTextField(
+          key: const Key('editItemForm_descriptionInput_textField'),
+          label: 'Description',
+          maxLines: 3,
+          initialValue: state.description.value,
+          errorText: state.quantity.displayError != null
+              ? 'field cannot be empty'
+              : null,
+          onChanged: (description) => context
+              .read<ListItemEditBloc>()
+              .add(ListItemEditDescriptionChanged(description: description)),
         );
       },
     );

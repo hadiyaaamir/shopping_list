@@ -26,10 +26,15 @@ class ListItemEditBloc extends Bloc<ListItemEditEvent, ListItemEditState> {
               value: listItem?.quantity ?? '',
               allowEmpty: true,
             ),
+            description: StringInput.dirty(
+              value: listItem?.description ?? '',
+              allowEmpty: true,
+            ),
           ),
         ) {
     on<ListItemEditItemChanged>(_onItemChanged);
     on<ListItemEditQuantityChanged>(_onQuantityChanged);
+    on<ListItemEditDescriptionChanged>(_onDescriptionChanged);
     on<ListItemEditSubmitted>(_onSubmitted);
   }
 
@@ -45,7 +50,7 @@ class ListItemEditBloc extends Bloc<ListItemEditEvent, ListItemEditState> {
     emit(
       state.copyWith(
         item: item,
-        isValid: Formz.validate([item, state.quantity]),
+        isValid: Formz.validate([item, state.quantity, state.description]),
       ),
     );
   }
@@ -61,7 +66,21 @@ class ListItemEditBloc extends Bloc<ListItemEditEvent, ListItemEditState> {
     emit(
       state.copyWith(
         quantity: quantity,
-        isValid: Formz.validate([state.item, quantity]),
+        isValid: Formz.validate([state.item, quantity, state.description]),
+      ),
+    );
+  }
+
+  Future<void> _onDescriptionChanged(
+    ListItemEditDescriptionChanged event,
+    Emitter<ListItemEditState> emit,
+  ) async {
+    final description =
+        StringInput.dirty(value: event.description, allowEmpty: true);
+    emit(
+      state.copyWith(
+        description: description,
+        isValid: Formz.validate([state.item, state.quantity, description]),
       ),
     );
   }
@@ -81,9 +100,9 @@ class ListItemEditBloc extends Bloc<ListItemEditEvent, ListItemEditState> {
               userId: userId,
             ))
         .copyWith(
-      item: state.item.value,
-      quantity: state.quantity.value,
-    );
+            item: state.item.value,
+            quantity: state.quantity.value,
+            description: state.description.value);
 
     try {
       await _shoppingListRepository.saveListItem(listItem);

@@ -89,26 +89,30 @@ class _ItemListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextStyle? textStyle = !listItem.isCompleted
+        ? null
+        : const TextStyle(
+            color: Colors.grey,
+            decoration: TextDecoration.lineThrough,
+          );
+
     return ListTile(
-      title: Text(
-        listItem.item,
-        style: !listItem.isCompleted
-            ? null
-            : const TextStyle(
-                color: Colors.grey,
-                decoration: TextDecoration.lineThrough,
-              ),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            listItem.item,
+            style: textStyle,
+          ),
+          // const Text('    -    '),
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Text(listItem.quantity, style: textStyle),
+          ),
+        ],
       ),
-      subtitle: listItem.quantity.isNotEmpty
-          ? Text(
-              listItem.quantity,
-              style: !listItem.isCompleted
-                  ? null
-                  : const TextStyle(
-                      color: Colors.grey,
-                      decoration: TextDecoration.lineThrough,
-                    ),
-            )
+      subtitle: listItem.description.isNotEmpty
+          ? Text(listItem.description, style: textStyle)
           : null,
       onTap: allowEdit ? onTap : null,
       leading: Checkbox(
@@ -118,8 +122,10 @@ class _ItemListTile extends StatelessWidget {
         value: listItem.isCompleted,
         onChanged: (value) => onToggleCompleted(value!),
       ),
-      trailing:
-          allowEdit ? const Icon(Icons.keyboard_arrow_right_rounded) : null,
+      trailing: Icon(
+        Icons.keyboard_arrow_right_rounded,
+        color: allowEdit ? null : Colors.transparent,
+      ),
     );
   }
 }
