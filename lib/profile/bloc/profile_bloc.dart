@@ -71,18 +71,28 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
 
       try {
-        await _userRepository
-            .createUser(
-                userId: _authenticationRepository.currentAuthUser!.id,
-                user: User(
-                  id: _authenticationRepository.currentAuthUser!.id,
-                  firstName: state.firstName.value,
-                  lastName: state.lastName.value,
-                  email: _authenticationRepository.currentAuthUser!.email,
-                  username: state.username.value,
-                ))
-            .then((value) =>
-                emit(state.copyWith(status: FormzSubmissionStatus.success)));
+        final existingUser = await _userRepository.getUserByIdentifier(
+          identifier: state.username.value,
+        );
+
+        if (existingUser == null) {
+          await _userRepository
+              .createUser(
+                  userId: _authenticationRepository.currentAuthUser!.id,
+                  user: User(
+                    id: _authenticationRepository.currentAuthUser!.id,
+                    firstName: state.firstName.value,
+                    lastName: state.lastName.value,
+                    email: _authenticationRepository.currentAuthUser!.email,
+                    username: state.username.value,
+                  ))
+              .then((value) => emit(state.copyWith(
+                  status: FormzSubmissionStatus.success, errorMessage: '')));
+        } else {
+          emit(state.copyWith(
+              errorMessage: 'Username already exists',
+              status: FormzSubmissionStatus.failure));
+        }
       } catch (_) {
         emit(state.copyWith(status: FormzSubmissionStatus.failure));
       }

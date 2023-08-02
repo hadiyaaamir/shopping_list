@@ -5,36 +5,58 @@ class CreateProfileForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ProfileBloc, ProfileState>(
-      listener: (context, state) {
-        if (state.status.isFailure) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(content: Text('Failed to create profile')),
-            );
-        }
-        if (state.status.isSuccess) {
-          context.read<AuthenticationBloc>().add(AuthenticationUserChanged());
-        }
-      },
-      child: const Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _FirstNameInput(),
-              SizedBox(height: 20),
-              _LastNameInput(),
-              SizedBox(height: 20),
-              _UsernameInput(),
-              SizedBox(height: 40),
-              _CreateProfileButton(),
-              SizedBox(height: 40),
-            ],
-          ),
+    return
+        // BlocListener<ProfileBloc, ProfileState>(
+        //   listener: (context, state) {
+        //     if (state.status.isFailure) {
+        //       ScaffoldMessenger.of(context)
+        //         ..hideCurrentSnackBar()
+        //         ..showSnackBar(
+        //           const SnackBar(content: Text('Failed to create profile')),
+        //         );
+        //     }
+        //     if (state.status.isSuccess) {
+        //       context.read<AuthenticationBloc>().add(AuthenticationUserChanged());
+        //     }
+        //   },
+        //   child:
+        const Center(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _ErrorMessage(),
+            SizedBox(height: 25),
+            _FirstNameInput(),
+            SizedBox(height: 20),
+            _LastNameInput(),
+            SizedBox(height: 20),
+            _UsernameInput(),
+            SizedBox(height: 40),
+            _CreateProfileButton(),
+            SizedBox(height: 40),
+          ],
         ),
       ),
+      // ),
+    );
+  }
+}
+
+class _ErrorMessage extends StatelessWidget {
+  const _ErrorMessage();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      buildWhen: (previous, current) =>
+          previous.errorMessage != current.errorMessage ||
+          previous.status != current.status,
+      builder: (context, state) {
+        return state.status.isFailure
+            ? ErrorText(text: state.errorMessage ?? 'Unexpected failure')
+            : const SizedBox();
+      },
     );
   }
 }
