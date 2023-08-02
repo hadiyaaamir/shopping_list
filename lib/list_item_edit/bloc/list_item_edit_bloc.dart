@@ -19,7 +19,9 @@ class ListItemEditBloc extends Bloc<ListItemEditEvent, ListItemEditState> {
         super(
           ListItemEditState(
             listItem: listItem,
-            item: StringInput.dirty(value: listItem?.item ?? ''),
+            item: listItem?.item != null
+                ? StringInput.dirty(value: listItem!.item)
+                : const StringInput.pure(),
             quantity: StringInput.dirty(
               value: listItem?.quantity ?? '',
               allowEmpty: true,

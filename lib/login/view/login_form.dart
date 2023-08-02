@@ -100,9 +100,8 @@ class _LoginButton extends StatelessWidget {
             : Button(
                 key: const Key('loginForm_button'),
                 onPressed: state.isValid
-                    ? () {
-                        context.read<LoginBloc>().add(const LoginSubmitted());
-                      }
+                    ? () =>
+                        context.read<LoginBloc>().add(const LoginSubmitted())
                     : null,
                 label: 'Log In',
               );
