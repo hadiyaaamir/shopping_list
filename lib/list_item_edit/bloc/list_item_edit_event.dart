@@ -25,6 +25,15 @@ final class ListItemEditQuantityChanged extends ListItemEditEvent {
   List<Object> get props => [quantity];
 }
 
+final class ListItemEditQuantityUnitChanged extends ListItemEditEvent {
+  const ListItemEditQuantityUnitChanged({required this.quantityUnit});
+
+  final String quantityUnit;
+
+  @override
+  List<Object> get props => [quantityUnit];
+}
+
 final class ListItemEditDescriptionChanged extends ListItemEditEvent {
   const ListItemEditDescriptionChanged({required this.description});
 

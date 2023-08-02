@@ -65,16 +65,45 @@ class _QuantityInput extends StatelessWidget {
     return BlocBuilder<ListItemEditBloc, ListItemEditState>(
       buildWhen: (previous, current) => previous.quantity != current.quantity,
       builder: (context, state) {
-        return CustomTextField(
-          key: const Key('editItemForm_quantityInput_textField'),
-          label: 'Quantity',
-          initialValue: state.quantity.value,
-          errorText: state.quantity.displayError != null
-              ? 'field cannot be empty'
-              : null,
-          onChanged: (quantity) => context
-              .read<ListItemEditBloc>()
-              .add(ListItemEditQuantityChanged(quantity: quantity)),
+        return Stack(
+          children: [
+            CustomTextField(
+              key: const Key('editItemForm_quantityInput_textField'),
+              label: 'Quantity',
+              initialValue: state.quantity.value,
+              errorText: state.quantity.displayError != null
+                  ? 'field cannot be empty'
+                  : null,
+              onChanged: (quantity) => context
+                  .read<ListItemEditBloc>()
+                  .add(ListItemEditQuantityChanged(quantity: quantity)),
+            ),
+            const Positioned(right: 15, bottom: 7, child: _QuantityUnitInput()),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _QuantityUnitInput extends StatelessWidget {
+  const _QuantityUnitInput();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ListItemEditBloc, ListItemEditState>(
+      buildWhen: (previous, current) =>
+          previous.quantityUnit != current.quantityUnit,
+      builder: (context, state) {
+        return DropdownButton<String>(
+          value: state.quantityUnit.value,
+          onChanged: (newValue) {
+            context.read<ListItemEditBloc>().add(
+                ListItemEditQuantityUnitChanged(quantityUnit: newValue ?? ''));
+          },
+          items: cQuantityUnits.map((unit) {
+            return DropdownMenuItem<String>(value: unit, child: Text(unit));
+          }).toList(),
         );
       },
     );

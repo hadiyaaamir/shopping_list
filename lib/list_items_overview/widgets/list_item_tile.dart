@@ -100,14 +100,13 @@ class _ItemListTile extends StatelessWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            listItem.item,
-            style: textStyle,
-          ),
-          // const Text('    -    '),
+          Text(listItem.item, style: textStyle),
           Padding(
             padding: const EdgeInsets.only(right: 10),
-            child: Text(listItem.quantity, style: textStyle),
+            child: Text(
+              '${listItem.quantity} ${listItem.quantityUnit}',
+              style: textStyle,
+            ),
           ),
         ],
       ),

@@ -26,6 +26,10 @@ class ListItemEditBloc extends Bloc<ListItemEditEvent, ListItemEditState> {
               value: listItem?.quantity ?? '',
               allowEmpty: true,
             ),
+            quantityUnit: StringInput.dirty(
+              value: listItem?.quantityUnit ?? '',
+              allowEmpty: true,
+            ),
             description: StringInput.dirty(
               value: listItem?.description ?? '',
               allowEmpty: true,
@@ -34,6 +38,7 @@ class ListItemEditBloc extends Bloc<ListItemEditEvent, ListItemEditState> {
         ) {
     on<ListItemEditItemChanged>(_onItemChanged);
     on<ListItemEditQuantityChanged>(_onQuantityChanged);
+    on<ListItemEditQuantityUnitChanged>(_onQuantityUnitChanged);
     on<ListItemEditDescriptionChanged>(_onDescriptionChanged);
     on<ListItemEditSubmitted>(_onSubmitted);
   }
@@ -50,7 +55,8 @@ class ListItemEditBloc extends Bloc<ListItemEditEvent, ListItemEditState> {
     emit(
       state.copyWith(
         item: item,
-        isValid: Formz.validate([item, state.quantity, state.description]),
+        isValid: Formz.validate(
+            [item, state.quantity, state.quantityUnit, state.description]),
       ),
     );
   }
@@ -66,9 +72,23 @@ class ListItemEditBloc extends Bloc<ListItemEditEvent, ListItemEditState> {
     emit(
       state.copyWith(
         quantity: quantity,
-        isValid: Formz.validate([state.item, quantity, state.description]),
+        isValid: Formz.validate(
+            [state.item, quantity, state.quantityUnit, state.description]),
       ),
     );
+  }
+
+  Future<void> _onQuantityUnitChanged(
+    ListItemEditQuantityUnitChanged event,
+    Emitter<ListItemEditState> emit,
+  ) async {
+    final quantityUnit =
+        StringInput.dirty(value: event.quantityUnit, allowEmpty: true);
+    emit(state.copyWith(
+      quantityUnit: quantityUnit,
+      isValid: Formz.validate(
+          [state.item, state.quantity, quantityUnit, state.description]),
+    ));
   }
 
   Future<void> _onDescriptionChanged(
@@ -80,7 +100,8 @@ class ListItemEditBloc extends Bloc<ListItemEditEvent, ListItemEditState> {
     emit(
       state.copyWith(
         description: description,
-        isValid: Formz.validate([state.item, state.quantity, description]),
+        isValid: Formz.validate(
+            [state.item, state.quantity, state.quantityUnit, description]),
       ),
     );
   }
@@ -102,6 +123,7 @@ class ListItemEditBloc extends Bloc<ListItemEditEvent, ListItemEditState> {
         .copyWith(
             item: state.item.value,
             quantity: state.quantity.value,
+            quantityUnit: state.quantityUnit.value,
             description: state.description.value);
 
     try {
