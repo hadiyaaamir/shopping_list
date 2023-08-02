@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:shopping_list/authentication/authentication.dart';
 import 'package:shopping_list/profile/bloc/profile_bloc.dart';
+
 import 'package:shopping_list/widgets/widgets.dart';
 import 'package:user_repository/user_repository.dart';
 

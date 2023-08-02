@@ -5,9 +5,8 @@ class CreateProfileForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-        // BlocListener<ProfileBloc, ProfileState>(
-        //   listener: (context, state) {
+    return BlocListener<ProfileBloc, ProfileState>(
+      listener: (context, state) {
         //     if (state.status.isFailure) {
         //       ScaffoldMessenger.of(context)
         //         ..hideCurrentSnackBar()
@@ -15,30 +14,29 @@ class CreateProfileForm extends StatelessWidget {
         //           const SnackBar(content: Text('Failed to create profile')),
         //         );
         //     }
-        //     if (state.status.isSuccess) {
-        //       context.read<AuthenticationBloc>().add(AuthenticationUserChanged());
-        //     }
-        //   },
-        //   child:
-        const Center(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _ErrorMessage(),
-            SizedBox(height: 25),
-            _FirstNameInput(),
-            SizedBox(height: 20),
-            _LastNameInput(),
-            SizedBox(height: 20),
-            _UsernameInput(),
-            SizedBox(height: 40),
-            _CreateProfileButton(),
-            SizedBox(height: 40),
-          ],
+        if (state.status.isSuccess) {
+          context.read<AuthenticationBloc>().add(AuthenticationUserChanged());
+        }
+      },
+      child: const Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _ErrorMessage(),
+              SizedBox(height: 25),
+              _FirstNameInput(),
+              SizedBox(height: 20),
+              _LastNameInput(),
+              SizedBox(height: 20),
+              _UsernameInput(),
+              SizedBox(height: 40),
+              _CreateProfileButton(),
+              SizedBox(height: 40),
+            ],
+          ),
         ),
       ),
-      // ),
     );
   }
 }
@@ -141,9 +139,11 @@ class _CreateProfileButton extends StatelessWidget {
             : Button(
                 key: const Key('profileForm_button'),
                 onPressed: state.isValid
-                    ? () => context
-                        .read<ProfileBloc>()
-                        .add(const ProfileSubmitted())
+                    ? () {
+                        context
+                            .read<ProfileBloc>()
+                            .add(const ProfileSubmitted());
+                      }
                     : null,
                 label: 'Create Profile',
               );

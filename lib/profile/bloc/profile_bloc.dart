@@ -86,8 +86,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
                     email: _authenticationRepository.currentAuthUser!.email,
                     username: state.username.value,
                   ))
-              .then((value) => emit(state.copyWith(
-                  status: FormzSubmissionStatus.success, errorMessage: '')));
+              .then(
+            (value) {
+              emit(state.copyWith(
+                  status: FormzSubmissionStatus.success, errorMessage: ''));
+            },
+          );
         } else {
           emit(state.copyWith(
               errorMessage: 'Username already exists',
