@@ -7,13 +7,13 @@ class CreateProfileForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<ProfileBloc, ProfileState>(
       listener: (context, state) {
-        if (state.status.isFailure) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(content: Text('Failed to create profile')),
-            );
-        }
+        //     if (state.status.isFailure) {
+        //       ScaffoldMessenger.of(context)
+        //         ..hideCurrentSnackBar()
+        //         ..showSnackBar(
+        //           const SnackBar(content: Text('Failed to create profile')),
+        //         );
+        //     }
         if (state.status.isSuccess) {
           context.read<AuthenticationBloc>().add(AuthenticationUserChanged());
         }
@@ -23,6 +23,8 @@ class CreateProfileForm extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              _ErrorMessage(),
+              SizedBox(height: 25),
               _FirstNameInput(),
               SizedBox(height: 20),
               _LastNameInput(),
@@ -35,6 +37,24 @@ class CreateProfileForm extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _ErrorMessage extends StatelessWidget {
+  const _ErrorMessage();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      buildWhen: (previous, current) =>
+          previous.errorMessage != current.errorMessage ||
+          previous.status != current.status,
+      builder: (context, state) {
+        return state.status.isFailure
+            ? ErrorText(text: state.errorMessage ?? 'Unexpected failure')
+            : const SizedBox();
+      },
     );
   }
 }
@@ -119,9 +139,11 @@ class _CreateProfileButton extends StatelessWidget {
             : Button(
                 key: const Key('profileForm_button'),
                 onPressed: state.isValid
-                    ? () => context
-                        .read<ProfileBloc>()
-                        .add(const ProfileSubmitted())
+                    ? () {
+                        context
+                            .read<ProfileBloc>()
+                            .add(const ProfileSubmitted());
+                      }
                     : null,
                 label: 'Create Profile',
               );

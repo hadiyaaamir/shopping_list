@@ -95,9 +95,9 @@ class _SubtitleRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final totalItems = todoList.activeItems + todoList.completedItems;
-    final String progress = totalItems == 0
-        ? ''
-        : '${((todoList.completedItems.toDouble() / totalItems.toDouble()) * 100).toStringAsFixed(1)}%';
+    // final String progress = totalItems == 0
+    //     ? ''
+    //     : '${((todoList.completedItems.toDouble() / totalItems.toDouble()) * 100).toStringAsFixed(1)}%';
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -109,14 +109,14 @@ class _SubtitleRow extends StatelessWidget {
                   'Active: ${todoList.activeItems}',
           style: Theme.of(context).textTheme.bodySmall,
         ),
-        if (totalItems != 0)
-          Text(
-            'Progress: $progress',
-            style: Theme.of(context)
-                .textTheme
-                .labelMedium!
-                .copyWith(color: Theme.of(context).colorScheme.primary),
-          )
+        // if (totalItems != 0)
+        //   Text(
+        //     'Progress: $progress',
+        //     style: Theme.of(context)
+        //         .textTheme
+        //         .labelMedium!
+        //         .copyWith(color: Theme.of(context).colorScheme.primary),
+        //   )
       ],
     );
   }

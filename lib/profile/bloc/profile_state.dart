@@ -7,6 +7,7 @@ final class ProfileState extends Equatable {
     this.lastName = const StringInput.pure(),
     this.username = const StringInput.pure(),
     this.isValid = false,
+    this.errorMessage,
   });
 
   final FormzSubmissionStatus status;
@@ -14,6 +15,7 @@ final class ProfileState extends Equatable {
   final StringInput lastName;
   final StringInput username;
   final bool isValid;
+  final String? errorMessage;
 
   ProfileState copyWith({
     FormzSubmissionStatus? status,
@@ -21,6 +23,7 @@ final class ProfileState extends Equatable {
     StringInput? lastName,
     StringInput? username,
     bool? isValid,
+    String? errorMessage,
   }) {
     return ProfileState(
       status: status ?? this.status,
@@ -28,9 +31,11 @@ final class ProfileState extends Equatable {
       lastName: lastName ?? this.lastName,
       username: username ?? this.username,
       isValid: isValid ?? this.isValid,
+      errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 
   @override
-  List<Object> get props => [status, firstName, lastName, username];
+  List<Object?> get props =>
+      [status, firstName, lastName, username, errorMessage];
 }

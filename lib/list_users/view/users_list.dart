@@ -33,7 +33,26 @@ class UsersList extends StatelessWidget {
               itemBuilder: (context, index) {
                 return index == 0
                     ? UserListTile(user: owner)
-                    : UserListTile(user: users[index - 1]);
+                    : UserListTile(
+                        user: users[index - 1],
+                        onDismissed: (_) {
+                          context.read<ListUsersBloc>().add(ListUsersDeleted(
+                              userId: users[index - 1].user.id,
+                              onSuccess: () {
+                                final List<ListUser> listUsers = context
+                                    .read<ListUsersBloc>()
+                                    .state
+                                    .users
+                                    .map((roleUser) => roleUser.listUser)
+                                    .toList();
+
+                                context.read<ListItemsOverviewBloc>().add(
+                                      ListItemsOverviewListUsersEdited(
+                                          listUsers: listUsers),
+                                    );
+                              }));
+                        },
+                      );
               },
             );
           }

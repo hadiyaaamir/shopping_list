@@ -34,8 +34,6 @@ class ListItemsOverviewBloc
   ) async {
     emit(state.copyWith(status: () => ListItemsOverviewStatus.loading));
 
-    print('shopping list users : ${shoppingList.users}');
-
     await emit.forEach<List<ShoppingListItem>>(
       _shoppingListRepository.getShoppingList(listId: shoppingList.id),
       onData: (listItems) => state.copyWith(
@@ -155,7 +153,6 @@ class ListItemsOverviewBloc
     ListItemsOverviewListUsersEdited event,
     Emitter<ListItemsOverviewState> emit,
   ) {
-    print('list users: ${event.listUsers}');
     emit(state.copyWith(
         listUsers: () => event.listUsers,
         status: () => ListItemsOverviewStatus.success));

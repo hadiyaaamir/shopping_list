@@ -23,6 +23,8 @@ class ListUsersBloc extends Bloc<ListUsersEvent, ListUsersState> {
     on<ListUsersIdentifierChanged>(_onUserIdentifierChanged);
     on<ListUsersRoleChanged>(_onUserRoleChanged);
     on<ListUsersAdded>(_onUserAdded);
+    on<ListUsersDeleted>(_onUserDeleted);
+    on<ListUsersEdited>(_onUserEdited);
   }
 
   final UserRepository _userRepository;
@@ -119,6 +121,70 @@ class ListUsersBloc extends Bloc<ListUsersEvent, ListUsersState> {
         ),
       );
     } catch (e) {
+      emit(state.copyWith(status: () => ListUsersStatus.failure));
+    }
+  }
+
+  Future<void> _onUserDeleted(
+    ListUsersDeleted event,
+    Emitter<ListUsersState> emit,
+  ) async {
+    emit(state.copyWith(status: () => ListUsersStatus.loading));
+
+    try {
+      await _shoppingListRepository.deleteShoppingListUser(
+        listId: shoppingList.id,
+        userId: event.userId,
+      );
+
+      List<RoleUser> updatedUserList = state.users
+          .where((roleUser) => roleUser.listUser.id != event.userId)
+          .toList();
+
+      emit(
+        state.copyWith(
+          status: () => ListUsersStatus.success,
+          users: () => updatedUserList,
+          userIdentifier: const StringInput.pure(),
+          userRole: ListUserRoles.editor,
+        ),
+      );
+      event.onSuccess();
+    } catch (e) {
+      print(e);
+      emit(state.copyWith(status: () => ListUsersStatus.failure));
+    }
+  }
+
+  Future<void> _onUserEdited(
+    ListUsersEdited event,
+    Emitter<ListUsersState> emit,
+  ) async {
+    emit(state.copyWith(status: () => ListUsersStatus.loading));
+
+    try {
+      await _shoppingListRepository.editShoppingListUser(
+        listId: shoppingList.id,
+        editedUser: event.editedUser,
+      );
+
+      List<RoleUser> updatedUserList = state.users.map((roleUser) {
+        return roleUser.listUser.id == event.editedUser.id
+            ? roleUser.copyWith(listUser: event.editedUser)
+            : roleUser;
+      }).toList();
+
+      emit(
+        state.copyWith(
+          status: () => ListUsersStatus.success,
+          users: () => updatedUserList,
+          userIdentifier: const StringInput.pure(),
+          userRole: ListUserRoles.editor,
+        ),
+      );
+      event.onSuccess();
+    } catch (e) {
+      print(e);
       emit(state.copyWith(status: () => ListUsersStatus.failure));
     }
   }
