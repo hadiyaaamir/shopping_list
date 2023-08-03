@@ -53,10 +53,13 @@ class _TitleRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
-          child: Text(
-            shoppingList.title,
-            style: Theme.of(context).textTheme.titleMedium,
-            textAlign: TextAlign.center,
+          child: Hero(
+            tag: 'title_${shoppingList.id}',
+            child: Text(
+              shoppingList.title,
+              style: Theme.of(context).textTheme.titleMedium,
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
         _EditButton(shoppingListBloc: shoppingListBloc, todoList: shoppingList),
