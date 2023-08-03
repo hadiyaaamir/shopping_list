@@ -22,7 +22,13 @@ class ListItemEditView extends StatelessWidget {
           child: Column(children: [
             _ItemInput(),
             SizedBox(height: 20),
-            _QuantityInput(),
+            Row(
+              children: [
+                Flexible(flex: 2, child: _QuantityInput()),
+                SizedBox(width: 10),
+                Flexible(flex: 1, child: _QuantityUnitInput()),
+              ],
+            ),
             SizedBox(height: 20),
             _DescriptionInput(),
           ]),
@@ -65,29 +71,43 @@ class _QuantityInput extends StatelessWidget {
     return BlocBuilder<ListItemEditBloc, ListItemEditState>(
       buildWhen: (previous, current) => previous.quantity != current.quantity,
       builder: (context, state) {
-        return Stack(
-          children: [
-            CustomTextField(
-              key: const Key('editItemForm_quantityInput_textField'),
-              label: 'Quantity',
-              initialValue: state.quantity.value,
-              errorText: state.quantity.displayError != null
-                  ? 'field cannot be empty'
-                  : null,
-              onChanged: (quantity) => context
-                  .read<ListItemEditBloc>()
-                  .add(ListItemEditQuantityChanged(quantity: quantity)),
-            ),
-            const Positioned(right: 15, bottom: 7, child: _QuantityUnitInput()),
-          ],
+        return CustomTextField(
+          key: const Key('editItemForm_quantityInput_textField'),
+          label: 'Quantity',
+          initialValue: state.quantity.value,
+          errorText: state.quantity.displayError != null
+              ? 'field cannot be empty'
+              : null,
+          onChanged: (quantity) => context
+              .read<ListItemEditBloc>()
+              .add(ListItemEditQuantityChanged(quantity: quantity)),
         );
       },
     );
   }
 }
 
-class _QuantityUnitInput extends StatelessWidget {
+class _QuantityUnitInput extends StatefulWidget {
   const _QuantityUnitInput();
+
+  @override
+  State<_QuantityUnitInput> createState() => _QuantityUnitInputState();
+}
+
+class _QuantityUnitInputState extends State<_QuantityUnitInput> {
+  late TextEditingController _textEditingController;
+
+  @override
+  void initState() {
+    super.initState();
+    _textEditingController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,15 +115,46 @@ class _QuantityUnitInput extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.quantityUnit != current.quantityUnit,
       builder: (context, state) {
-        return DropdownButton<String>(
-          value: state.quantityUnit.value,
-          onChanged: (newValue) {
-            context.read<ListItemEditBloc>().add(
-                ListItemEditQuantityUnitChanged(quantityUnit: newValue ?? ''));
+        _textEditingController.text = state.quantityUnit.value;
+
+        _textEditingController.selection =
+            TextSelection.collapsed(offset: _textEditingController.text.length);
+
+        return TypeAheadField<String>(
+          key: const Key('editItemForm_quantityUnitInput_textField'),
+          textFieldConfiguration: TextFieldConfiguration(
+            decoration: InputDecoration(
+              labelText: 'Unit',
+              errorText: state.quantityUnit.displayError != null
+                  ? 'field cannot be empty'
+                  : null,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                  width: 3,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              alignLabelWithHint: true,
+            ),
+            controller: _textEditingController,
+            onChanged: (newValue) {
+              context.read<ListItemEditBloc>().add(
+                    ListItemEditQuantityUnitChanged(quantityUnit: newValue),
+                  );
+            },
+          ),
+          suggestionsCallback: (pattern) async {
+            return cQuantityUnits
+                .where((unit) => unit.contains(pattern))
+                .toList();
           },
-          items: cQuantityUnits.map((unit) {
-            return DropdownMenuItem<String>(value: unit, child: Text(unit));
-          }).toList(),
+          itemBuilder: (context, suggested) => ListTile(title: Text(suggested)),
+          onSuggestionSelected: (suggestion) {
+            context.read<ListItemEditBloc>().add(
+                  ListItemEditQuantityUnitChanged(quantityUnit: suggestion),
+                );
+          },
         );
       },
     );
