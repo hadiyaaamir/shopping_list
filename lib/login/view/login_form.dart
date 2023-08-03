@@ -6,22 +6,70 @@ class LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _ErrorMessage(),
-            SizedBox(height: 25),
-            _EmailInput(),
-            SizedBox(height: 20),
-            _PasswordInput(),
-            SizedBox(height: 40),
-            _LoginButton(),
-            SizedBox(height: 20),
-            _SignupLink(),
-            SizedBox(height: 20),
-          ],
-        ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _HeaderText(),
+          SizedBox(height: 30),
+          Card(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _ErrorMessage(),
+                    SizedBox(height: 25),
+                    _EmailInput(),
+                    SizedBox(height: 20),
+                    _PasswordInput(),
+                    SizedBox(height: 40),
+                    _LoginButton(),
+                    SizedBox(height: 20),
+                    _SignupLink(),
+                    SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HeaderText extends StatelessWidget {
+  const _HeaderText();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Welcome Back!',
+              textAlign: TextAlign.start,
+              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  fontWeight: FontWeight.w500),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Log In to your account now and start planning your shopping',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+            ),
+          ),
+        ],
       ),
     );
   }
