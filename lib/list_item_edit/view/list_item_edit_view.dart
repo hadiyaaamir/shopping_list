@@ -13,6 +13,7 @@ class ListItemEditView extends StatelessWidget {
 
     return Scaffold(
       appBar: CustomAppBar(
+        heroTag: 'listItem_${listItem?.id}',
         title:
             isNewItem ? 'Add List Item' : (listItem?.item ?? 'Edit List Item'),
       ),

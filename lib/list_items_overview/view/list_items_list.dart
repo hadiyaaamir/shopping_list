@@ -66,6 +66,7 @@ class _NonEmptyList extends StatelessWidget {
                       itemBuilder: (context, index) {
                         ShoppingListItem listItem =
                             filteredTodos.elementAt(index);
+
                         return ListItemTile(
                           key: Key(listItem.id),
                           listItem: listItem,
