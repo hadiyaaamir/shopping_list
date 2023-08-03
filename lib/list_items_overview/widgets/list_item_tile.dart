@@ -114,12 +114,14 @@ class _ItemListTile extends StatelessWidget {
           ? Text(listItem.description, style: textStyle)
           : null,
       onTap: allowEdit ? onTap : null,
-      leading: Checkbox(
-        shape: const ContinuousRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
+      leading: Transform.scale(
+        scale: 1.2,
+        child: Checkbox(
+          side: const BorderSide(width: 1),
+          shape: const CircleBorder(),
+          value: listItem.isCompleted,
+          onChanged: (value) => onToggleCompleted(value!),
         ),
-        value: listItem.isCompleted,
-        onChanged: (value) => onToggleCompleted(value!),
       ),
       trailing: Icon(
         Icons.keyboard_arrow_right_rounded,
