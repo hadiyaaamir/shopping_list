@@ -113,7 +113,7 @@ class _ItemListTile extends StatelessWidget {
       subtitle: listItem.description.isNotEmpty
           ? Text(listItem.description, style: textStyle)
           : null,
-      onTap: allowEdit ? onTap : null,
+      onTap: allowEdit && !listItem.isCompleted ? onTap : null,
       leading: Transform.scale(
         scale: 1.2,
         child: Checkbox(
@@ -125,7 +125,7 @@ class _ItemListTile extends StatelessWidget {
       ),
       trailing: Icon(
         Icons.keyboard_arrow_right_rounded,
-        color: allowEdit ? null : Colors.transparent,
+        color: allowEdit && !listItem.isCompleted ? null : Colors.transparent,
       ),
     );
   }

@@ -26,8 +26,7 @@ class ShoppingListTile extends StatelessWidget {
       child: Card(
         color: Theme.of(context).colorScheme.secondaryContainer,
         child: ListTile(
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          // contentPadding: EdgeInsets.zero,
           title: _TitleRow(
               shoppingList: shoppingList, shoppingListBloc: shoppingListBloc),
           subtitle: _SubtitleRow(todoList: shoppingList),
@@ -49,21 +48,28 @@ class _TitleRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: Hero(
-            tag: 'title_${shoppingList.id}',
-            child: Text(
-              shoppingList.title,
-              style: Theme.of(context).textTheme.titleMedium,
-              textAlign: TextAlign.center,
+    return Container(
+      // color: Theme.of(context).colorScheme.primary,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Hero(
+                tag: 'title_${shoppingList.id}',
+                child: Text(
+                  shoppingList.title,
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ),
-          ),
+            _EditButton(
+                shoppingListBloc: shoppingListBloc, todoList: shoppingList),
+          ],
         ),
-        _EditButton(shoppingListBloc: shoppingListBloc, todoList: shoppingList),
-      ],
+      ),
     );
   }
 }
