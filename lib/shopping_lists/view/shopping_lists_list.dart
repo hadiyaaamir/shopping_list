@@ -37,14 +37,36 @@ class _NonEmptyList extends StatelessWidget {
             radius: const Radius.circular(20),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: ListView.builder(
-                itemCount: todoLists.length,
-                itemBuilder: (context, index) => ShoppingListTile(
-                    shoppingList: todoLists[index],
-                    onDismissed: (_) {
-                      context.read<ShoppingListBloc>().add(
-                          ShoppingListDeleted(shoppingList: todoLists[index]));
-                    }),
+              child: GridView.count(
+                // itemCount: todoLists.length,
+                crossAxisCount: 2,
+                childAspectRatio: 1.3,
+                crossAxisSpacing: 5,
+                mainAxisSpacing: 5,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                children: List.generate(
+                  todoLists.length,
+                  (index) => ShoppingListTile(
+                      shoppingList: todoLists[index],
+                      onDismissed: (_) {
+                        context.read<ShoppingListBloc>().add(
+                            ShoppingListDeleted(
+                                shoppingList: todoLists[index]));
+                      }),
+                ),
+
+                // itemBuilder: (context, index) => ShoppingListTile(
+                //     shoppingList: todoLists[index],
+                //     onDismissed: (_) {
+                //       context.read<ShoppingListBloc>().add(
+                //           ShoppingListDeleted(shoppingList: todoLists[index]));
+                //     }),
+                // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                //   crossAxisCount: 2,
+                //   // crossAxisSpacing: 4.0,
+                //   mainAxisSpacing: 0,
+                // ),
               ),
             ),
           );
