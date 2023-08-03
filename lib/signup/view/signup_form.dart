@@ -190,7 +190,7 @@ class _LoginLink extends StatelessWidget {
     return LinkText(
       text: 'Already have an account? ',
       boldText: 'Log In',
-      onTap: () => AppRouter.router.go('/login'),
+      onTap: () => context.go('/login'),
     );
   }
 }
