@@ -30,29 +30,34 @@ class FilterButton extends StatelessWidget {
 
     bool isSelected = activeFilter == filter;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: GestureDetector(
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: colorScheme.primary, width: 2),
-            color: isSelected ? colorScheme.primary : colorScheme.background,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 25),
-            child: Text(
-              filter.text,
-              style: TextStyle(
-                  color: isSelected
-                      ? colorScheme.onPrimary
-                      : Theme.of(context).textTheme.bodyLarge!.color),
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: 300),
+      child: Padding(
+        key: ValueKey<int>(
+            context.read<ListItemsOverviewBloc>().state.filter.index),
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: GestureDetector(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: colorScheme.primary, width: 2),
+              color: isSelected ? colorScheme.primary : colorScheme.background,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 25),
+              child: Text(
+                filter.text,
+                style: TextStyle(
+                    color: isSelected
+                        ? colorScheme.onPrimary
+                        : Theme.of(context).textTheme.bodyLarge!.color),
+              ),
             ),
           ),
+          onTap: () => context
+              .read<ListItemsOverviewBloc>()
+              .add(ListItemsOverviewFilterChanged(filter: filter)),
         ),
-        onTap: () => context
-            .read<ListItemsOverviewBloc>()
-            .add(ListItemsOverviewFilterChanged(filter: filter)),
       ),
     );
   }
