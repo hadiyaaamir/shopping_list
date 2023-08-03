@@ -142,7 +142,8 @@ class _LoginLink extends StatelessWidget {
     return LinkText(
       text: 'Already have an account? ',
       boldText: 'Log In',
-      onTap: () => Navigator.pushReplacement(context, LoginPage.route()),
+      onTap: () => AppRouter.router.go('/login'),
+      // Navigator.pushReplacement(context, LoginPage.route()),
     );
   }
 }

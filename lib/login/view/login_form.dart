@@ -100,9 +100,8 @@ class _LoginButton extends StatelessWidget {
             : Button(
                 key: const Key('loginForm_button'),
                 onPressed: state.isValid
-                    ? () {
-                        context.read<LoginBloc>().add(const LoginSubmitted());
-                      }
+                    ? () =>
+                        context.read<LoginBloc>().add(const LoginSubmitted())
                     : null,
                 label: 'Log In',
               );
@@ -119,7 +118,9 @@ class _SignupLink extends StatelessWidget {
     return LinkText(
       text: 'Don\'t have an account? ',
       boldText: 'Sign Up',
-      onTap: () => Navigator.pushReplacement(context, SignupPage.route()),
+      onTap: () => context.go('/signup'),
+      //  AppRouter.router.go('/signup'),
+      // Navigator.pushReplacement(context, SignupPage.route()),
     );
   }
 }

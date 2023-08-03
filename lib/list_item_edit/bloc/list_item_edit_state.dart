@@ -13,6 +13,8 @@ final class ListItemEditState extends Equatable {
     this.listItem,
     this.item = const StringInput.pure(),
     this.quantity = const StringInput.pure(allowEmpty: true),
+    this.quantityUnit = const StringInput.pure(allowEmpty: true),
+    this.description = const StringInput.pure(allowEmpty: true),
     this.isValid = false,
   });
 
@@ -20,6 +22,8 @@ final class ListItemEditState extends Equatable {
   final ShoppingListItem? listItem;
   final StringInput item;
   final StringInput quantity;
+  final StringInput quantityUnit;
+  final StringInput description;
   final bool isValid;
 
   bool get isNewItem => listItem == null;
@@ -29,6 +33,8 @@ final class ListItemEditState extends Equatable {
     ShoppingListItem? listItem,
     StringInput? item,
     StringInput? quantity,
+    StringInput? quantityUnit,
+    StringInput? description,
     bool? isValid,
   }) {
     return ListItemEditState(
@@ -36,10 +42,13 @@ final class ListItemEditState extends Equatable {
       listItem: listItem ?? this.listItem,
       item: item ?? this.item,
       quantity: quantity ?? this.quantity,
+      quantityUnit: quantityUnit ?? this.quantityUnit,
+      description: description ?? this.description,
       isValid: isValid ?? this.isValid,
     );
   }
 
   @override
-  List<Object?> get props => [status, listItem, item, quantity];
+  List<Object?> get props =>
+      [status, listItem, item, quantity, quantityUnit, description];
 }

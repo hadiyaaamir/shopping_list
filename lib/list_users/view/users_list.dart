@@ -17,7 +17,8 @@ class UsersList extends StatelessWidget {
       child: FutureBuilder<User>(
         future: context.read<UserRepository>().getUser(userId: userId),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+          if (snapshot.connectionState == ConnectionState.waiting &&
+              context.read<ListUsersBloc>().isAddingOrRetrieving) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
@@ -27,8 +28,7 @@ class UsersList extends StatelessWidget {
               listUser: ListUser(id: userId, role: ListUserRoles.owner),
             );
 
-            return ListView.separated(
-              separatorBuilder: (context, index) => const Divider(),
+            return ListView.builder(
               itemCount: users.length + 1,
               itemBuilder: (context, index) {
                 return index == 0

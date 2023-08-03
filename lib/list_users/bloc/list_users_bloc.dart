@@ -32,11 +32,15 @@ class ListUsersBloc extends Bloc<ListUsersEvent, ListUsersState> {
   final ShoppingList shoppingList;
   final List<ListUser> listUsers;
 
+  bool isAddingOrRetrieving = true;
+
   Future<void> _onGetUserDetails(
     ListUsersGetUsersDetails event,
     Emitter<ListUsersState> emit,
   ) async {
     emit(state.copyWith(status: () => ListUsersStatus.loading));
+
+    isAddingOrRetrieving = true;
 
     try {
       final List<String> userIds = listUsers.map((user) => user.id).toList();
@@ -78,6 +82,7 @@ class ListUsersBloc extends Bloc<ListUsersEvent, ListUsersState> {
     ListUsersAdded event,
     Emitter<ListUsersState> emit,
   ) async {
+    isAddingOrRetrieving = true;
     emit(state.copyWith(status: () => ListUsersStatus.loading));
 
     try {
@@ -129,8 +134,8 @@ class ListUsersBloc extends Bloc<ListUsersEvent, ListUsersState> {
     ListUsersDeleted event,
     Emitter<ListUsersState> emit,
   ) async {
-    emit(state.copyWith(status: () => ListUsersStatus.loading));
-
+    // emit(state.copyWith(status: () => ListUsersStatus.loading));
+    isAddingOrRetrieving = false;
     try {
       await _shoppingListRepository.deleteShoppingListUser(
         listId: shoppingList.id,
@@ -160,8 +165,8 @@ class ListUsersBloc extends Bloc<ListUsersEvent, ListUsersState> {
     ListUsersEdited event,
     Emitter<ListUsersState> emit,
   ) async {
-    emit(state.copyWith(status: () => ListUsersStatus.loading));
-
+    // emit(state.copyWith(status: () => ListUsersStatus.loading));
+    isAddingOrRetrieving = false;
     try {
       await _shoppingListRepository.editShoppingListUser(
         listId: shoppingList.id,

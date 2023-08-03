@@ -19,15 +19,27 @@ class ListItemEditBloc extends Bloc<ListItemEditEvent, ListItemEditState> {
         super(
           ListItemEditState(
             listItem: listItem,
-            item: StringInput.dirty(value: listItem?.item ?? ''),
+            item: listItem?.item != null
+                ? StringInput.dirty(value: listItem!.item)
+                : const StringInput.pure(),
             quantity: StringInput.dirty(
               value: listItem?.quantity ?? '',
+              allowEmpty: true,
+            ),
+            quantityUnit: StringInput.dirty(
+              value: listItem?.quantityUnit ?? '',
+              allowEmpty: true,
+            ),
+            description: StringInput.dirty(
+              value: listItem?.description ?? '',
               allowEmpty: true,
             ),
           ),
         ) {
     on<ListItemEditItemChanged>(_onItemChanged);
     on<ListItemEditQuantityChanged>(_onQuantityChanged);
+    on<ListItemEditQuantityUnitChanged>(_onQuantityUnitChanged);
+    on<ListItemEditDescriptionChanged>(_onDescriptionChanged);
     on<ListItemEditSubmitted>(_onSubmitted);
   }
 
@@ -43,7 +55,8 @@ class ListItemEditBloc extends Bloc<ListItemEditEvent, ListItemEditState> {
     emit(
       state.copyWith(
         item: item,
-        isValid: Formz.validate([item, state.quantity]),
+        isValid: Formz.validate(
+            [item, state.quantity, state.quantityUnit, state.description]),
       ),
     );
   }
@@ -59,7 +72,36 @@ class ListItemEditBloc extends Bloc<ListItemEditEvent, ListItemEditState> {
     emit(
       state.copyWith(
         quantity: quantity,
-        isValid: Formz.validate([state.item, quantity]),
+        isValid: Formz.validate(
+            [state.item, quantity, state.quantityUnit, state.description]),
+      ),
+    );
+  }
+
+  Future<void> _onQuantityUnitChanged(
+    ListItemEditQuantityUnitChanged event,
+    Emitter<ListItemEditState> emit,
+  ) async {
+    final quantityUnit =
+        StringInput.dirty(value: event.quantityUnit, allowEmpty: true);
+    emit(state.copyWith(
+      quantityUnit: quantityUnit,
+      isValid: Formz.validate(
+          [state.item, state.quantity, quantityUnit, state.description]),
+    ));
+  }
+
+  Future<void> _onDescriptionChanged(
+    ListItemEditDescriptionChanged event,
+    Emitter<ListItemEditState> emit,
+  ) async {
+    final description =
+        StringInput.dirty(value: event.description, allowEmpty: true);
+    emit(
+      state.copyWith(
+        description: description,
+        isValid: Formz.validate(
+            [state.item, state.quantity, state.quantityUnit, description]),
       ),
     );
   }
@@ -79,9 +121,10 @@ class ListItemEditBloc extends Bloc<ListItemEditEvent, ListItemEditState> {
               userId: userId,
             ))
         .copyWith(
-      item: state.item.value,
-      quantity: state.quantity.value,
-    );
+            item: state.item.value,
+            quantity: state.quantity.value,
+            quantityUnit: state.quantityUnit.value,
+            description: state.description.value);
 
     try {
       await _shoppingListRepository.saveListItem(listItem);

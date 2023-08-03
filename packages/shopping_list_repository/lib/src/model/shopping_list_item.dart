@@ -7,6 +7,8 @@ class ShoppingListItem extends Equatable {
     required this.userId,
     String? id,
     this.quantity = '',
+    this.quantityUnit = '',
+    this.description = '',
     this.isCompleted = false,
     DateTime? dateCreated,
   })  : assert(
@@ -21,6 +23,8 @@ class ShoppingListItem extends Equatable {
   final String userId;
   final String item;
   final String quantity;
+  final String quantityUnit;
+  final String description;
   final bool isCompleted;
   final DateTime dateCreated;
 
@@ -30,6 +34,8 @@ class ShoppingListItem extends Equatable {
     String? userId,
     String? item,
     String? quantity,
+    String? quantityUnit,
+    String? description,
     bool? isCompleted,
     DateTime? dateCreated,
   }) {
@@ -39,6 +45,8 @@ class ShoppingListItem extends Equatable {
       userId: userId ?? this.userId,
       item: item ?? this.item,
       quantity: quantity ?? this.quantity,
+      quantityUnit: quantityUnit ?? this.quantityUnit,
+      description: description ?? this.description,
       isCompleted: isCompleted ?? this.isCompleted,
       dateCreated: dateCreated ?? this.dateCreated,
     );
@@ -51,6 +59,8 @@ class ShoppingListItem extends Equatable {
         listId: json['listId'] as String,
         userId: json['userId'] as String,
         quantity: json['quantity'] as String? ?? '',
+        quantityUnit: json['quantityUnit'] as String? ?? '',
+        description: json['description'] as String? ?? '',
         isCompleted: json['isCompleted'] as bool? ?? false,
         dateCreated: json['dateCreated'].toDate(),
       );
@@ -61,11 +71,22 @@ class ShoppingListItem extends Equatable {
         'userId': userId,
         'item': item,
         'quantity': quantity,
+        'quantityUnit': quantityUnit,
+        'description': description,
         'isCompleted': isCompleted,
         'dateCreated': dateCreated,
       };
 
   @override
-  List<Object> get props =>
-      [id, listId, userId, item, quantity, isCompleted, dateCreated];
+  List<Object?> get props => [
+        id,
+        listId,
+        userId,
+        item,
+        quantity,
+        quantityUnit,
+        description,
+        isCompleted,
+        dateCreated,
+      ];
 }
