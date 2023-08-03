@@ -10,7 +10,7 @@ class LoginForm extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _HeaderText(),
-          SizedBox(height: 30),
+          SizedBox(height: 20),
           Card(
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -45,7 +45,7 @@ class _HeaderText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
       child: Column(
         children: [
           Align(
@@ -167,8 +167,6 @@ class _SignupLink extends StatelessWidget {
       text: 'Don\'t have an account? ',
       boldText: 'Sign Up',
       onTap: () => context.go('/signup'),
-      //  AppRouter.router.go('/signup'),
-      // Navigator.pushReplacement(context, SignupPage.route()),
     );
   }
 }
