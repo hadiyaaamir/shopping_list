@@ -15,7 +15,7 @@ class ListItemsList extends StatelessWidget {
       builder: (context, state) {
         if (state.listItems.isEmpty) {
           return (state.status == ListItemsOverviewStatus.loading)
-              ? const Center(child: CircularProgressIndicator())
+              ? const CustomProgressIndicator()
               : (state.status != ListItemsOverviewStatus.success)
                   ? const SizedBox()
                   : _EmptyList(isButtonVisible: isNotViewer);
@@ -52,7 +52,7 @@ class _NonEmptyList extends StatelessWidget {
 
     return Expanded(
       child: status == ListItemsOverviewStatus.loading
-          ? const Center(child: CircularProgressIndicator())
+          ? const CustomProgressIndicator()
           : AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
               child: Scrollbar(
@@ -67,6 +67,7 @@ class _NonEmptyList extends StatelessWidget {
                         ShoppingListItem listItem =
                             filteredTodos.elementAt(index);
                         return ListItemTile(
+                          key: Key(listItem.id),
                           listItem: listItem,
                           currentListUser: currentListUser,
                           onTap: () {

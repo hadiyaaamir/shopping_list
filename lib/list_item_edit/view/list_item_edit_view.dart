@@ -148,7 +148,7 @@ class _EditTodoButton extends StatelessWidget {
       child: BlocBuilder<ListItemEditBloc, ListItemEditState>(
         builder: (context, state) {
           return state.status.isLoadingOrSuccess
-              ? const CircularProgressIndicator()
+              ? const CustomProgressIndicator()
               : Button(
                   key: const Key('editItemForm_button'),
                   onPressed: state.isValid

@@ -96,7 +96,7 @@ class _LoginButton extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return state.status.isInProgress
-            ? const CircularProgressIndicator()
+            ? const CustomProgressIndicator()
             : Button(
                 key: const Key('loginForm_button'),
                 onPressed: state.isValid

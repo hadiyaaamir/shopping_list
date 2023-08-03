@@ -9,7 +9,7 @@ class ShoppingListsList extends StatelessWidget {
       builder: (context, state) {
         if (state.shoppingLists.isEmpty) {
           return (state.status == ShoppingListStatus.loading)
-              ? const Center(child: CircularProgressIndicator())
+              ? const CustomProgressIndicator()
               : (state.status != ShoppingListStatus.success)
                   ? const SizedBox()
                   : const _EmptyList();
@@ -32,7 +32,7 @@ class _NonEmptyList extends StatelessWidget {
         context.select((ShoppingListBloc bloc) => bloc.state.status);
 
     return status == ShoppingListStatus.loading
-        ? const Center(child: CircularProgressIndicator())
+        ? const Center(child: CustomProgressIndicator())
         : Scrollbar(
             radius: const Radius.circular(20),
             child: Padding(

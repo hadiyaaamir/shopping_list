@@ -135,7 +135,7 @@ class _CreateProfileButton extends StatelessWidget {
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
         return state.status.isInProgress
-            ? const CircularProgressIndicator()
+            ? const CustomProgressIndicator()
             : Button(
                 key: const Key('profileForm_button'),
                 onPressed: state.isValid
