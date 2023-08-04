@@ -26,6 +26,7 @@ class ListItemsOverviewView extends StatelessWidget {
 
     return Scaffold(
       appBar: CustomAppBar(
+        heroTag: 'title_${shoppingList.id}',
         title: title,
         actions: [
           AddUsersButton(

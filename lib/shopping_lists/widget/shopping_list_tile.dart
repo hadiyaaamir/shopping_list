@@ -23,19 +23,16 @@ class ShoppingListTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Icon(Icons.delete, color: Theme.of(context).colorScheme.onError),
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 2),
-        child: Card(
-          child: ListTile(
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-            title: _TitleRow(
-                shoppingList: shoppingList, shoppingListBloc: shoppingListBloc),
-            subtitle: _SubtitleRow(todoList: shoppingList),
-            onTap: () => Navigator.push(
-              context,
-              ListItemsOverviewPage.route(shoppingList: shoppingList),
-            ),
+      child: Card(
+        color: Theme.of(context).colorScheme.secondaryContainer,
+        child: ListTile(
+          // contentPadding: EdgeInsets.zero,
+          title: _TitleRow(
+              shoppingList: shoppingList, shoppingListBloc: shoppingListBloc),
+          subtitle: _SubtitleRow(todoList: shoppingList),
+          onTap: () => Navigator.push(
+            context,
+            ListItemsOverviewPage.route(shoppingList: shoppingList),
           ),
         ),
       ),
@@ -51,15 +48,28 @@ class _TitleRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          shoppingList.title,
-          style: Theme.of(context).textTheme.titleMedium,
+    return Container(
+      // color: Theme.of(context).colorScheme.primary,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Hero(
+                tag: 'title_${shoppingList.id}',
+                child: Text(
+                  shoppingList.title,
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            _EditButton(
+                shoppingListBloc: shoppingListBloc, todoList: shoppingList),
+          ],
         ),
-        _EditButton(shoppingListBloc: shoppingListBloc, todoList: shoppingList),
-      ],
+      ),
     );
   }
 }
@@ -99,25 +109,29 @@ class _SubtitleRow extends StatelessWidget {
     //     ? ''
     //     : '${((todoList.completedItems.toDouble() / totalItems.toDouble()) * 100).toStringAsFixed(1)}%';
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          totalItems == 0
-              ? 'No items in list'
-              : 'Completed: ${todoList.completedItems}, '
-                  'Active: ${todoList.activeItems}',
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-        // if (totalItems != 0)
-        //   Text(
-        //     'Progress: $progress',
-        //     style: Theme.of(context)
-        //         .textTheme
-        //         .labelMedium!
-        //         .copyWith(color: Theme.of(context).colorScheme.primary),
-        //   )
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        // mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (totalItems == 0)
+            Text(
+              'No items in the list',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          if (totalItems != 0) ...[
+            Text(
+              'Completed: ${todoList.completedItems}',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            Text(
+              'Active: ${todoList.activeItems}',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
+        ],
+      ),
     );
   }
 }

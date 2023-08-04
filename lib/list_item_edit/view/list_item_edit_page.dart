@@ -1,23 +1,36 @@
 part of 'view.dart';
 
 class ListItemEditPage extends StatelessWidget {
-  const ListItemEditPage({super.key, required this.shoppingList});
+  const ListItemEditPage(
+      {super.key, required this.shoppingList, this.listItem});
 
   final ShoppingList shoppingList;
+  final ShoppingListItem? listItem;
 
   static Route<void> route(
       {ShoppingListItem? listItem, required ShoppingList shoppingList}) {
-    return MaterialPageRoute(
+    return PageRouteBuilder(
       fullscreenDialog: true,
-      builder: (context) => BlocProvider(
-        create: (context) => ListItemEditBloc(
-          shoppingListRepository: context.read<ShoppingListRepository>(),
-          shoppingList: shoppingList,
-          listItem: listItem,
-          userId: context.read<AuthenticationRepository>().currentAuthUser!.id,
-        ),
-        child: ListItemEditPage(shoppingList: shoppingList),
-      ),
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return BlocProvider(
+          create: (context) => ListItemEditBloc(
+            shoppingListRepository: context.read<ShoppingListRepository>(),
+            shoppingList: shoppingList,
+            listItem: listItem,
+            userId:
+                context.read<AuthenticationRepository>().currentAuthUser!.id,
+          ),
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(1.0, 0.0),
+              end: Offset.zero,
+            ).animate(animation),
+            child: ListItemEditPage(
+                shoppingList: shoppingList, listItem: listItem),
+          ),
+        );
+      },
     );
   }
 

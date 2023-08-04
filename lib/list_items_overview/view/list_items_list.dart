@@ -15,7 +15,7 @@ class ListItemsList extends StatelessWidget {
       builder: (context, state) {
         if (state.listItems.isEmpty) {
           return (state.status == ListItemsOverviewStatus.loading)
-              ? const Center(child: CircularProgressIndicator())
+              ? const CustomProgressIndicator()
               : (state.status != ListItemsOverviewStatus.success)
                   ? const SizedBox()
                   : _EmptyList(isButtonVisible: isNotViewer);
@@ -52,40 +52,48 @@ class _NonEmptyList extends StatelessWidget {
 
     return Expanded(
       child: status == ListItemsOverviewStatus.loading
-          ? const Center(child: CircularProgressIndicator())
-          : Scrollbar(
-              radius: const Radius.circular(20),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: ListView.builder(
-                    itemCount: filteredTodos.length,
-                    itemBuilder: (context, index) {
-                      ShoppingListItem listItem =
-                          filteredTodos.elementAt(index);
-                      return ListItemTile(
-                        listItem: listItem,
-                        currentListUser: currentListUser,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            ListItemEditPage.route(
-                                listItem: listItem, shoppingList: shoppingList),
-                          );
-                        },
-                        onDismissed: (_) {
-                          context.read<ListItemsOverviewBloc>().add(
-                              ListItemsOverviewDeleted(listItem: listItem));
-                        },
-                        onToggleCompleted: (isCompleted) {
-                          context.read<ListItemsOverviewBloc>().add(
-                                ListItemsOverviewCompletionToggled(
+          ? const CustomProgressIndicator()
+          : AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              child: Scrollbar(
+                key: ValueKey<int>(
+                    context.read<ListItemsOverviewBloc>().state.filter.index),
+                radius: const Radius.circular(20),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: ListView.builder(
+                      itemCount: filteredTodos.length,
+                      itemBuilder: (context, index) {
+                        ShoppingListItem listItem =
+                            filteredTodos.elementAt(index);
+
+                        return ListItemTile(
+                          key: Key(listItem.id),
+                          listItem: listItem,
+                          currentListUser: currentListUser,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              ListItemEditPage.route(
                                   listItem: listItem,
-                                  isCompleted: isCompleted,
-                                ),
-                              );
-                        },
-                      );
-                    }),
+                                  shoppingList: shoppingList),
+                            );
+                          },
+                          onDismissed: (_) {
+                            context.read<ListItemsOverviewBloc>().add(
+                                ListItemsOverviewDeleted(listItem: listItem));
+                          },
+                          onToggleCompleted: (isCompleted) {
+                            context.read<ListItemsOverviewBloc>().add(
+                                  ListItemsOverviewCompletionToggled(
+                                    listItem: listItem,
+                                    isCompleted: isCompleted,
+                                  ),
+                                );
+                          },
+                        );
+                      }),
+                ),
               ),
             ),
     );

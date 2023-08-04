@@ -10,18 +10,66 @@ class LoginForm extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _ErrorMessage(),
-            SizedBox(height: 25),
-            _EmailInput(),
+            _HeaderText(),
             SizedBox(height: 20),
-            _PasswordInput(),
-            SizedBox(height: 40),
-            _LoginButton(),
-            SizedBox(height: 20),
-            _SignupLink(),
-            SizedBox(height: 20),
+            Card(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _ErrorMessage(),
+                    SizedBox(height: 25),
+                    _EmailInput(),
+                    SizedBox(height: 20),
+                    _PasswordInput(),
+                    SizedBox(height: 40),
+                    _LoginButton(),
+                    SizedBox(height: 20),
+                    _SignupLink(),
+                    SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _HeaderText extends StatelessWidget {
+  const _HeaderText();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Welcome Back!',
+              textAlign: TextAlign.start,
+              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  fontWeight: FontWeight.w500),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Log In to your account now and start planning your shopping',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -96,7 +144,7 @@ class _LoginButton extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return state.status.isInProgress
-            ? const CircularProgressIndicator()
+            ? const CustomProgressIndicator()
             : Button(
                 key: const Key('loginForm_button'),
                 onPressed: state.isValid
@@ -119,8 +167,6 @@ class _SignupLink extends StatelessWidget {
       text: 'Don\'t have an account? ',
       boldText: 'Sign Up',
       onTap: () => context.go('/signup'),
-      //  AppRouter.router.go('/signup'),
-      // Navigator.pushReplacement(context, SignupPage.route()),
     );
   }
 }

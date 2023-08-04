@@ -35,7 +35,7 @@ class ProfilePage extends StatelessWidget {
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
+                            return const CustomProgressIndicator();
                           } else if (snapshot.hasData) {
                             final user = snapshot.data!;
                             return Column(

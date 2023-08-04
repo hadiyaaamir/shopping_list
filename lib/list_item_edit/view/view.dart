@@ -1,6 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 import 'package:shopping_list/list_item_edit/bloc/list_item_edit_bloc.dart';
 import 'package:shopping_list/utils/constants.dart';

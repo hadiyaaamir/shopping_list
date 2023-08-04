@@ -7,11 +7,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.title = '',
     this.profileButton = false,
     this.actions,
+    this.heroTag,
   });
 
   final String title;
   final bool profileButton;
   final List<Widget>? actions;
+  final String? heroTag;
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +29,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     if (actions != null) appActions.addAll(actions!);
 
     return AppBar(
-      title: Text(
-        title,
-        style: Theme.of(context).textTheme.headlineMedium,
-      ),
+      title: heroTag == null
+          ? Text(
+              title,
+              style: Theme.of(context).textTheme.headlineMedium,
+            )
+          : Hero(
+              tag: heroTag!,
+              child: Text(
+                title,
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+            ),
       centerTitle: true,
       actions: appActions,
     );

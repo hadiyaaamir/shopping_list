@@ -34,6 +34,7 @@ class ShoppingListRepositoryFirebase extends ShoppingListRepository {
     return listItemCollection
         .where('listId', isEqualTo: listId)
         .orderBy('isCompleted')
+        .orderBy('dateCreated', descending: true)
         .snapshots()
         .map((snapshot) => snapshot.docs.map((e) => e.data()).toList());
   }

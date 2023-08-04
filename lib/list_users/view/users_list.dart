@@ -19,7 +19,7 @@ class UsersList extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting &&
               context.read<ListUsersBloc>().isAddingOrRetrieving) {
-            return const Center(child: CircularProgressIndicator());
+            return const CustomProgressIndicator();
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
