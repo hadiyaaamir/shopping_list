@@ -24,11 +24,8 @@ class AppRouter {
           key: state.pageKey,
           child: const LoginPage(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(-1.0, 0.0);
-            const end = Offset.zero;
-            const curve = Curves.easeInOut;
-            var tween =
-                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            var tween = Tween(begin: const Offset(-1.0, 0.0), end: Offset.zero)
+                .chain(CurveTween(curve: Curves.easeInOut));
             var offsetAnimation = animation.drive(tween);
             return SlideTransition(position: offsetAnimation, child: child);
           },
@@ -40,12 +37,11 @@ class AppRouter {
           key: state.pageKey,
           child: const SignupPage(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(1.0, 0.0);
-            const end = Offset.zero;
-            const curve = Curves.easeInOut;
-            var tween =
-                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-            var offsetAnimation = animation.drive(tween);
+            var slideTween =
+                Tween(begin: const Offset(1.0, 0.0), end: Offset.zero)
+                    .chain(CurveTween(curve: Curves.easeInOut));
+            var offsetAnimation = animation.drive(slideTween);
+
             return SlideTransition(position: offsetAnimation, child: child);
           },
         ),

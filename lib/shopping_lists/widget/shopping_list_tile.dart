@@ -23,20 +23,50 @@ class ShoppingListTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Icon(Icons.delete, color: Theme.of(context).colorScheme.onError),
       ),
-      child: Card(
-        color: Theme.of(context).colorScheme.secondaryContainer,
-        child: ListTile(
-          // contentPadding: EdgeInsets.zero,
-          title: _TitleRow(
-              shoppingList: shoppingList, shoppingListBloc: shoppingListBloc),
-          subtitle: _SubtitleRow(todoList: shoppingList),
-          onTap: () => Navigator.push(
-            context,
-            ListItemsOverviewPage.route(shoppingList: shoppingList),
+      child: GestureDetector(
+        child: Card(
+          color: Theme.of(context).colorScheme.secondaryContainer,
+          child: Stack(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                child: Column(
+                  children: [
+                    const _TileIcon(),
+                    _TitleRow(
+                      shoppingList: shoppingList,
+                      shoppingListBloc: shoppingListBloc,
+                    ),
+                    _SubtitleRow(todoList: shoppingList),
+                  ],
+                ),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: _EditButton(
+                  shoppingListBloc: shoppingListBloc,
+                  todoList: shoppingList,
+                ),
+              ),
+            ],
           ),
+        ),
+        onTap: () => Navigator.push(
+          context,
+          ListItemsOverviewPage.route(shoppingList: shoppingList),
         ),
       ),
     );
+  }
+}
+
+class _TileIcon extends StatelessWidget {
+  const _TileIcon();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Icon(Icons.shopping_cart);
   }
 }
 
@@ -48,48 +78,22 @@ class _TitleRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // color: Theme.of(context).colorScheme.primary,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Hero(
-                tag: 'title_${shoppingList.id}',
-                child: Text(
-                  shoppingList.title,
-                  style: Theme.of(context).textTheme.titleMedium,
-                  textAlign: TextAlign.center,
-                ),
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Hero(
+              tag: 'title_${shoppingList.id}',
+              child: Text(
+                shoppingList.title,
+                style: Theme.of(context).textTheme.titleMedium,
+                textAlign: TextAlign.center,
               ),
             ),
-            _EditButton(
-                shoppingListBloc: shoppingListBloc, todoList: shoppingList),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _EditButton extends StatelessWidget {
-  const _EditButton({required this.shoppingListBloc, required this.todoList});
-
-  final ShoppingListBloc shoppingListBloc;
-  final ShoppingList todoList;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      child: const Icon(Icons.edit, size: 15),
-      onTap: () => showDialog(
-        context: context,
-        builder: (context) => AddListDialog(
-          shoppingListBloc: shoppingListBloc,
-          shoppingList: todoList,
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -105,32 +109,38 @@ class _SubtitleRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final totalItems = todoList.activeItems + todoList.completedItems;
-    // final String progress = totalItems == 0
-    //     ? ''
-    //     : '${((todoList.completedItems.toDouble() / totalItems.toDouble()) * 100).toStringAsFixed(1)}%';
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 2),
       child: Column(
-        // mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (totalItems == 0)
-            Text(
-              'No items in the list',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-          if (totalItems != 0) ...[
-            Text(
-              'Completed: ${todoList.completedItems}',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            Text(
-              'Active: ${todoList.activeItems}',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-          ],
+          Text(
+            totalItems == 0 ? 'Your list is empty' : '$totalItems items',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
         ],
+      ),
+    );
+  }
+}
+
+class _EditButton extends StatelessWidget {
+  const _EditButton({required this.shoppingListBloc, required this.todoList});
+
+  final ShoppingListBloc shoppingListBloc;
+  final ShoppingList todoList;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.edit, size: 15),
+      onPressed: () => showDialog(
+        context: context,
+        builder: (context) => AddListDialog(
+          shoppingListBloc: shoppingListBloc,
+          shoppingList: todoList,
+        ),
       ),
     );
   }
