@@ -24,11 +24,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LoginEmailChanged event,
     Emitter<LoginState> emit,
   ) {
-    final email = Email.dirty(event.email);
+    final email = StringInput.dirty(value: event.email);
     emit(
       state.copyWith(
         email: email,
-        isValid: Formz.validate([state.password, email]),
+        isValid: Formz.validate([email, state.password]),
       ),
     );
   }
@@ -37,11 +37,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LoginPasswordChanged event,
     Emitter<LoginState> emit,
   ) {
-    final password = Password.dirty(event.password);
+    final password = StringInput.dirty(value: event.password);
     emit(
       state.copyWith(
         password: password,
-        isValid: Formz.validate([password, state.email]),
+        isValid: Formz.validate([state.email, password]),
       ),
     );
   }
