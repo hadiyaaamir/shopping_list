@@ -29,7 +29,7 @@ class AddListDialog extends StatelessWidget {
         TextButton(
           onPressed: () {
             Navigator.pop(context);
-            shoppingListBloc.add(ShoppingListAdded(todoList: shoppingList));
+            shoppingListBloc.add(ShoppingListAdded(shoppingList: shoppingList));
           },
           child: Text(shoppingList == null ? 'Add' : 'Edit'),
         ),

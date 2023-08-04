@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:form_inputs/form_inputs.dart';
 import 'package:shopping_list_repository/shopping_list_repository.dart';
 
@@ -18,6 +19,7 @@ class ShoppingListBloc extends Bloc<ShoppingListEvent, ShoppingListState> {
     on<ShoppingListSubscriptionRequested>(_onSubscriptionRequested);
     on<ShoppingListAdded>(_onListAdded);
     on<ShoppingListTitleChanged>(_onTitleChanged);
+    on<ShoppingListIconChanged>(_onIconChanged);
     on<ShoppingListDeleted>(_onListDeleted);
     on<ShoppingListUndoDelete>(_onUndoDelete);
   }
@@ -49,18 +51,22 @@ class ShoppingListBloc extends Bloc<ShoppingListEvent, ShoppingListState> {
   ) async {
     emit(state.copyWith(status: () => ShoppingListStatus.loading));
 
-    final todoList = (event.todoList ?? ShoppingList(userId: _userId))
-        .copyWith(title: state.title.value);
+    final shoppingList = (event.shoppingList ?? ShoppingList(userId: _userId))
+        .copyWith(title: state.title.value, icon: state.icon);
 
     try {
-      await _shoppingListRepository.saveShoppingList(todoList);
+      await _shoppingListRepository.saveShoppingList(shoppingList);
       emit(state.copyWith(
-          status: () => ShoppingListStatus.success,
-          title: const StringInput.pure()));
+        status: () => ShoppingListStatus.success,
+        title: const StringInput.pure(),
+        icon: Icons.shopping_cart,
+      ));
     } catch (e) {
       emit(state.copyWith(
-          status: () => ShoppingListStatus.failure,
-          title: const StringInput.pure()));
+        status: () => ShoppingListStatus.failure,
+        title: const StringInput.pure(),
+        icon: Icons.shopping_cart,
+      ));
     }
   }
 
@@ -72,6 +78,13 @@ class ShoppingListBloc extends Bloc<ShoppingListEvent, ShoppingListState> {
     emit(
       state.copyWith(title: title),
     );
+  }
+
+  Future<void> _onIconChanged(
+    ShoppingListIconChanged event,
+    Emitter<ShoppingListState> emit,
+  ) async {
+    emit(state.copyWith(icon: event.icon));
   }
 
   Future<void> _onListDeleted(

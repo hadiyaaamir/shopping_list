@@ -33,7 +33,7 @@ class ShoppingListTile extends StatelessWidget {
                     const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
                 child: Column(
                   children: [
-                    const _TileIcon(),
+                    _TileIcon(icon: shoppingList.icon),
                     _TitleRow(
                       shoppingList: shoppingList,
                       shoppingListBloc: shoppingListBloc,
@@ -62,11 +62,13 @@ class ShoppingListTile extends StatelessWidget {
 }
 
 class _TileIcon extends StatelessWidget {
-  const _TileIcon();
+  const _TileIcon({required this.icon});
+
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
-    return const Icon(Icons.shopping_cart);
+    return Icon(icon);
   }
 }
 

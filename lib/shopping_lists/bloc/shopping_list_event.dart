@@ -20,10 +20,19 @@ final class ShoppingListTitleChanged extends ShoppingListEvent {
   List<Object> get props => [title];
 }
 
-final class ShoppingListAdded extends ShoppingListEvent {
-  const ShoppingListAdded({this.todoList});
+final class ShoppingListIconChanged extends ShoppingListEvent {
+  const ShoppingListIconChanged({required this.icon});
 
-  final ShoppingList? todoList;
+  final IconData icon;
+
+  @override
+  List<Object> get props => [icon];
+}
+
+final class ShoppingListAdded extends ShoppingListEvent {
+  const ShoppingListAdded({this.shoppingList});
+
+  final ShoppingList? shoppingList;
 }
 
 final class ShoppingListDeleted extends ShoppingListEvent {
