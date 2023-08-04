@@ -22,7 +22,7 @@ class ListItemEditBloc extends Bloc<ListItemEditEvent, ListItemEditState> {
             item: listItem?.item != null
                 ? StringInput.dirty(value: listItem!.item)
                 : const StringInput.pure(),
-            quantity: StringInput.dirty(
+            quantity: NumericInput.dirty(
               value: listItem?.quantity ?? '',
               allowEmpty: true,
             ),
@@ -65,7 +65,7 @@ class ListItemEditBloc extends Bloc<ListItemEditEvent, ListItemEditState> {
     ListItemEditQuantityChanged event,
     Emitter<ListItemEditState> emit,
   ) async {
-    final quantity = StringInput.dirty(
+    final quantity = NumericInput.dirty(
       value: event.quantity,
       allowEmpty: true,
     );

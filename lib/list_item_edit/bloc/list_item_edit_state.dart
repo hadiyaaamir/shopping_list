@@ -12,7 +12,7 @@ final class ListItemEditState extends Equatable {
     this.status = ListItemEditStatus.initial,
     this.listItem,
     this.item = const StringInput.pure(),
-    this.quantity = const StringInput.pure(allowEmpty: true),
+    this.quantity = const NumericInput.pure(allowEmpty: true),
     this.quantityUnit = const StringInput.pure(allowEmpty: true),
     this.description = const StringInput.pure(allowEmpty: true),
     this.isValid = false,
@@ -21,7 +21,7 @@ final class ListItemEditState extends Equatable {
   final ListItemEditStatus status;
   final ShoppingListItem? listItem;
   final StringInput item;
-  final StringInput quantity;
+  final NumericInput quantity;
   final StringInput quantityUnit;
   final StringInput description;
   final bool isValid;
@@ -32,7 +32,7 @@ final class ListItemEditState extends Equatable {
     ListItemEditStatus? status,
     ShoppingListItem? listItem,
     StringInput? item,
-    StringInput? quantity,
+    NumericInput? quantity,
     StringInput? quantityUnit,
     StringInput? description,
     bool? isValid,
