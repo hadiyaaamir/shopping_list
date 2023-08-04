@@ -32,6 +32,7 @@ dependencies:
   go_router: ^9.0.3
   flutter_spinkit: ^5.2.0
   flutter_typeahead: ^4.6.2
+  flutter_iconpicker: ^3.2.4
 
 
 dev_dependencies:

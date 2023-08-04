@@ -77,8 +77,10 @@ class _EmptyList extends StatelessWidget {
             width: 130,
             onPressed: () => showDialog(
               context: context,
-              builder: (context) =>
-                  AddListDialog(shoppingListBloc: shoppingListBloc),
+              builder: (context) => MultiBlocProvider(
+                providers: [BlocProvider.value(value: shoppingListBloc)],
+                child: const AddListDialog(),
+              ),
             ),
           )
         ],

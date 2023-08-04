@@ -46,7 +46,7 @@ class ShoppingListTile extends StatelessWidget {
                 alignment: Alignment.topRight,
                 child: _EditButton(
                   shoppingListBloc: shoppingListBloc,
-                  todoList: shoppingList,
+                  shoppingList: shoppingList,
                 ),
               ),
             ],
@@ -128,10 +128,11 @@ class _SubtitleRow extends StatelessWidget {
 }
 
 class _EditButton extends StatelessWidget {
-  const _EditButton({required this.shoppingListBloc, required this.todoList});
+  const _EditButton(
+      {required this.shoppingListBloc, required this.shoppingList});
 
   final ShoppingListBloc shoppingListBloc;
-  final ShoppingList todoList;
+  final ShoppingList shoppingList;
 
   @override
   Widget build(BuildContext context) {
@@ -139,9 +140,9 @@ class _EditButton extends StatelessWidget {
       icon: const Icon(Icons.edit, size: 15),
       onPressed: () => showDialog(
         context: context,
-        builder: (context) => AddListDialog(
-          shoppingListBloc: shoppingListBloc,
-          shoppingList: todoList,
+        builder: (context) => MultiBlocProvider(
+          providers: [BlocProvider.value(value: shoppingListBloc)],
+          child: AddListDialog(shoppingList: shoppingList),
         ),
       ),
     );

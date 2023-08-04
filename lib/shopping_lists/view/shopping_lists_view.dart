@@ -68,8 +68,12 @@ class _AddShoppingListButton extends StatelessWidget {
           isVisible: state.shoppingLists.isNotEmpty,
           onPressed: () => showDialog(
             context: context,
-            builder: (context) =>
-                AddListDialog(shoppingListBloc: shoppingListBloc),
+            builder: (context) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(value: shoppingListBloc),
+              ],
+              child: const AddListDialog(),
+            ),
           ),
         );
       },
