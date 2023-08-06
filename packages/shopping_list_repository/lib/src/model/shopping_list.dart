@@ -8,8 +8,7 @@ class ShoppingList extends Equatable {
     String? id,
     this.icon = Icons.shopping_cart,
     DateTime? dateCreated,
-    this.completedItems = 0,
-    this.activeItems = 0,
+    this.totalItems = 0,
   })  : assert(
           id == null || id.isNotEmpty,
           'id must either be null or not empty',
@@ -24,8 +23,7 @@ class ShoppingList extends Equatable {
   final List<ListUser> users;
   final String title;
   final DateTime dateCreated;
-  final int completedItems;
-  final int activeItems;
+  final int totalItems;
   final IconData icon;
 
   ShoppingList copyWith({
@@ -35,8 +33,7 @@ class ShoppingList extends Equatable {
     String? title,
     IconData? icon,
     DateTime? dateCreated,
-    int? completedItems,
-    int? activeItems,
+    int? totalItems,
   }) {
     return ShoppingList(
       id: id ?? this.id,
@@ -45,8 +42,7 @@ class ShoppingList extends Equatable {
       title: title ?? this.title,
       icon: icon ?? this.icon,
       dateCreated: dateCreated ?? this.dateCreated,
-      completedItems: completedItems ?? this.completedItems,
-      activeItems: activeItems ?? this.activeItems,
+      totalItems: totalItems ?? this.totalItems,
     );
   }
 
@@ -65,8 +61,7 @@ class ShoppingList extends Equatable {
               )
             : Icons.shopping_cart,
         dateCreated: json['dateCreated'].toDate(),
-        completedItems: json['completedItems'] as int,
-        activeItems: json['activeItems'] as int,
+        totalItems: json['totalItems'] as int? ?? 0,
       );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
@@ -80,19 +75,10 @@ class ShoppingList extends Equatable {
           'fontPackage': icon.fontPackage,
         },
         'dateCreated': dateCreated,
-        'completedItems': completedItems,
-        'activeItems': activeItems,
+        'totalItems': totalItems,
       };
 
   @override
-  List<Object> get props => [
-        id,
-        title,
-        dateCreated,
-        users,
-        userId,
-        icon,
-        completedItems,
-        activeItems,
-      ];
+  List<Object> get props =>
+      [id, title, dateCreated, users, userId, icon, totalItems];
 }

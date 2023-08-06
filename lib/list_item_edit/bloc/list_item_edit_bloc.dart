@@ -121,16 +121,18 @@ class ListItemEditBloc extends Bloc<ListItemEditEvent, ListItemEditState> {
               userId: userId,
             ))
         .copyWith(
-            item: state.item.value,
-            quantity: state.quantity.value,
-            quantityUnit: state.quantityUnit.value,
-            description: state.description.value);
+      item: state.item.value,
+      quantity: state.quantity.value,
+      quantityUnit: state.quantityUnit.value,
+      description: state.description.value,
+    );
 
     try {
       await _shoppingListRepository.saveListItem(listItem);
       if (newItem) {
-        await _shoppingListRepository.shoppingListIncrementActive(
-            listId: shoppingList.id);
+        await _shoppingListRepository.shoppingListIncrementTotal(
+          listId: shoppingList.id,
+        );
       }
       emit(state.copyWith(status: ListItemEditStatus.success));
     } catch (e) {

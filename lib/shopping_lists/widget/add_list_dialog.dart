@@ -11,10 +11,16 @@ class AddListDialog extends StatelessWidget {
       context
           .read<ShoppingListBloc>()
           .add(ShoppingListIconChanged(icon: shoppingList!.icon));
+      context
+          .read<ShoppingListBloc>()
+          .add(ShoppingListTitleChanged(title: shoppingList!.title));
     } else {
       context
           .read<ShoppingListBloc>()
           .add(const ShoppingListIconChanged(icon: Icons.shopping_cart));
+      context
+          .read<ShoppingListBloc>()
+          .add(const ShoppingListTitleChanged(title: 'Unnamed'));
     }
 
     return AlertDialog(
@@ -98,7 +104,7 @@ class _IconInput extends StatelessWidget {
   Future<void> _openIconPicker(BuildContext context) async {
     final icon = await FlutterIconPicker.showIconPicker(
       context,
-      iconPackModes: [IconPack.material],
+      iconPackModes: [IconPack.material, IconPack.fontAwesomeIcons],
     );
     if (icon != null) {
       context.read<ShoppingListBloc>().add(ShoppingListIconChanged(icon: icon));

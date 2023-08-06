@@ -110,7 +110,7 @@ class _SubtitleRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final totalItems = todoList.activeItems + todoList.completedItems;
+    final totalItems = todoList.totalItems;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
@@ -118,7 +118,9 @@ class _SubtitleRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            totalItems == 0 ? 'Your list is empty' : '$totalItems items',
+            totalItems == 0
+                ? 'Your list is empty'
+                : '$totalItems item${totalItems > 1 ? 's' : ''}',
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ],

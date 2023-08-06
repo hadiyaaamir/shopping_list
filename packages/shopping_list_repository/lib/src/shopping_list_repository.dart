@@ -26,18 +26,9 @@ abstract class ShoppingListRepository {
   Future<int> toggleCompleteAllItems(
       {required bool isCompleted, required String listId});
 
-  Future<void> shoppingListIncrementCompleted(
+  Future<void> shoppingListIncrementTotal(
       {int value = 1, required String listId});
-  Future<void> shoppingListDecrementCompleted(
-      {int value = 1, required String listId});
-  Future<void> shoppingListSetCompleted(
-      {required int value, required String listId});
-
-  Future<void> shoppingListIncrementActive(
-      {int value = 1, required String listId});
-  Future<void> shoppingListDecrementActive(
-      {int value = 1, required String listId});
-  Future<void> shoppingListSetActive(
+  Future<void> shoppingListSetTotal(
       {required int value, required String listId});
 }
 

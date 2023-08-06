@@ -53,18 +53,6 @@ class ListItemsOverviewBloc
   ) async {
     final newItem = event.listItem.copyWith(isCompleted: event.isCompleted);
     await _shoppingListRepository.saveListItem(newItem);
-
-    if (event.isCompleted) {
-      await _shoppingListRepository.shoppingListIncrementCompleted(
-          listId: shoppingList.id);
-      await _shoppingListRepository.shoppingListDecrementActive(
-          listId: shoppingList.id);
-    } else {
-      await _shoppingListRepository.shoppingListDecrementCompleted(
-          listId: shoppingList.id);
-      await _shoppingListRepository.shoppingListIncrementActive(
-          listId: shoppingList.id);
-    }
   }
 
   Future<void> _onListItemDeleted(
@@ -81,11 +69,8 @@ class ListItemsOverviewBloc
     try {
       await _shoppingListRepository.deleteListItem(event.listItem.id);
 
-      event.listItem.isCompleted
-          ? await _shoppingListRepository.shoppingListDecrementCompleted(
-              listId: shoppingList.id)
-          : await _shoppingListRepository.shoppingListDecrementActive(
-              listId: shoppingList.id);
+      await _shoppingListRepository.shoppingListSetTotal(
+          listId: shoppingList.id, value: state.listItems.length);
 
       emit(state.copyWith(status: () => ListItemsOverviewStatus.success));
     } catch (_) {
@@ -102,11 +87,8 @@ class ListItemsOverviewBloc
       emit(state.copyWith(lastDeletedItem: () => null));
       await _shoppingListRepository.saveListItem(deletedItem);
 
-      deletedItem.isCompleted
-          ? await _shoppingListRepository.shoppingListIncrementCompleted(
-              listId: shoppingList.id)
-          : await _shoppingListRepository.shoppingListIncrementActive(
-              listId: shoppingList.id);
+      await _shoppingListRepository.shoppingListSetTotal(
+          listId: shoppingList.id, value: state.listItems.length);
     }
   }
 
@@ -123,30 +105,15 @@ class ListItemsOverviewBloc
   ) async {
     final areAllCompleted =
         state.listItems.every((listItem) => listItem.isCompleted);
-    int completed = await _shoppingListRepository.toggleCompleteAllItems(
+    await _shoppingListRepository.toggleCompleteAllItems(
         isCompleted: !areAllCompleted, listId: shoppingList.id);
-
-    if (areAllCompleted) {
-      await _shoppingListRepository.shoppingListSetCompleted(
-          value: 0, listId: shoppingList.id);
-      await _shoppingListRepository.shoppingListSetActive(
-          value: completed, listId: shoppingList.id);
-    } else {
-      await _shoppingListRepository.shoppingListSetCompleted(
-          value: completed, listId: shoppingList.id);
-      await _shoppingListRepository.shoppingListSetActive(
-          value: 0, listId: shoppingList.id);
-    }
   }
 
   Future<void> _onClearCompleted(
     ListItemsOverviewClearCompleted event,
     Emitter<ListItemsOverviewState> emit,
   ) async {
-    int cleared = await _shoppingListRepository.clearCompletedItems(
-        listId: shoppingList.id);
-    await _shoppingListRepository.shoppingListDecrementCompleted(
-        listId: shoppingList.id, value: cleared);
+    await _shoppingListRepository.clearCompletedItems(listId: shoppingList.id);
   }
 
   void _onListUsersEdited(
