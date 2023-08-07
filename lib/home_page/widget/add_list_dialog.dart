@@ -73,7 +73,10 @@ class _IconInput extends StatelessWidget {
               builder: (context, state) {
                 return IconButton(
                   onPressed: () => _openIconPicker(context),
-                  icon: Icon(state.icon),
+                  icon: Icon(
+                    state.icon,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 );
               },
             ),
@@ -83,7 +86,7 @@ class _IconInput extends StatelessWidget {
             right: 0,
             child: Container(
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.secondary,
                 borderRadius: const BorderRadius.all(Radius.circular(20)),
               ),
               child: Padding(
@@ -104,7 +107,7 @@ class _IconInput extends StatelessWidget {
   Future<void> _openIconPicker(BuildContext context) async {
     final icon = await FlutterIconPicker.showIconPicker(
       context,
-      iconPackModes: [IconPack.material, IconPack.fontAwesomeIcons],
+      iconPackModes: [IconPack.material],
     );
     if (icon != null) {
       context.read<ShoppingListBloc>().add(ShoppingListIconChanged(icon: icon));

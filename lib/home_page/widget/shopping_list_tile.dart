@@ -30,7 +30,7 @@ class ShoppingListTile extends StatelessWidget {
             children: [
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                 child: Column(
                   children: [
                     _TileIcon(icon: shoppingList.icon),
@@ -68,7 +68,14 @@ class _TileIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Icon(icon);
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Icon(
+        icon,
+        color: Theme.of(context).colorScheme.primary,
+        size: 25,
+      ),
+    );
   }
 }
 
@@ -80,23 +87,20 @@ class _TitleRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Hero(
-              tag: 'title_${shoppingList.id}',
-              child: Text(
-                shoppingList.title,
-                style: Theme.of(context).textTheme.titleMedium,
-                textAlign: TextAlign.center,
-              ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Hero(
+            tag: 'title_${shoppingList.id}',
+            child: Text(
+              shoppingList.title,
+              style: Theme.of(context).textTheme.titleMedium,
+              textAlign: TextAlign.center,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
