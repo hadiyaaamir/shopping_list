@@ -49,7 +49,6 @@ class AuthenticationBloc
         return emit(const AuthenticationState.unknown());
 
       case AuthenticationStatus.unauthenticated:
-        print('unauthenticated user');
         return emit(const AuthenticationState.unauthenticated());
 
       case AuthenticationStatus.unverified:
@@ -62,7 +61,6 @@ class AuthenticationBloc
         final authUser = _authenticationRepository.currentAuthUser;
         final profileCreated = await _getUserProfileCreated(authUser: authUser);
 
-        print('authenticated user: $authUser');
         return emit(
           authUser != null
               ? AuthenticationState.authenticated(

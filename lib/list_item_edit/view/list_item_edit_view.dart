@@ -77,7 +77,10 @@ class _QuantityInput extends StatelessWidget {
           label: 'Quantity',
           initialValue: state.quantity.value,
           errorText: state.quantity.displayError != null
-              ? 'field cannot be empty'
+              ? state.quantity.displayError ==
+                      NumericInputValidationError.invalid
+                  ? 'Quantity must be numeric'
+                  : null
               : null,
           onChanged: (quantity) => context
               .read<ListItemEditBloc>()

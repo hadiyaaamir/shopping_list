@@ -38,7 +38,6 @@ class _NonEmptyList extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: GridView.count(
-                // itemCount: todoLists.length,
                 crossAxisCount: 2,
                 childAspectRatio: 1.3,
                 crossAxisSpacing: 5,
@@ -55,18 +54,6 @@ class _NonEmptyList extends StatelessWidget {
                                 shoppingList: todoLists[index]));
                       }),
                 ),
-
-                // itemBuilder: (context, index) => ShoppingListTile(
-                //     shoppingList: todoLists[index],
-                //     onDismissed: (_) {
-                //       context.read<ShoppingListBloc>().add(
-                //           ShoppingListDeleted(shoppingList: todoLists[index]));
-                //     }),
-                // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                //   crossAxisCount: 2,
-                //   // crossAxisSpacing: 4.0,
-                //   mainAxisSpacing: 0,
-                // ),
               ),
             ),
           );
@@ -90,8 +77,10 @@ class _EmptyList extends StatelessWidget {
             width: 130,
             onPressed: () => showDialog(
               context: context,
-              builder: (context) =>
-                  AddListDialog(shoppingListBloc: shoppingListBloc),
+              builder: (context) => MultiBlocProvider(
+                providers: [BlocProvider.value(value: shoppingListBloc)],
+                child: const AddListDialog(),
+              ),
             ),
           )
         ],

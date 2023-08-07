@@ -4,3 +4,4 @@ part 'confirmed_password.dart';
 part 'email.dart';
 part 'password.dart';
 part 'string_input.dart';
+part 'numeric_input.dart';

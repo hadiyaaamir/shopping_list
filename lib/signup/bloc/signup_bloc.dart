@@ -29,11 +29,8 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     emit(
       state.copyWith(
         email: email,
-        isValid: Formz.validate([
-          email,
-          state.password,
-          state.confirmedPassword,
-        ]),
+        isValid:
+            Formz.validate([email, state.password, state.confirmedPassword]),
       ),
     );
   }

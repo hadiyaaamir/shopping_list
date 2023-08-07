@@ -153,75 +153,26 @@ class ShoppingListRepositoryFirebase extends ShoppingListRepository {
     );
   }
 
-  Future<void> shoppingListIncrementCompleted(
-      {int value = 1, required String listId}) async {
-    await shoppingListCollection.doc(listId).get().then((snapshot) {
-      if (snapshot.data() != null) {
-        saveShoppingList(
-          snapshot.data()!.copyWith(
-              completedItems: snapshot.data()!.completedItems + value),
-        );
-      }
-    });
-  }
-
-  Future<void> shoppingListDecrementCompleted(
-      {int value = 1, required String listId}) async {
-    await shoppingListCollection.doc(listId).get().then((snapshot) {
-      if (snapshot.data() != null) {
-        saveShoppingList(
-          snapshot.data()!.copyWith(
-              completedItems: snapshot.data()!.completedItems - value),
-        );
-      }
-    });
-  }
-
-  Future<void> shoppingListIncrementActive(
+  Future<void> shoppingListIncrementTotal(
       {int value = 1, required String listId}) async {
     await shoppingListCollection.doc(listId).get().then((snapshot) {
       if (snapshot.data() != null) {
         saveShoppingList(
           snapshot
               .data()!
-              .copyWith(activeItems: snapshot.data()!.activeItems + value),
-        );
-      }
-    });
-  }
-
-  Future<void> shoppingListDecrementActive(
-      {int value = 1, required String listId}) async {
-    await shoppingListCollection.doc(listId).get().then((snapshot) {
-      if (snapshot.data() != null) {
-        saveShoppingList(
-          snapshot
-              .data()!
-              .copyWith(activeItems: snapshot.data()!.activeItems - value),
+              .copyWith(totalItems: snapshot.data()!.totalItems + value),
         );
       }
     });
   }
 
   @override
-  Future<void> shoppingListSetActive(
+  Future<void> shoppingListSetTotal(
       {required int value, required String listId}) async {
     await shoppingListCollection.doc(listId).get().then((snapshot) {
       if (snapshot.data() != null) {
         saveShoppingList(
-          snapshot.data()!.copyWith(activeItems: value),
-        );
-      }
-    });
-  }
-
-  @override
-  Future<void> shoppingListSetCompleted(
-      {required int value, required String listId}) async {
-    await shoppingListCollection.doc(listId).get().then((snapshot) {
-      if (snapshot.data() != null) {
-        saveShoppingList(
-          snapshot.data()!.copyWith(completedItems: value),
+          snapshot.data()!.copyWith(totalItems: value),
         );
       }
     });

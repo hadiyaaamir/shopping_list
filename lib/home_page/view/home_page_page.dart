@@ -1,10 +1,10 @@
 part of 'view.dart';
 
-class ShoppingListsPage extends StatelessWidget {
-  const ShoppingListsPage({super.key});
+class HomePagePage extends StatelessWidget {
+  const HomePagePage({super.key});
 
   static Route<void> route() {
-    return MaterialPageRoute<void>(builder: (_) => const ShoppingListsPage());
+    return MaterialPageRoute<void>(builder: (_) => const HomePagePage());
   }
 
   @override
@@ -14,7 +14,7 @@ class ShoppingListsPage extends StatelessWidget {
         userId: context.read<AuthenticationRepository>().currentAuthUser!.id,
         shoppingListRepository: context.read<ShoppingListRepository>(),
       )..add(const ShoppingListSubscriptionRequested()),
-      child: const ShoppingListsView(),
+      child: const HomePageView(),
     );
   }
 }

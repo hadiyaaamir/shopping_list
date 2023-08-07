@@ -1,7 +1,7 @@
 part of 'view.dart';
 
-class ShoppingListsView extends StatelessWidget {
-  const ShoppingListsView({super.key});
+class HomePageView extends StatelessWidget {
+  const HomePageView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +68,12 @@ class _AddShoppingListButton extends StatelessWidget {
           isVisible: state.shoppingLists.isNotEmpty,
           onPressed: () => showDialog(
             context: context,
-            builder: (context) =>
-                AddListDialog(shoppingListBloc: shoppingListBloc),
+            builder: (context) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(value: shoppingListBloc),
+              ],
+              child: const AddListDialog(),
+            ),
           ),
         );
       },

@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shopping_list/authentication/authentication.dart';
 import 'package:shopping_list/login/login.dart';
 import 'package:shopping_list/profile/profile.dart';
-import 'package:shopping_list/shopping_lists/shopping_lists.dart';
+import 'package:shopping_list/home_page/home_page.dart';
 import 'package:shopping_list/signup/view/view.dart';
 
 import 'package:shopping_list/splash/splash.dart';
@@ -24,11 +24,8 @@ class AppRouter {
           key: state.pageKey,
           child: const LoginPage(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(-1.0, 0.0);
-            const end = Offset.zero;
-            const curve = Curves.easeInOut;
-            var tween =
-                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            var tween = Tween(begin: const Offset(-1.0, 0.0), end: Offset.zero)
+                .chain(CurveTween(curve: Curves.easeInOut));
             var offsetAnimation = animation.drive(tween);
             return SlideTransition(position: offsetAnimation, child: child);
           },
@@ -40,12 +37,11 @@ class AppRouter {
           key: state.pageKey,
           child: const SignupPage(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(1.0, 0.0);
-            const end = Offset.zero;
-            const curve = Curves.easeInOut;
-            var tween =
-                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-            var offsetAnimation = animation.drive(tween);
+            var slideTween =
+                Tween(begin: const Offset(1.0, 0.0), end: Offset.zero)
+                    .chain(CurveTween(curve: Curves.easeInOut));
+            var offsetAnimation = animation.drive(slideTween);
+
             return SlideTransition(position: offsetAnimation, child: child);
           },
         ),
@@ -71,7 +67,7 @@ class AppRouter {
       GoRoute(
         path: '/shoppingLists',
         builder: (BuildContext context, GoRouterState state) {
-          return const ShoppingListsPage();
+          return const HomePagePage();
         },
       ),
     ],

@@ -27,7 +27,9 @@ class ListItemEditPage extends StatelessWidget {
               end: Offset.zero,
             ).animate(animation),
             child: ListItemEditPage(
-                shoppingList: shoppingList, listItem: listItem),
+              shoppingList: shoppingList,
+              listItem: listItem,
+            ),
           ),
         );
       },

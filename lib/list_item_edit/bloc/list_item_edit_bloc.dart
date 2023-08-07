@@ -22,7 +22,7 @@ class ListItemEditBloc extends Bloc<ListItemEditEvent, ListItemEditState> {
             item: listItem?.item != null
                 ? StringInput.dirty(value: listItem!.item)
                 : const StringInput.pure(),
-            quantity: StringInput.dirty(
+            quantity: NumericInput.dirty(
               value: listItem?.quantity ?? '',
               allowEmpty: true,
             ),
@@ -65,7 +65,7 @@ class ListItemEditBloc extends Bloc<ListItemEditEvent, ListItemEditState> {
     ListItemEditQuantityChanged event,
     Emitter<ListItemEditState> emit,
   ) async {
-    final quantity = StringInput.dirty(
+    final quantity = NumericInput.dirty(
       value: event.quantity,
       allowEmpty: true,
     );
@@ -121,16 +121,18 @@ class ListItemEditBloc extends Bloc<ListItemEditEvent, ListItemEditState> {
               userId: userId,
             ))
         .copyWith(
-            item: state.item.value,
-            quantity: state.quantity.value,
-            quantityUnit: state.quantityUnit.value,
-            description: state.description.value);
+      item: state.item.value,
+      quantity: state.quantity.value,
+      quantityUnit: state.quantityUnit.value,
+      description: state.description.value,
+    );
 
     try {
       await _shoppingListRepository.saveListItem(listItem);
       if (newItem) {
-        await _shoppingListRepository.shoppingListIncrementActive(
-            listId: shoppingList.id);
+        await _shoppingListRepository.shoppingListIncrementTotal(
+          listId: shoppingList.id,
+        );
       }
       emit(state.copyWith(status: ListItemEditStatus.success));
     } catch (e) {

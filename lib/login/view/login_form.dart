@@ -104,7 +104,8 @@ class _EmailInput extends StatelessWidget {
         return CustomTextField(
           key: const Key('loginForm_emailInput_textField'),
           label: 'Email',
-          errorText: state.email.displayError != null ? 'invalid email' : null,
+          errorText:
+              state.email.displayError != null ? 'field cannot be empty' : null,
           onChanged: (email) =>
               context.read<LoginBloc>().add(LoginEmailChanged(email)),
         );
@@ -126,7 +127,7 @@ class _PasswordInput extends StatelessWidget {
           label: 'Password',
           obsecureText: true,
           errorText: state.password.displayError != null
-              ? 'password must be atleast 8 characters long'
+              ? 'field cannot be empty'
               : null,
           onChanged: (password) =>
               context.read<LoginBloc>().add(LoginPasswordChanged(password)),

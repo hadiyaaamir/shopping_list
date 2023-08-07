@@ -125,7 +125,9 @@ class _ItemListTile extends StatelessWidget {
       ),
       trailing: Icon(
         Icons.keyboard_arrow_right_rounded,
-        color: allowEdit && !listItem.isCompleted ? null : Colors.transparent,
+        color: allowEdit && !listItem.isCompleted
+            ? Theme.of(context).colorScheme.surfaceVariant
+            : Colors.transparent,
       ),
     );
   }
