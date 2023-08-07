@@ -20,7 +20,6 @@ class UserRepositoryHardcoded extends UserRepository {
 
   @override
   Future<void> updateUser({required User user, required String userId}) {
-    // TODO: implement updateUser
     throw UnimplementedError();
   }
 
@@ -31,26 +30,22 @@ class UserRepositoryHardcoded extends UserRepository {
 
   @override
   Future<void> createUser({required String userId, required User user}) {
-    // TODO: implement createUser
     throw UnimplementedError();
   }
 
   @override
   Future<bool> userProfileCreated(
       {required String userId, required String email}) {
-    // TODO: implement userProfileCreated
     throw UnimplementedError();
   }
 
   @override
   Future<List<User>> getUsersById(List<String> userIds) {
-    // TODO: implement getUsersById
     throw UnimplementedError();
   }
 
   @override
   Future<User?> getUserByIdentifier({required String identifier}) {
-    // TODO: implement getUserByIdentifier
     throw UnimplementedError();
   }
 }

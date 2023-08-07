@@ -31,7 +31,7 @@ class FilterButton extends StatelessWidget {
     bool isSelected = activeFilter == filter;
 
     return AnimatedSwitcher(
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       child: Padding(
         key: ValueKey<int>(
             context.read<ListItemsOverviewBloc>().state.filter.index),

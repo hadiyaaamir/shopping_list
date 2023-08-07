@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shopping_list/authentication/authentication.dart';
 import 'package:shopping_list/login/login.dart';
 import 'package:shopping_list/profile/profile.dart';
-import 'package:shopping_list/shopping_lists/shopping_lists.dart';
+import 'package:shopping_list/home_page/home_page.dart';
 import 'package:shopping_list/signup/view/view.dart';
 
 import 'package:shopping_list/splash/splash.dart';
@@ -67,7 +67,7 @@ class AppRouter {
       GoRoute(
         path: '/shoppingLists',
         builder: (BuildContext context, GoRouterState state) {
-          return const ShoppingListsPage();
+          return const HomePagePage();
         },
       ),
     ],

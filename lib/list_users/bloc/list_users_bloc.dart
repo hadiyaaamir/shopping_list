@@ -156,7 +156,6 @@ class ListUsersBloc extends Bloc<ListUsersEvent, ListUsersState> {
       );
       event.onSuccess();
     } catch (e) {
-      print(e);
       emit(state.copyWith(status: () => ListUsersStatus.failure));
     }
   }
@@ -189,7 +188,6 @@ class ListUsersBloc extends Bloc<ListUsersEvent, ListUsersState> {
       );
       event.onSuccess();
     } catch (e) {
-      print(e);
       emit(state.copyWith(status: () => ListUsersStatus.failure));
     }
   }

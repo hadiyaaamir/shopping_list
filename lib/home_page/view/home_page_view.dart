@@ -1,7 +1,7 @@
 part of 'view.dart';
 
-class ShoppingListsView extends StatelessWidget {
-  const ShoppingListsView({super.key});
+class HomePageView extends StatelessWidget {
+  const HomePageView({super.key});
 
   @override
   Widget build(BuildContext context) {
