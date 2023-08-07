@@ -105,13 +105,21 @@ class _IconInput extends StatelessWidget {
   }
 
   Future<void> _openIconPicker(BuildContext context) async {
-    final icon = await FlutterIconPicker.showIconPicker(
+    await FlutterIconPicker.showIconPicker(
       context,
-      iconPackModes: [IconPack.material],
-    );
-    if (icon != null) {
-      context.read<ParentListBloc>().add(ParentListIconChanged(icon: icon));
-    }
+      iconPackModes: [IconPack.custom],
+      customIconPack: cShoppingListIconPack,
+      iconColor: Theme.of(context).colorScheme.primary,
+      iconSize: 25,
+      crossAxisSpacing: 20,
+      mainAxisSpacing: 15,
+      showSearchBar: false,
+      constraints: const BoxConstraints(maxHeight: 150),
+    ).then((icon) {
+      if (icon != null) {
+        context.read<ParentListBloc>().add(ParentListIconChanged(icon: icon));
+      }
+    });
   }
 }
 
