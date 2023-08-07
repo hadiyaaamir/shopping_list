@@ -44,7 +44,7 @@ class FilterButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(30),
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 25),
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
               child: Text(
                 filter.text,
                 style: TextStyle(

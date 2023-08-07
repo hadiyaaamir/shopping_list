@@ -3,7 +3,9 @@ part of 'widgets.dart';
 enum ListItemsOverviewOption { toggleAll, clearCompleted }
 
 class ListItemsOptionsMenu extends StatelessWidget {
-  const ListItemsOptionsMenu({super.key});
+  const ListItemsOptionsMenu({super.key, required this.currentListUser});
+
+  final ListUser? currentListUser;
 
   @override
   Widget build(BuildContext context) {
@@ -11,6 +13,10 @@ class ListItemsOptionsMenu extends StatelessWidget {
         .select((ListItemsOverviewBloc bloc) => bloc.state.filteredItems);
     final hasItems = listItems.isNotEmpty;
     final completedItems = listItems.where((item) => item.isCompleted).length;
+
+    ListUserRoles userRole =
+        currentListUser != null ? currentListUser!.role : ListUserRoles.viewer;
+    bool canClearAll = userRole != ListUserRoles.viewer;
 
     return PopupMenuButton<ListItemsOverviewOption>(
       child: const Padding(
@@ -30,7 +36,7 @@ class ListItemsOptionsMenu extends StatelessWidget {
           ),
           PopupMenuItem(
             value: ListItemsOverviewOption.clearCompleted,
-            enabled: hasItems && completedItems > 0,
+            enabled: hasItems && completedItems > 0 && canClearAll,
             child: const Text('Clear Completed'),
           ),
         ];

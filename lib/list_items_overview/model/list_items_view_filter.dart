@@ -19,9 +19,9 @@ extension ListItemsViewFilterX on ListItemsViewFilter {
       case ListItemsViewFilter.all:
         return 'All';
       case ListItemsViewFilter.activeOnly:
-        return 'Active';
+        return 'Pending';
       case ListItemsViewFilter.completedOnly:
-        return 'Completed';
+        return 'Purchased';
     }
   }
 

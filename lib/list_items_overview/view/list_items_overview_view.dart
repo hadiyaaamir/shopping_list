@@ -29,10 +29,7 @@ class ListItemsOverviewView extends StatelessWidget {
         heroTag: 'title_${shoppingList.id}',
         title: title,
         actions: [
-          AddUsersButton(
-            shoppingList: shoppingList,
-            isVisible: isOwner,
-          )
+          AddUsersButton(shoppingList: shoppingList, isVisible: isOwner)
         ],
       ),
       body: MultiBlocListener(

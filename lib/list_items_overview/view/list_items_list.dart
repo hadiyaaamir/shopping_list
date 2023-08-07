@@ -22,9 +22,15 @@ class ListItemsList extends StatelessWidget {
         }
         return Column(
           children: [
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [ListItemsFilterOptions(), ListItemsOptionsMenu()],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const ListItemsFilterOptions(),
+                  ListItemsOptionsMenu(currentListUser: currentListUser),
+                ],
+              ),
             ),
             _NonEmptyList(currentListUser: currentListUser),
           ],
