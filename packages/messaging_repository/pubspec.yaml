@@ -1,0 +1,14 @@
+name: messaging_repository
+description: Dart package which manages the push notifications.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_messaging: ^14.6.7
+  http: ^1.1.0
+  flutter_local_notifications: ^15.1.1
