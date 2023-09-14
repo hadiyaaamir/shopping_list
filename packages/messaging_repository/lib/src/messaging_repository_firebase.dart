@@ -97,10 +97,8 @@ class MessagingRepositoryFirebase extends MessagingRepository {
     required String token,
     String title = '',
     String body = '',
+    String? listId,
   }) async {
-    const serverKey =
-        'AAAAVvI0CHs:APA91bFQhuWPbmD6cpNnTthSbGDrk0UufioEGrsPEHG22c_k3tezqobdVawSGKCqxoEw790zz0dgu4_nm1tNnCgJhCQEBc4rc-8FIg4NtuDLLcMLSt-1ISONQCjNVB2dirpyiJkulqtv';
-
     if (token.isEmpty) {
       print('token is empty');
       return;
@@ -111,7 +109,7 @@ class MessagingRepositoryFirebase extends MessagingRepository {
         Uri.parse('https://fcm.googleapis.com/fcm/send'),
         headers: <String, String>{
           'Content-Type': 'application/json',
-          'Authorization': 'key=$serverKey'
+          'Authorization': 'key=$kServerKey'
         },
         body: jsonEncode(<String, dynamic>{
           'notification': <String, dynamic>{
@@ -122,6 +120,7 @@ class MessagingRepositoryFirebase extends MessagingRepository {
             'status': 'done',
             'title': title,
             'body': body,
+            'listId': listId,
           },
           'to': token,
         }),
