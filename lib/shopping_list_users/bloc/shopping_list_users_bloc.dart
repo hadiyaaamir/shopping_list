@@ -125,8 +125,7 @@ class ShoppingListUsersBloc
         );
 
         _messagingRepository.sendPushMessage(
-          token:
-              'eZkqje0PS0uoJuIN7NEtm-:APA91bHC5h_jrx7zia0gRlBp5kb5gzNoTwzuQ9HZQEQT7nkbq-1bGl8gNwHt6N1IU7hQ1lXIP6bt6aBlSuD9VcDts5VbkclQOebSo0yaZOohDILXDk6Mq0EsOlPhrORau5k4-hliGYGx',
+          token: user.token,
           title: 'New List',
           body: 'You\'ve been added to a new list called ${shoppingList.title}',
           listId: shoppingList.id,

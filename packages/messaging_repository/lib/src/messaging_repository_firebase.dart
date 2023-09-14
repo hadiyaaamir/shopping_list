@@ -6,10 +6,10 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
   print('Payload: ${message.data}');
 }
 
-String fcmToken = '';
-
 class MessagingRepositoryFirebase extends MessagingRepository {
   final _firebaseMessaging = FirebaseMessaging.instance;
+
+  final UserRepository _userRepository = UserRepositoryFirebase();
 
   final _androidChannel = const AndroidNotificationChannel(
     'high_importance_channel',
@@ -19,6 +19,18 @@ class MessagingRepositoryFirebase extends MessagingRepository {
   );
 
   final _localNotifications = FlutterLocalNotificationsPlugin();
+
+  String fcmToken = '';
+
+  Future<void> setupToken(String userId) async {
+    String? fcmToken = await _firebaseMessaging.getToken();
+    if (fcmToken != null) {
+      await _userRepository.saveToken(token: fcmToken, userId: userId);
+    }
+    FirebaseMessaging.instance.onTokenRefresh.listen(
+      (token) => _userRepository.saveToken(token: token, userId: userId),
+    );
+  }
 
   Future<void> initNotifications() async {
     await _firebaseMessaging.requestPermission();

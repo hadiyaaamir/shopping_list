@@ -6,8 +6,6 @@ class UserRepositoryFirebase extends UserRepository {
   final usersCollection = FirebaseFirestore.instance.collection("Users");
 
   Future<User> getUser({String? userId, String? email}) async {
-    // if (_user != null) return _user!;
-
     if (userId != null) {
       await usersCollection.doc(userId).get().then((snapshot) async {
         if (snapshot.exists) {
@@ -91,4 +89,11 @@ class UserRepositoryFirebase extends UserRepository {
   }
 
   void resetUser() => _user = null;
+
+  Future<void> saveToken({
+    required String token,
+    required String userId,
+  }) async {
+    await usersCollection.doc(userId).update({'token': token});
+  }
 }

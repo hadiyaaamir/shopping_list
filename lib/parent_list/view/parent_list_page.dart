@@ -13,6 +13,7 @@ class ParentListPage extends StatelessWidget {
       create: (context) => ParentListBloc(
         userId: context.read<AuthenticationRepository>().currentAuthUser!.id,
         shoppingListRepository: context.read<ShoppingListRepository>(),
+        messagingRepository: context.read<MessagingRepository>(),
       )..add(const ParentListSubscriptionRequested()),
       child: const ParentListView(),
     );

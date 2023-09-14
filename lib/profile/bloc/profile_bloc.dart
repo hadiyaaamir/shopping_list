@@ -79,7 +79,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           await _userRepository
               .createUser(
                   userId: _authenticationRepository.currentAuthUser!.id,
-                  user: User(
+                  user: User.empty.copyWith(
                     id: _authenticationRepository.currentAuthUser!.id,
                     firstName: state.firstName.value,
                     lastName: state.lastName.value,
