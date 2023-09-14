@@ -4,4 +4,4 @@ import 'package:flutter/material.dart';
 
 part 'shopping_list_item.dart';
 part 'shopping_list.dart';
-part 'list_user.dart';
+part 'shopping_list_user.dart';
