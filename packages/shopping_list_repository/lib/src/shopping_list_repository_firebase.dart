@@ -57,6 +57,10 @@ class ShoppingListRepositoryFirebase extends ShoppingListRepository {
         ...shoppingList.data()!.users,
         user
       ];
+      if (shoppingList.data()!.userId == user.id) {
+        throw UserAlreadyExistsException('You\'re already the owner, weirdo');
+      }
+
       if (shoppingList
           .data()!
           .users

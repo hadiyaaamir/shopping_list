@@ -39,9 +39,11 @@ class ParentListBloc extends Bloc<ParentListEvent, ParentListState> {
         status: () => ParentListStatus.success,
         shoppingLists: () => shoppingLists,
       ),
-      onError: (_, __) => state.copyWith(
-        status: () => ParentListStatus.failure,
-      ),
+      onError: (_, __) {
+        return state.copyWith(
+          status: () => ParentListStatus.failure,
+        );
+      },
     );
   }
 

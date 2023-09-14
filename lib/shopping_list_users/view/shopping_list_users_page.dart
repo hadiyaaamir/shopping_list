@@ -27,6 +27,7 @@ class ShoppingListUsersPage extends StatelessWidget {
         shoppingList: shoppingList,
         userRepository: context.read<UserRepository>(),
         shoppingListRepository: context.read<ShoppingListRepository>(),
+        messagingRepository: context.read<MessagingRepository>(),
         listUsers: BlocProvider.of<ShoppingListBloc>(context).state.listUsers,
       )..add(const ShoppingListUsersGetUsersDetails()),
       child: const ShoppingListUsersView(),
