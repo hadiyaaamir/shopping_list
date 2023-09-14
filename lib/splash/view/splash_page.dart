@@ -11,7 +11,9 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
-      body: const CustomProgressIndicator(),
+      body: CustomProgressIndicator(
+        color: Theme.of(context).colorScheme.onPrimary,
+      ),
     );
   }
 }

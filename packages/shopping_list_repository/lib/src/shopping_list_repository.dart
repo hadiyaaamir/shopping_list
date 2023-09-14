@@ -13,9 +13,10 @@ abstract class ShoppingListRepository {
   Future<void> saveShoppingList(ShoppingList shoppingList);
   Future<void> saveListItem(ShoppingListItem listItem);
 
-  Future<void> addUserToList({required String listId, required ListUser user});
+  Future<void> addUserToList(
+      {required String listId, required ShoppingListUser user});
   Future<void> editShoppingListUser(
-      {required String listId, required ListUser editedUser});
+      {required String listId, required ShoppingListUser editedUser});
   Future<void> deleteShoppingListUser(
       {required String listId, required String userId});
 

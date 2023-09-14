@@ -4,7 +4,7 @@ class ShoppingList extends Equatable {
   ShoppingList({
     String title = '',
     required this.userId,
-    List<ListUser>? users,
+    List<ShoppingListUser>? users,
     String? id,
     this.icon = Icons.shopping_cart,
     DateTime? dateCreated,
@@ -20,7 +20,7 @@ class ShoppingList extends Equatable {
 
   final String id;
   final String userId;
-  final List<ListUser> users;
+  final List<ShoppingListUser> users;
   final String title;
   final DateTime dateCreated;
   final int totalItems;
@@ -29,7 +29,7 @@ class ShoppingList extends Equatable {
   ShoppingList copyWith({
     String? id,
     String? userId,
-    List<ListUser>? users,
+    List<ShoppingListUser>? users,
     String? title,
     IconData? icon,
     DateTime? dateCreated,
@@ -51,7 +51,7 @@ class ShoppingList extends Equatable {
         id: json['id'] as String?,
         userId: json['userId'] as String,
         users: (json['users'] as List<dynamic>)
-            .map((userJson) => ListUser.fromJson(userJson))
+            .map((userJson) => ShoppingListUser.fromJson(userJson))
             .toList(),
         icon: json['icon'] != null
             ? IconData(
