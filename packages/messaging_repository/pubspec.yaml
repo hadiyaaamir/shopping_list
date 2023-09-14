@@ -14,3 +14,5 @@ dependencies:
   flutter_local_notifications: ^15.1.1
   user_repository:
     path: ../user_repository
+  shopping_list_repository:
+    path: ../shopping_list_repository

@@ -1,5 +1,7 @@
 part of 'view.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 class ShoppingAppView extends StatefulWidget {
   const ShoppingAppView({super.key});
 
@@ -10,13 +12,9 @@ class ShoppingAppView extends StatefulWidget {
 class _ShoppingAppViewState extends State<ShoppingAppView> {
   @override
   Widget build(BuildContext context) {
-    GoRouter router = AppRouter.router;
-
-    return MaterialApp.router(
+    return MaterialApp(
       title: 'Flutter Login App',
-      routeInformationProvider: router.routeInformationProvider,
-      routeInformationParser: router.routeInformationParser,
-      routerDelegate: router.routerDelegate,
+      navigatorKey: navigatorKey,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: kSeedColor),
         useMaterial3: true,
@@ -26,15 +24,24 @@ class _ShoppingAppViewState extends State<ShoppingAppView> {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.unverified:
-                router.go('/verifyEmail');
+                navigatorKey.currentState?.pushAndRemoveUntil(
+                  VerifyEmailPage.route(),
+                  (route) => false,
+                );
 
               case AuthenticationStatus.authenticated:
-                router.go(
-                  state.profileCreated ? '/shoppingLists' : '/createProfile',
+                navigatorKey.currentState?.pushAndRemoveUntil(
+                  state.profileCreated
+                      ? ParentListPage.route()
+                      : CreateProfilePage.route(),
+                  (route) => false,
                 );
 
               case AuthenticationStatus.unauthenticated:
-                router.go('/login');
+                navigatorKey.currentState?.pushAndRemoveUntil(
+                  LoginPage.route(),
+                  (route) => false,
+                );
 
               case AuthenticationStatus.unknown:
                 break;
@@ -43,6 +50,7 @@ class _ShoppingAppViewState extends State<ShoppingAppView> {
           child: child,
         );
       },
+      onGenerateRoute: (_) => SplashPage.route(),
     );
   }
 }

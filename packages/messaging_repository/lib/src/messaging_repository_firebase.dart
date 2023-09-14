@@ -10,6 +10,8 @@ class MessagingRepositoryFirebase extends MessagingRepository {
   final _firebaseMessaging = FirebaseMessaging.instance;
 
   final UserRepository _userRepository = UserRepositoryFirebase();
+  final ShoppingListRepository _shoppingListRepository =
+      ShoppingListRepositoryFirebase();
 
   final _androidChannel = const AndroidNotificationChannel(
     'high_importance_channel',
@@ -20,7 +22,7 @@ class MessagingRepositoryFirebase extends MessagingRepository {
 
   final _localNotifications = FlutterLocalNotificationsPlugin();
 
-  String fcmToken = '';
+  MessagingRepositoryFirebase({required super.notificationNavigation});
 
   Future<void> setupToken(String userId) async {
     String? fcmToken = await _firebaseMessaging.getToken();
@@ -34,8 +36,6 @@ class MessagingRepositoryFirebase extends MessagingRepository {
 
   Future<void> initNotifications() async {
     await _firebaseMessaging.requestPermission();
-    fcmToken = await _firebaseMessaging.getToken() ?? '';
-    print('Token: $fcmToken');
 
     initPushNotifications();
     initLocalNotifications();
@@ -73,10 +73,13 @@ class MessagingRepositoryFirebase extends MessagingRepository {
     });
   }
 
-  void handleMessage(RemoteMessage? message) {
+  void handleMessage(RemoteMessage? message) async {
     if (message == null) return;
-    //TODO: navigate to correct screen
-    // navigatorKey.currentState?.push(Screen2.route(message: message));
+
+    ShoppingList? shoppingList = await _shoppingListRepository.getListFromId(
+      message.data['listId'],
+    );
+    if (shoppingList != null) notificationNavigation(shoppingList);
   }
 
   Future initLocalNotifications() async {

@@ -34,7 +34,7 @@ class ShoppingListBloc extends Bloc<ShoppingListEvent, ShoppingListState> {
     emit(state.copyWith(status: () => ShoppingListStatus.loading));
 
     await emit.forEach<List<ShoppingListItem>>(
-      _shoppingListRepository.getShoppingList(listId: shoppingList.id),
+      _shoppingListRepository.getShoppingListItems(listId: shoppingList.id),
       onData: (listItems) => state.copyWith(
         status: () => ShoppingListStatus.success,
         listItems: () => listItems,

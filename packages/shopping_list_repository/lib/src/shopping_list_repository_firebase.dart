@@ -29,8 +29,14 @@ class ShoppingListRepositoryFirebase extends ShoppingListRepository {
     });
   }
 
+  Future<ShoppingList?> getListFromId(String listId) async {
+    final shoppingList = await shoppingListCollection.doc(listId).get();
+    return shoppingList.exists ? shoppingList.data() : null;
+  }
+
   @override
-  Stream<List<ShoppingListItem>> getShoppingList({required String listId}) {
+  Stream<List<ShoppingListItem>> getShoppingListItems(
+      {required String listId}) {
     return listItemCollection
         .where('listId', isEqualTo: listId)
         .orderBy('isCompleted')
