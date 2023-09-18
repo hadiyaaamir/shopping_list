@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:firebase_auth/firebase_auth.dart';
 
 part 'authentication_hardcoded.dart';
 part 'authentication_firebase.dart';

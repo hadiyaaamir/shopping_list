@@ -85,11 +85,11 @@ class AuthenticationBloc
     AuthenticationLogoutRequested event,
     Emitter<AuthenticationState> emit,
   ) async {
-    _authenticationRepository.logOut();
     await _userRepository.saveToken(
       token: '',
       userId: _authenticationRepository.currentAuthUser!.id,
     );
+    _authenticationRepository.logOut();
     _userRepository.resetUser();
   }
 

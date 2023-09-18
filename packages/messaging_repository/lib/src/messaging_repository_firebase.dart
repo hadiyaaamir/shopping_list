@@ -67,6 +67,12 @@ class MessagingRepositoryFirebase extends MessagingRepository {
             channelDescription: _androidChannel.description,
             icon: '@drawable/ic_launcher',
           ),
+          iOS: DarwinNotificationDetails(
+            badgeNumber: 0,
+            presentAlert: true,
+            presentBadge: true,
+            presentSound: true,
+          ),
         ),
         payload: jsonEncode(message.toMap()),
       );
