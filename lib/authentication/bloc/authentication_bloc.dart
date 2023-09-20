@@ -81,10 +81,14 @@ class AuthenticationBloc
           );
   }
 
-  void _onAuthenticationLogoutRequested(
+  Future<void> _onAuthenticationLogoutRequested(
     AuthenticationLogoutRequested event,
     Emitter<AuthenticationState> emit,
-  ) {
+  ) async {
+    await _userRepository.saveToken(
+      token: '',
+      userId: _authenticationRepository.currentAuthUser!.id,
+    );
     _authenticationRepository.logOut();
     _userRepository.resetUser();
   }

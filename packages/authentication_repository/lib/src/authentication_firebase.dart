@@ -2,8 +2,7 @@ part of 'authentication_repository.dart';
 
 class AuthenticationRepositoryFirebase extends AuthenticationRepository {
   final _controller = StreamController<AuthenticationStatus>();
-  final firebase_auth.FirebaseAuth _firebaseAuth =
-      firebase_auth.FirebaseAuth.instance;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   @override
   Stream<AuthenticationStatus> get status async* {

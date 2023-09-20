@@ -8,7 +8,8 @@ abstract class ShoppingListRepository {
   const ShoppingListRepository();
 
   Stream<List<ShoppingList>> getAllLists({required String userId});
-  Stream<List<ShoppingListItem>> getShoppingList({required String listId});
+  Stream<List<ShoppingListItem>> getShoppingListItems({required String listId});
+  Future<ShoppingList?> getListFromId(String listId);
 
   Future<void> saveShoppingList(ShoppingList shoppingList);
   Future<void> saveListItem(ShoppingListItem listItem);

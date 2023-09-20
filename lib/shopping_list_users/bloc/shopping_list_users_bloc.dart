@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:form_inputs/form_inputs.dart';
+import 'package:messaging_repository/messaging_repository.dart';
 import 'package:shopping_list/shopping_list_users/shopping_list_users.dart';
 import 'package:shopping_list_repository/shopping_list_repository.dart';
 import 'package:user_repository/user_repository.dart';
@@ -15,10 +16,12 @@ class ShoppingListUsersBloc
   ShoppingListUsersBloc({
     required UserRepository userRepository,
     required ShoppingListRepository shoppingListRepository,
+    required MessagingRepository messagingRepository,
     required this.shoppingList,
     required this.listUsers,
   })  : _userRepository = userRepository,
         _shoppingListRepository = shoppingListRepository,
+        _messagingRepository = messagingRepository,
         super(const ListUsersState()) {
     on<ShoppingListUsersGetUsersDetails>(_onGetUserDetails);
     on<ShoppingListUsersIdentifierChanged>(_onUserIdentifierChanged);
@@ -30,6 +33,8 @@ class ShoppingListUsersBloc
 
   final UserRepository _userRepository;
   final ShoppingListRepository _shoppingListRepository;
+  final MessagingRepository _messagingRepository;
+
   final ShoppingList shoppingList;
   final List<ShoppingListUser> listUsers;
 
@@ -90,7 +95,8 @@ class ShoppingListUsersBloc
       final String listId = shoppingList.id;
 
       final User? user = await _userRepository.getUserByIdentifier(
-          identifier: state.userIdentifier.value);
+        identifier: state.userIdentifier.value,
+      );
 
       if (user == null) {
         emit(
@@ -118,6 +124,13 @@ class ShoppingListUsersBloc
           ),
         );
 
+        _messagingRepository.sendPushMessage(
+          token: user.token,
+          title: 'New List',
+          body: 'You\'ve been added to a new list called ${shoppingList.title}',
+          listId: shoppingList.id,
+        );
+
         event.onSuccess();
       }
     } on UserAlreadyExistsException catch (e) {
@@ -128,7 +141,10 @@ class ShoppingListUsersBloc
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: () => ListUsersStatus.failure));
+      emit(state.copyWith(
+        status: () => ListUsersStatus.failure,
+        errorMessage: 'AN unexpected error occured',
+      ));
     }
   }
 
@@ -136,8 +152,8 @@ class ShoppingListUsersBloc
     ShoppingListUsersDeleted event,
     Emitter<ListUsersState> emit,
   ) async {
-    // emit(state.copyWith(status: () => ListUsersStatus.loading));
     isAddingOrRetrieving = false;
+
     try {
       await _shoppingListRepository.deleteShoppingListUser(
         listId: shoppingList.id,
@@ -166,8 +182,8 @@ class ShoppingListUsersBloc
     ShoppingListUsersEdited event,
     Emitter<ListUsersState> emit,
   ) async {
-    // emit(state.copyWith(status: () => ListUsersStatus.loading));
     isAddingOrRetrieving = false;
+
     try {
       await _shoppingListRepository.editShoppingListUser(
         listId: shoppingList.id,

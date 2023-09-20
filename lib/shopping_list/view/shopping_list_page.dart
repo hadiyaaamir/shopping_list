@@ -11,6 +11,12 @@ class ShoppingListPage extends StatelessWidget {
     );
   }
 
+  static void navigateToScreen({required ShoppingList shoppingList}) {
+    navigatorKey.currentState?.push(
+      ShoppingListPage.route(shoppingList: shoppingList),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(

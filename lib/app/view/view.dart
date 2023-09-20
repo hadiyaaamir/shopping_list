@@ -1,10 +1,12 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:shopping_list/authentication/authentication.dart';
+import 'package:shopping_list/login/login.dart';
+import 'package:shopping_list/parent_list/parent_list.dart';
+import 'package:shopping_list/profile/view/view.dart';
+import 'package:shopping_list/splash/splash.dart';
 import 'package:shopping_list/utils/constants.dart';
-import 'package:shopping_list/app/router.dart';
 import 'package:shopping_list_repository/shopping_list_repository.dart';
 
 import 'package:user_repository/user_repository.dart';

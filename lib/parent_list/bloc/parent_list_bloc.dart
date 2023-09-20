@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:form_inputs/form_inputs.dart';
+import 'package:messaging_repository/messaging_repository.dart';
 import 'package:shopping_list_repository/shopping_list_repository.dart';
 
 part 'parent_list_event.dart';
@@ -12,8 +13,10 @@ part 'parent_list_state.dart';
 class ParentListBloc extends Bloc<ParentListEvent, ParentListState> {
   ParentListBloc({
     required ShoppingListRepository shoppingListRepository,
+    required MessagingRepository messagingRepository,
     required String userId,
   })  : _shoppingListRepository = shoppingListRepository,
+        _messagingRepository = messagingRepository,
         _userId = userId,
         super(const ParentListState()) {
     on<ParentListSubscriptionRequested>(_onSubscriptionRequested);
@@ -25,6 +28,7 @@ class ParentListBloc extends Bloc<ParentListEvent, ParentListState> {
   }
 
   final ShoppingListRepository _shoppingListRepository;
+  final MessagingRepository _messagingRepository;
   final String _userId;
 
   Future<void> _onSubscriptionRequested(
@@ -33,15 +37,19 @@ class ParentListBloc extends Bloc<ParentListEvent, ParentListState> {
   ) async {
     emit(state.copyWith(status: () => ParentListStatus.loading));
 
+    await _messagingRepository.setupToken(_userId);
+
     await emit.forEach<List<ShoppingList>>(
       _shoppingListRepository.getAllLists(userId: _userId),
       onData: (shoppingLists) => state.copyWith(
         status: () => ParentListStatus.success,
         shoppingLists: () => shoppingLists,
       ),
-      onError: (_, __) => state.copyWith(
-        status: () => ParentListStatus.failure,
-      ),
+      onError: (_, __) {
+        return state.copyWith(
+          status: () => ParentListStatus.failure,
+        );
+      },
     );
   }
 

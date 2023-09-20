@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:messaging_repository/messaging_repository.dart';
 import 'package:shopping_list/shopping_list/bloc/shopping_list_bloc.dart';
 import 'package:shopping_list/shopping_list_users/bloc/shopping_list_users_bloc.dart';
 import 'package:shopping_list/shopping_list_users/shopping_list_users.dart';

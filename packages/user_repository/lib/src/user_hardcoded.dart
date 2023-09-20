@@ -8,7 +8,7 @@ class UserRepositoryHardcoded extends UserRepository {
 
     return Future.delayed(
       const Duration(milliseconds: 300),
-      () => _user = User(
+      () => _user = User.empty.copyWith(
         id: 'id',
         firstName: 'Hadiya',
         lastName: 'Aamir',
@@ -46,6 +46,12 @@ class UserRepositoryHardcoded extends UserRepository {
 
   @override
   Future<User?> getUserByIdentifier({required String identifier}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> saveToken({required String token, required String userId}) {
+    // TODO: implement saveToken
     throw UnimplementedError();
   }
 }
