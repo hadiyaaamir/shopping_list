@@ -5,73 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "shopping_list",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "shopping_list (profile mode)",
+            "name": "Shopping List",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "program": "lib/main.dart",
+            "args": ["--flavor", "production", "--target", "lib/main.dart"]
         },
+        
         {
-            "name": "shopping_list (release mode)",
+            "name": "Shopping List staging",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "program": "lib/main_staging.dart",
+            "args": ["--flavor", "staging", "--target", "lib/main_staging.dart"]
         },
-        {
-            "name": "authentication_repository",
-            "cwd": "packages/authentication_repository",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "authentication_repository (profile mode)",
-            "cwd": "packages/authentication_repository",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "authentication_repository (release mode)",
-            "cwd": "packages/authentication_repository",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
-        },
-        {
-            "name": "form_inputs",
-            "cwd": "packages/form_inputs",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "shopping_list_repository",
-            "cwd": "packages/shopping_list_repository",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "user_repository",
-            "cwd": "packages/user_repository",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "user_repository (profile mode)",
-            "cwd": "packages/user_repository",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "user_repository (release mode)",
-            "cwd": "packages/user_repository",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
-        }
+        
     ]
 }
