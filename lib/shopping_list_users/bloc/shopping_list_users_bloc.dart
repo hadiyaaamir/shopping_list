@@ -106,8 +106,10 @@ class ShoppingListUsersBloc
           ),
         );
       } else {
-        final ShoppingListUser listUser =
-            ShoppingListUser(id: user.id, role: state.userRole);
+        final ShoppingListUser listUser = ShoppingListUser(
+          id: user.id,
+          role: state.userRole,
+        );
         final RoleUser roleUser = RoleUser(user: user, listUser: listUser);
 
         await _shoppingListRepository.addUserToList(

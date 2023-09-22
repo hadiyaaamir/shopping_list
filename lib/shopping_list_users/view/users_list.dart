@@ -26,7 +26,10 @@ class UsersList extends StatelessWidget {
             final RoleUser owner = RoleUser(
               user: snapshot.data!,
               listUser: ShoppingListUser(
-                  id: userId, role: ShoppingListUserRoles.owner),
+                id: userId,
+                role: ShoppingListUserRoles.owner,
+                acceptedInvitation: true,
+              ),
             );
 
             return ListView.builder(

@@ -18,7 +18,10 @@ class ShoppingListView extends StatelessWidget {
 
     final ShoppingListUser? currentListUser = isOwner
         ? ShoppingListUser(
-            id: currentAuthUser.id, role: ShoppingListUserRoles.owner)
+            id: currentAuthUser.id,
+            role: ShoppingListUserRoles.owner,
+            acceptedInvitation: true,
+          )
         : shoppingList.users.isNotEmpty
             ? shoppingList.users.firstWhere(
                 (user) => user.id == currentAuthUser.id,
