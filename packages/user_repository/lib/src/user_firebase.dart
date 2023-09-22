@@ -6,7 +6,7 @@ class UserRepositoryFirebase extends UserRepository {
   final usersCollection = FirebaseFirestore.instance.collection("Users");
 
   Future<User> getUser({String? userId, String? email}) async {
-    if (userId != null) {
+    if (userId != null && userId.isNotEmpty) {
       await usersCollection.doc(userId).get().then((snapshot) async {
         if (snapshot.exists) {
           _user = User.fromJson(snapshot.data()!);

@@ -35,6 +35,7 @@ dependencies:
   flutter_iconpicker: ^3.2.4
   messaging_repository:
     path: packages/messaging_repository
+  flutter_launcher_icons: ^0.13.1
 
 
 dev_dependencies:
