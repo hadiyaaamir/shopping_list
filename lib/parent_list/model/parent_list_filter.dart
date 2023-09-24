@@ -1,13 +1,12 @@
 part of 'model.dart';
 
-enum ParentListFilter { all, accepted, invitations }
+enum ParentListFilter { accepted, invitations }
 
 extension ParentListFilterX on ParentListFilter {
   bool apply(ShoppingList shoppingList, String userId) {
     switch (this) {
-      case ParentListFilter.all:
-        return true;
       case ParentListFilter.accepted:
+        if (shoppingList.userId == userId) return true;
         return shoppingList.users.any(
           (user) => user.id == userId && user.acceptedInvitation,
         );
@@ -20,8 +19,6 @@ extension ParentListFilterX on ParentListFilter {
 
   String get text {
     switch (this) {
-      case ParentListFilter.all:
-        return 'All';
       case ParentListFilter.accepted:
         return 'My Lists';
       case ParentListFilter.invitations:

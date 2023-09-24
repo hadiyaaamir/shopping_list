@@ -47,3 +47,12 @@ final class ParentListDeleted extends ParentListEvent {
 final class ParentListUndoDelete extends ParentListEvent {
   const ParentListUndoDelete();
 }
+
+final class ParentListFilterChanged extends ParentListEvent {
+  const ParentListFilterChanged({required this.filter});
+
+  final ParentListFilter filter;
+
+  @override
+  List<Object> get props => [filter];
+}

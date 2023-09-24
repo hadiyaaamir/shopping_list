@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_inputs/form_inputs.dart';
 import 'package:messaging_repository/messaging_repository.dart';
+import 'package:shopping_list/parent_list/model/model.dart';
 import 'package:shopping_list_repository/shopping_list_repository.dart';
 
 part 'parent_list_event.dart';
@@ -14,10 +16,9 @@ class ParentListBloc extends Bloc<ParentListEvent, ParentListState> {
   ParentListBloc({
     required ShoppingListRepository shoppingListRepository,
     required MessagingRepository messagingRepository,
-    required String userId,
+    required this.userId,
   })  : _shoppingListRepository = shoppingListRepository,
         _messagingRepository = messagingRepository,
-        _userId = userId,
         super(const ParentListState()) {
     on<ParentListSubscriptionRequested>(_onSubscriptionRequested);
     on<ParentListAdded>(_onListAdded);
@@ -25,11 +26,12 @@ class ParentListBloc extends Bloc<ParentListEvent, ParentListState> {
     on<ParentListIconChanged>(_onIconChanged);
     on<ParentListDeleted>(_onListDeleted);
     on<ParentListUndoDelete>(_onUndoDelete);
+    on<ParentListFilterChanged>(_onFilterChanged);
   }
 
   final ShoppingListRepository _shoppingListRepository;
   final MessagingRepository _messagingRepository;
-  final String _userId;
+  final String userId;
 
   Future<void> _onSubscriptionRequested(
     ParentListSubscriptionRequested event,
@@ -37,10 +39,10 @@ class ParentListBloc extends Bloc<ParentListEvent, ParentListState> {
   ) async {
     emit(state.copyWith(status: () => ParentListStatus.loading));
 
-    await _messagingRepository.setupToken(_userId);
+    await _messagingRepository.setupToken(userId);
 
     await emit.forEach<List<ShoppingList>>(
-      _shoppingListRepository.getAllLists(userId: _userId),
+      _shoppingListRepository.getAllLists(userId: userId),
       onData: (shoppingLists) => state.copyWith(
         status: () => ParentListStatus.success,
         shoppingLists: () => shoppingLists,
@@ -59,7 +61,7 @@ class ParentListBloc extends Bloc<ParentListEvent, ParentListState> {
   ) async {
     emit(state.copyWith(status: () => ParentListStatus.loading));
 
-    final shoppingList = (event.shoppingList ?? ShoppingList(userId: _userId))
+    final shoppingList = (event.shoppingList ?? ShoppingList(userId: userId))
         .copyWith(title: state.title.value, icon: state.icon);
 
     try {
@@ -122,5 +124,12 @@ class ParentListBloc extends Bloc<ParentListEvent, ParentListState> {
       emit(state.copyWith(lastDeletedList: () => null));
       await _shoppingListRepository.saveShoppingList(deletedTodoList);
     }
+  }
+
+  Future<void> _onFilterChanged(
+    ParentListFilterChanged event,
+    Emitter<ParentListState> emit,
+  ) async {
+    emit(state.copyWith(filter: () => event.filter));
   }
 }
