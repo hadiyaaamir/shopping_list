@@ -22,15 +22,15 @@ class ParentList extends StatelessWidget {
           Expanded(
             child: BlocBuilder<ParentListBloc, ParentListState>(
               builder: (context, state) {
-                final filteredLists = context.select(
+                final filteredList = context.select(
                   (ParentListBloc bloc) => bloc.state.filteredLists(
                     bloc.userId,
                   ),
                 );
 
                 return state.filter == ParentListFilter.accepted
-                    ? AcceptedParentList(filteredList: filteredLists.toList())
-                    : Container();
+                    ? AcceptedList(filteredList: filteredList.toList())
+                    : InvitationsList(filteredList: filteredList.toList());
               },
             ),
           )

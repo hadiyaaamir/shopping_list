@@ -9,7 +9,8 @@ import 'package:shopping_list/parent_list/widget/widget.dart';
 import 'package:shopping_list/widgets/widgets.dart';
 import 'package:shopping_list_repository/shopping_list_repository.dart';
 
-part 'accepted_parent_list.dart';
+part 'accepted_list.dart';
+part 'invitations_list.dart';
 part 'parent_list_page.dart';
 part 'parent_list_view.dart';
 part 'parent_list.dart';

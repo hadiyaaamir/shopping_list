@@ -1,7 +1,7 @@
 part of 'widget.dart';
 
-class ParentListTile extends StatelessWidget {
-  const ParentListTile(
+class AcceptedListTile extends StatelessWidget {
+  const AcceptedListTile(
       {super.key, required this.shoppingList, required this.onDismissed});
 
   final ShoppingList shoppingList;

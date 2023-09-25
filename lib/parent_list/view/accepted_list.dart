@@ -1,7 +1,7 @@
 part of 'view.dart';
 
-class AcceptedParentList extends StatelessWidget {
-  const AcceptedParentList({super.key, required this.filteredList});
+class AcceptedList extends StatelessWidget {
+  const AcceptedList({super.key, required this.filteredList});
 
   final List<ShoppingList> filteredList;
 
@@ -9,21 +9,21 @@ class AcceptedParentList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ParentListBloc, ParentListState>(
       builder: (context, state) {
-        if (state.shoppingLists.isEmpty) {
+        if (filteredList.isEmpty) {
           return (state.status == ParentListStatus.loading)
               ? const CustomProgressIndicator()
               : (state.status != ParentListStatus.success)
                   ? const SizedBox()
-                  : const _EmptyList();
+                  : const _EmptyAcceptedList();
         }
-        return _NonEmptyList(filteredList: filteredList);
+        return _NonEmptyAcceptedList(filteredList: filteredList);
       },
     );
   }
 }
 
-class _NonEmptyList extends StatelessWidget {
-  const _NonEmptyList({required this.filteredList});
+class _NonEmptyAcceptedList extends StatelessWidget {
+  const _NonEmptyAcceptedList({required this.filteredList});
 
   final List<ShoppingList> filteredList;
 
@@ -47,7 +47,7 @@ class _NonEmptyList extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                 children: List.generate(
                   filteredList.length,
-                  (index) => ParentListTile(
+                  (index) => AcceptedListTile(
                     shoppingList: filteredList[index],
                     onDismissed: (_) {
                       context.read<ParentListBloc>().add(
@@ -64,8 +64,8 @@ class _NonEmptyList extends StatelessWidget {
   }
 }
 
-class _EmptyList extends StatelessWidget {
-  const _EmptyList();
+class _EmptyAcceptedList extends StatelessWidget {
+  const _EmptyAcceptedList();
 
   @override
   Widget build(BuildContext context) {
