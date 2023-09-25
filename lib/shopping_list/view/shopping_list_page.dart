@@ -5,15 +5,12 @@ class ShoppingListPage extends StatelessWidget {
 
   final ShoppingList shoppingList;
 
-  static Route<void> route({required ShoppingList shoppingList}) {
+  static Route<void> route({
+    required ShoppingList shoppingList,
+    bool openInvitationTab = false,
+  }) {
     return MaterialPageRoute<void>(
       builder: (_) => ShoppingListPage(shoppingList: shoppingList),
-    );
-  }
-
-  static void navigateToScreen({required ShoppingList shoppingList}) {
-    navigatorKey.currentState?.push(
-      ShoppingListPage.route(shoppingList: shoppingList),
     );
   }
 

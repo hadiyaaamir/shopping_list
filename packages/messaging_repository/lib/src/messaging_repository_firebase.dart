@@ -85,7 +85,7 @@ class MessagingRepositoryFirebase extends MessagingRepository {
     ShoppingList? shoppingList = await _shoppingListRepository.getListFromId(
       message.data['listId'],
     );
-    if (shoppingList != null) notificationNavigation(shoppingList);
+    if (shoppingList != null) notificationNavigation();
   }
 
   Future initLocalNotifications() async {

@@ -1,12 +1,15 @@
 part of 'view.dart';
 
 class ParentList extends StatelessWidget {
-  const ParentList({super.key});
+  const ParentList({super.key, required this.initialIndex});
+
+  final int initialIndex;
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: ParentListFilter.values.length,
+      initialIndex: initialIndex,
       child: Column(
         children: [
           TabBar(

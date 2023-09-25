@@ -1,7 +1,9 @@
 part of 'view.dart';
 
 class ParentListView extends StatelessWidget {
-  const ParentListView({super.key});
+  const ParentListView({super.key, this.initialIndex = 0});
+
+  final int initialIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +50,7 @@ class ParentListView extends StatelessWidget {
             },
           ),
         ],
-        child: const ParentList(),
+        child: ParentList(initialIndex: initialIndex),
       ),
       floatingActionButton: const _AddShoppingListButton(),
     );
