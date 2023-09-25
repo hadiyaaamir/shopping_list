@@ -27,6 +27,8 @@ class ParentListBloc extends Bloc<ParentListEvent, ParentListState> {
     on<ParentListDeleted>(_onListDeleted);
     on<ParentListUndoDelete>(_onUndoDelete);
     on<ParentListFilterChanged>(_onFilterChanged);
+    on<ParentListInvitationAccepted>(_onInvitationAccepted);
+    on<ParentListInvitationRejected>(_onInvitationRejected);
   }
 
   final ShoppingListRepository _shoppingListRepository;
@@ -131,5 +133,39 @@ class ParentListBloc extends Bloc<ParentListEvent, ParentListState> {
     Emitter<ParentListState> emit,
   ) async {
     emit(state.copyWith(filter: () => event.filter));
+  }
+
+  FutureOr<void> _onInvitationAccepted(
+    ParentListInvitationAccepted event,
+    Emitter<ParentListState> emit,
+  ) async {
+    emit(state.copyWith(status: () => ParentListStatus.loading));
+
+    try {
+      _shoppingListRepository.acceptUserInvitation(
+        listId: event.shoppingList.id,
+        userId: userId,
+      );
+      emit(state.copyWith(status: () => ParentListStatus.success));
+    } catch (e) {
+      emit(state.copyWith(status: () => ParentListStatus.failure));
+    }
+  }
+
+  FutureOr<void> _onInvitationRejected(
+    ParentListInvitationRejected event,
+    Emitter<ParentListState> emit,
+  ) async {
+    emit(state.copyWith(status: () => ParentListStatus.loading));
+
+    try {
+      _shoppingListRepository.deleteShoppingListUser(
+        listId: event.shoppingList.id,
+        userId: userId,
+      );
+      emit(state.copyWith(status: () => ParentListStatus.success));
+    } catch (e) {
+      emit(state.copyWith(status: () => ParentListStatus.failure));
+    }
   }
 }

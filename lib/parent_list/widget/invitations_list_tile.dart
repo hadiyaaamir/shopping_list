@@ -7,8 +7,6 @@ class InvitationsListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final shoppingListBloc = BlocProvider.of<ParentListBloc>(context);
-
     return Card(
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
@@ -20,14 +18,8 @@ class InvitationsListTile extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _RejectButton(
-              shoppingListBloc: shoppingListBloc,
-              shoppingList: shoppingList,
-            ),
-            _AcceptButton(
-              shoppingListBloc: shoppingListBloc,
-              shoppingList: shoppingList,
-            ),
+            _RejectButton(shoppingList: shoppingList),
+            _AcceptButton(shoppingList: shoppingList),
           ],
         ),
       ),
@@ -51,12 +43,8 @@ class _InvitationsTileIcon extends StatelessWidget {
 }
 
 class _AcceptButton extends StatelessWidget {
-  const _AcceptButton({
-    required this.shoppingListBloc,
-    required this.shoppingList,
-  });
+  const _AcceptButton({required this.shoppingList});
 
-  final ParentListBloc shoppingListBloc;
   final ShoppingList shoppingList;
 
   @override
@@ -66,18 +54,16 @@ class _AcceptButton extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 5),
         child: Icon(Icons.check, size: 20),
       ),
-      onTap: () {},
+      onTap: () => context
+          .read<ParentListBloc>()
+          .add(ParentListInvitationAccepted(shoppingList: shoppingList)),
     );
   }
 }
 
 class _RejectButton extends StatelessWidget {
-  const _RejectButton({
-    required this.shoppingListBloc,
-    required this.shoppingList,
-  });
+  const _RejectButton({required this.shoppingList});
 
-  final ParentListBloc shoppingListBloc;
   final ShoppingList shoppingList;
 
   @override
@@ -87,7 +73,9 @@ class _RejectButton extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 5),
         child: Icon(Icons.close, size: 20),
       ),
-      onTap: () {},
+      onTap: () => context
+          .read<ParentListBloc>()
+          .add(ParentListInvitationRejected(shoppingList: shoppingList)),
     );
   }
 }

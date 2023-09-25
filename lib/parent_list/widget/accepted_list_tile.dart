@@ -14,7 +14,7 @@ class AcceptedListTile extends StatelessWidget {
     final shoppingListBloc = BlocProvider.of<ParentListBloc>(context);
 
     return Dismissible(
-      key: Key('todoListListTile_dismissible_${shoppingList.id}'),
+      key: Key('shoppingListListTile_dismissible_${shoppingList.id}'),
       onDismissed: status == ParentListStatus.loading ? null : onDismissed,
       direction: DismissDirection.endToStart,
       background: Container(
@@ -34,11 +34,8 @@ class AcceptedListTile extends StatelessWidget {
                 child: Column(
                   children: [
                     _TileIcon(icon: shoppingList.icon),
-                    _TitleRow(
-                      shoppingList: shoppingList,
-                      shoppingListBloc: shoppingListBloc,
-                    ),
-                    _SubtitleRow(todoList: shoppingList),
+                    _TitleRow(shoppingList: shoppingList),
+                    _SubtitleRow(shoppingList: shoppingList),
                   ],
                 ),
               ),
@@ -80,10 +77,9 @@ class _TileIcon extends StatelessWidget {
 }
 
 class _TitleRow extends StatelessWidget {
-  const _TitleRow({required this.shoppingList, required this.shoppingListBloc});
+  const _TitleRow({required this.shoppingList});
 
   final ShoppingList shoppingList;
-  final ParentListBloc shoppingListBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -106,15 +102,13 @@ class _TitleRow extends StatelessWidget {
 }
 
 class _SubtitleRow extends StatelessWidget {
-  const _SubtitleRow({
-    required this.todoList,
-  });
+  const _SubtitleRow({required this.shoppingList});
 
-  final ShoppingList todoList;
+  final ShoppingList shoppingList;
 
   @override
   Widget build(BuildContext context) {
-    final totalItems = todoList.totalItems;
+    final totalItems = shoppingList.totalItems;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),

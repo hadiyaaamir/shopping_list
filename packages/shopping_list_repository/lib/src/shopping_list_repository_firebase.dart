@@ -78,8 +78,10 @@ class ShoppingListRepositoryFirebase extends ShoppingListRepository {
     }
   }
 
-  Future<void> editShoppingListUser(
-      {required String listId, required ShoppingListUser editedUser}) async {
+  Future<void> editShoppingListUser({
+    required String listId,
+    required ShoppingListUser editedUser,
+  }) async {
     final shoppingList = await shoppingListCollection.doc(listId).get();
     if (shoppingList.exists) {
       final List<ShoppingListUser> updatedListUsers = shoppingList
@@ -94,8 +96,32 @@ class ShoppingListRepositoryFirebase extends ShoppingListRepository {
     }
   }
 
-  Future<void> deleteShoppingListUser(
-      {required String listId, required String userId}) async {
+  Future<void> acceptUserInvitation({
+    required String listId,
+    required String userId,
+  }) async {
+    final shoppingList = await shoppingListCollection.doc(listId).get();
+    if (shoppingList.exists) {
+      final List<ShoppingListUser> updatedListUsers = shoppingList
+          .data()!
+          .users
+          .map(
+            (user) => user.id == userId
+                ? user.copyWith(acceptedInvitation: true)
+                : user,
+          )
+          .toList();
+
+      await saveShoppingList(
+        shoppingList.data()!.copyWith(users: updatedListUsers),
+      );
+    }
+  }
+
+  Future<void> deleteShoppingListUser({
+    required String listId,
+    required String userId,
+  }) async {
     final shoppingList = await shoppingListCollection.doc(listId).get();
     if (shoppingList.exists) {
       final List<ShoppingListUser> updatedListUsers = shoppingList
