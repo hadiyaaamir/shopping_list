@@ -135,14 +135,14 @@ class ParentListBloc extends Bloc<ParentListEvent, ParentListState> {
     emit(state.copyWith(filter: () => event.filter));
   }
 
-  FutureOr<void> _onInvitationAccepted(
+  Future<void> _onInvitationAccepted(
     ParentListInvitationAccepted event,
     Emitter<ParentListState> emit,
   ) async {
     emit(state.copyWith(status: () => ParentListStatus.loading));
 
     try {
-      _shoppingListRepository.acceptUserInvitation(
+      await _shoppingListRepository.acceptUserInvitation(
         listId: event.shoppingList.id,
         userId: userId,
       );
@@ -152,14 +152,14 @@ class ParentListBloc extends Bloc<ParentListEvent, ParentListState> {
     }
   }
 
-  FutureOr<void> _onInvitationRejected(
+  Future<void> _onInvitationRejected(
     ParentListInvitationRejected event,
     Emitter<ParentListState> emit,
   ) async {
     emit(state.copyWith(status: () => ParentListStatus.loading));
 
     try {
-      _shoppingListRepository.deleteShoppingListUser(
+      await _shoppingListRepository.deleteShoppingListUser(
         listId: event.shoppingList.id,
         userId: userId,
       );

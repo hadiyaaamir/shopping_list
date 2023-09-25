@@ -49,13 +49,6 @@ class _NonEmptyAcceptedList extends StatelessWidget {
                   filteredList.length,
                   (index) => AcceptedListTile(
                     shoppingList: filteredList[index],
-                    onDismissed: (_) {
-                      context.read<ParentListBloc>().add(
-                            ParentListDeleted(
-                              shoppingList: filteredList[index],
-                            ),
-                          );
-                    },
                   ),
                 ),
               ),
