@@ -52,7 +52,11 @@ class ParentListView extends StatelessWidget {
         ],
         child: ParentList(initialIndex: initialIndex),
       ),
-      floatingActionButton: const _AddShoppingListButton(),
+      floatingActionButton: Visibility(
+        visible: context.select((ParentListBloc bloc) => bloc.state.filter) ==
+            ParentListFilter.accepted,
+        child: const _AddShoppingListButton(),
+      ),
     );
   }
 }

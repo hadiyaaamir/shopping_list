@@ -31,9 +31,18 @@ class ParentList extends StatelessWidget {
                   ),
                 );
 
-                return state.filter == ParentListFilter.accepted
-                    ? AcceptedList(filteredList: filteredList.toList())
-                    : InvitationsList(filteredList: filteredList.toList());
+                return AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: state.filter == ParentListFilter.accepted
+                      ? AcceptedList(
+                          key: const Key('accepted_lists'),
+                          filteredList: filteredList.toList(),
+                        )
+                      : InvitationsList(
+                          key: const Key('invitations'),
+                          filteredList: filteredList.toList(),
+                        ),
+                );
               },
             ),
           )

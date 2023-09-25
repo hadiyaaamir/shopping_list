@@ -7,6 +7,8 @@ class InvitationsListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ParentListBloc parentListBloc = context.read<ParentListBloc>();
+
     return Card(
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
@@ -18,7 +20,10 @@ class InvitationsListTile extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _RejectButton(shoppingList: shoppingList),
+            _RejectButton(
+              shoppingList: shoppingList,
+              parentListBloc: parentListBloc,
+            ),
             _AcceptButton(shoppingList: shoppingList),
           ],
         ),
@@ -62,9 +67,13 @@ class _AcceptButton extends StatelessWidget {
 }
 
 class _RejectButton extends StatelessWidget {
-  const _RejectButton({required this.shoppingList});
+  const _RejectButton({
+    required this.shoppingList,
+    required this.parentListBloc,
+  });
 
   final ShoppingList shoppingList;
+  final ParentListBloc parentListBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -73,9 +82,13 @@ class _RejectButton extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 5),
         child: Icon(Icons.close, size: 20),
       ),
-      onTap: () => context
-          .read<ParentListBloc>()
-          .add(ParentListInvitationRejected(shoppingList: shoppingList)),
+      onTap: () => showDialog(
+        context: context,
+        builder: (context) => MultiBlocProvider(
+          providers: [BlocProvider.value(value: parentListBloc)],
+          child: RejectInvitationDialog(shoppingList: shoppingList),
+        ),
+      ),
     );
   }
 }

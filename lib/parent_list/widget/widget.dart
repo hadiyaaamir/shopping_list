@@ -9,3 +9,4 @@ import 'package:shopping_list_repository/shopping_list_repository.dart';
 part 'accepted_list_tile.dart';
 part 'add_list_dialog.dart';
 part 'invitations_list_tile.dart';
+part 'reject_invitation_dialog.dart';
