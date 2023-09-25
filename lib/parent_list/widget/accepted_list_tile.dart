@@ -49,11 +49,14 @@ class AcceptedListTile extends StatelessWidget {
                   ],
                 ),
               ),
-              Align(
-                alignment: Alignment.topRight,
-                child: _EditButton(
-                  parentListBloc: parentListBloc,
-                  shoppingList: shoppingList,
+              Visibility(
+                visible: isOwner,
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: _EditButton(
+                    parentListBloc: parentListBloc,
+                    shoppingList: shoppingList,
+                  ),
                 ),
               ),
             ],
