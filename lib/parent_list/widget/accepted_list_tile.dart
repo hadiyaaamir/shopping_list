@@ -1,21 +1,31 @@
 part of 'widget.dart';
 
-class ParentListTile extends StatelessWidget {
-  const ParentListTile(
-      {super.key, required this.shoppingList, required this.onDismissed});
+class AcceptedListTile extends StatelessWidget {
+  const AcceptedListTile({super.key, required this.shoppingList});
 
   final ShoppingList shoppingList;
-  final DismissDirectionCallback onDismissed;
 
   @override
   Widget build(BuildContext context) {
-    final status = context.read<ParentListBloc>().state.status;
+    final AuthUser currentAuthUser =
+        context.read<AuthenticationRepository>().currentAuthUser!;
 
-    final shoppingListBloc = BlocProvider.of<ParentListBloc>(context);
+    final bool isOwner = currentAuthUser.id == shoppingList.userId;
+
+    final status = context.read<ParentListBloc>().state.status;
+    final parentListBloc = BlocProvider.of<ParentListBloc>(context);
 
     return Dismissible(
-      key: Key('todoListListTile_dismissible_${shoppingList.id}'),
-      onDismissed: status == ParentListStatus.loading ? null : onDismissed,
+      key: Key('shoppingListListTile_dismissible_${shoppingList.id}'),
+      onDismissed: status == ParentListStatus.loading
+          ? null
+          : (_) {
+              parentListBloc.add(
+                isOwner
+                    ? ParentListDeleted(shoppingList: shoppingList)
+                    : ParentListInvitationRejected(shoppingList: shoppingList),
+              );
+            },
       direction: DismissDirection.endToStart,
       background: Container(
         alignment: Alignment.centerRight,
@@ -34,19 +44,19 @@ class ParentListTile extends StatelessWidget {
                 child: Column(
                   children: [
                     _TileIcon(icon: shoppingList.icon),
-                    _TitleRow(
-                      shoppingList: shoppingList,
-                      shoppingListBloc: shoppingListBloc,
-                    ),
-                    _SubtitleRow(todoList: shoppingList),
+                    _TitleRow(shoppingList: shoppingList),
+                    _SubtitleRow(shoppingList: shoppingList),
                   ],
                 ),
               ),
-              Align(
-                alignment: Alignment.topRight,
-                child: _EditButton(
-                  shoppingListBloc: shoppingListBloc,
-                  shoppingList: shoppingList,
+              Visibility(
+                visible: isOwner,
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: _EditButton(
+                    parentListBloc: parentListBloc,
+                    shoppingList: shoppingList,
+                  ),
                 ),
               ),
             ],
@@ -80,10 +90,9 @@ class _TileIcon extends StatelessWidget {
 }
 
 class _TitleRow extends StatelessWidget {
-  const _TitleRow({required this.shoppingList, required this.shoppingListBloc});
+  const _TitleRow({required this.shoppingList});
 
   final ShoppingList shoppingList;
-  final ParentListBloc shoppingListBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -106,15 +115,13 @@ class _TitleRow extends StatelessWidget {
 }
 
 class _SubtitleRow extends StatelessWidget {
-  const _SubtitleRow({
-    required this.todoList,
-  });
+  const _SubtitleRow({required this.shoppingList});
 
-  final ShoppingList todoList;
+  final ShoppingList shoppingList;
 
   @override
   Widget build(BuildContext context) {
-    final totalItems = todoList.totalItems;
+    final totalItems = shoppingList.totalItems;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
@@ -134,10 +141,9 @@ class _SubtitleRow extends StatelessWidget {
 }
 
 class _EditButton extends StatelessWidget {
-  const _EditButton(
-      {required this.shoppingListBloc, required this.shoppingList});
+  const _EditButton({required this.parentListBloc, required this.shoppingList});
 
-  final ParentListBloc shoppingListBloc;
+  final ParentListBloc parentListBloc;
   final ShoppingList shoppingList;
 
   @override
@@ -147,7 +153,7 @@ class _EditButton extends StatelessWidget {
       onPressed: () => showDialog(
         context: context,
         builder: (context) => MultiBlocProvider(
-          providers: [BlocProvider.value(value: shoppingListBloc)],
+          providers: [BlocProvider.value(value: parentListBloc)],
           child: AddListDialog(shoppingList: shoppingList),
         ),
       ),

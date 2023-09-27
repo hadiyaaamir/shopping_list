@@ -8,4 +8,4 @@ import 'package:shopping_list_repository/shopping_list_repository.dart';
 part 'shopping_item_tile.dart';
 part 'shopping_list_filter_options.dart';
 part 'shopping_list_options_menu.dart';
-part 'add_users_button.dart';
+part 'action_buttons.dart';

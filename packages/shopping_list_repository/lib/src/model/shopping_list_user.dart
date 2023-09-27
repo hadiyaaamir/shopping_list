@@ -50,15 +50,22 @@ class ShoppingListUser extends Equatable {
   const ShoppingListUser({
     required this.id,
     this.role = ShoppingListUserRoles.editor,
+    this.acceptedInvitation = false,
   });
 
   final String id;
   final ShoppingListUserRoles role;
+  final bool acceptedInvitation;
 
-  ShoppingListUser copyWith({String? id, ShoppingListUserRoles? role}) {
+  ShoppingListUser copyWith({
+    String? id,
+    ShoppingListUserRoles? role,
+    bool? acceptedInvitation,
+  }) {
     return ShoppingListUser(
       id: id ?? this.id,
       role: role ?? this.role,
+      acceptedInvitation: acceptedInvitation ?? this.acceptedInvitation,
     );
   }
 
@@ -66,15 +73,17 @@ class ShoppingListUser extends Equatable {
       ShoppingListUser(
         id: json['id'] as String,
         role: ShoppingListUserRolesExtension.fromString(json['role'] as String),
+        acceptedInvitation: json['acceptedInvitation'] as bool? ?? true,
       );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
         'id': id,
         'role': role.toStringValue(),
+        'acceptedInvitation': acceptedInvitation,
       };
 
   static const empty = ShoppingListUser(id: '');
 
   @override
-  List<Object> get props => [id, role];
+  List<Object> get props => [id, role, acceptedInvitation];
 }

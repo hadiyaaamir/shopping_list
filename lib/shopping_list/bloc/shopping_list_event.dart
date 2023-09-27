@@ -62,3 +62,11 @@ final class ShoppingListListUsersEdited extends ShoppingListEvent {
   @override
   List<Object> get props => [listUsers];
 }
+
+final class ShoppingListUserLeaves extends ShoppingListEvent {
+  const ShoppingListUserLeaves({required this.userId});
+
+  final String userId;
+
+  List<Object> get props => [userId];
+}

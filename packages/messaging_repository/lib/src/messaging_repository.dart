@@ -16,7 +16,7 @@ abstract class MessagingRepository {
 
   MessagingRepository({required this.notificationNavigation});
 
-  Function(ShoppingList shoppingList) notificationNavigation;
+  Function() notificationNavigation;
 
   void sendPushMessage({
     required String token,

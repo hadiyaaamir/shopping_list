@@ -22,6 +22,7 @@ class ShoppingListBloc extends Bloc<ShoppingListEvent, ShoppingListState> {
     on<ShoppingListToggleAll>(_onToggleAll);
     on<ShoppingListClearCompleted>(_onClearCompleted);
     on<ShoppingListListUsersEdited>(_onListUsersEdited);
+    on<ShoppingListUserLeaves>(_onUserLeaves);
   }
 
   final ShoppingListRepository _shoppingListRepository;
@@ -120,7 +121,25 @@ class ShoppingListBloc extends Bloc<ShoppingListEvent, ShoppingListState> {
     Emitter<ShoppingListState> emit,
   ) {
     emit(state.copyWith(
-        listUsers: () => event.listUsers,
-        status: () => ShoppingListStatus.success));
+      listUsers: () => event.listUsers,
+      status: () => ShoppingListStatus.success,
+    ));
+  }
+
+  Future<void> _onUserLeaves(
+    ShoppingListUserLeaves event,
+    Emitter<ShoppingListState> emit,
+  ) async {
+    emit(state.copyWith(status: () => ShoppingListStatus.loading));
+
+    try {
+      await _shoppingListRepository.deleteShoppingListUser(
+        listId: shoppingList.id,
+        userId: event.userId,
+      );
+      emit(state.copyWith(status: () => ShoppingListStatus.success));
+    } catch (e) {
+      emit(state.copyWith(status: () => ShoppingListStatus.failure));
+    }
   }
 }

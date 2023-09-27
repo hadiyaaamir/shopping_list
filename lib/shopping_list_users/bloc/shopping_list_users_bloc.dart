@@ -106,8 +106,10 @@ class ShoppingListUsersBloc
           ),
         );
       } else {
-        final ShoppingListUser listUser =
-            ShoppingListUser(id: user.id, role: state.userRole);
+        final ShoppingListUser listUser = ShoppingListUser(
+          id: user.id,
+          role: state.userRole,
+        );
         final RoleUser roleUser = RoleUser(user: user, listUser: listUser);
 
         await _shoppingListRepository.addUserToList(
@@ -126,8 +128,9 @@ class ShoppingListUsersBloc
 
         _messagingRepository.sendPushMessage(
           token: user.token,
-          title: 'New List',
-          body: 'You\'ve been added to a new list called ${shoppingList.title}',
+          title: 'New Invitation',
+          body:
+              'You\'ve been invited to a new list called ${shoppingList.title}',
           listId: shoppingList.id,
         );
 

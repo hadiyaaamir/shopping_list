@@ -1,10 +1,22 @@
 part of 'view.dart';
 
 class ParentListPage extends StatelessWidget {
-  const ParentListPage({super.key});
+  const ParentListPage({super.key, required this.openInvitationTab});
 
-  static Route<void> route() {
-    return MaterialPageRoute<void>(builder: (_) => const ParentListPage());
+  final bool openInvitationTab;
+
+  static Route<void> route({bool openInvitationTab = false}) {
+    return MaterialPageRoute<void>(
+      builder: (_) => ParentListPage(
+        openInvitationTab: openInvitationTab,
+      ),
+    );
+  }
+
+  static void navigateToScreen({bool openInvitationTab = true}) {
+    navigatorKey.currentState?.push(
+      ParentListPage.route(openInvitationTab: openInvitationTab),
+    );
   }
 
   @override
@@ -14,8 +26,16 @@ class ParentListPage extends StatelessWidget {
         userId: context.read<AuthenticationRepository>().currentAuthUser!.id,
         shoppingListRepository: context.read<ShoppingListRepository>(),
         messagingRepository: context.read<MessagingRepository>(),
-      )..add(const ParentListSubscriptionRequested()),
-      child: const ParentListView(),
+      )
+        ..add(const ParentListSubscriptionRequested())
+        ..add(
+          ParentListFilterChanged(
+            filter: openInvitationTab
+                ? ParentListFilter.invitations
+                : ParentListFilter.accepted,
+          ),
+        ),
+      child: ParentListView(initialIndex: openInvitationTab ? 1 : 0),
     );
   }
 }

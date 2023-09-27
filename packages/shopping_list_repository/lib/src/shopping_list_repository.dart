@@ -18,6 +18,8 @@ abstract class ShoppingListRepository {
       {required String listId, required ShoppingListUser user});
   Future<void> editShoppingListUser(
       {required String listId, required ShoppingListUser editedUser});
+  Future<void> acceptUserInvitation(
+      {required String listId, required String userId});
   Future<void> deleteShoppingListUser(
       {required String listId, required String userId});
 

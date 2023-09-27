@@ -18,7 +18,10 @@ class ShoppingListView extends StatelessWidget {
 
     final ShoppingListUser? currentListUser = isOwner
         ? ShoppingListUser(
-            id: currentAuthUser.id, role: ShoppingListUserRoles.owner)
+            id: currentAuthUser.id,
+            role: ShoppingListUserRoles.owner,
+            acceptedInvitation: true,
+          )
         : shoppingList.users.isNotEmpty
             ? shoppingList.users.firstWhere(
                 (user) => user.id == currentAuthUser.id,
@@ -30,7 +33,12 @@ class ShoppingListView extends StatelessWidget {
         heroTag: 'title_${shoppingList.id}',
         title: title,
         actions: [
-          AddUsersButton(shoppingList: shoppingList, isVisible: isOwner)
+          isOwner
+              ? AddUsersButton(shoppingList: shoppingList)
+              : UserLeaveButton(
+                  userId: currentAuthUser.id,
+                  shoppingListBloc: context.read<ShoppingListBloc>(),
+                ),
         ],
       ),
       body: MultiBlocListener(
@@ -99,7 +107,9 @@ class _AddTodoButton extends StatelessWidget {
         return FloatingActionIconButton(
           isVisible: state.listItems.isNotEmpty && isVisible,
           onPressed: () => Navigator.push(
-              context, ShoppingItemPage.route(shoppingList: shoppingList)),
+            context,
+            ShoppingItemPage.route(shoppingList: shoppingList),
+          ),
         );
       },
     );
